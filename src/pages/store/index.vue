@@ -46,8 +46,10 @@
         currentTab: 0,
       }
     },
-    created() {},
+    created() {
+    },
     mounted() {
+      wx.clearStorageSync()
       let query = wx.createSelectorQuery();
       query.select('.store_top').boundingClientRect()
       query.exec(res => {

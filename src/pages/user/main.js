@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
     config: {
-        navigationBarTitleText: 'UU商城',
+        navigationBarTitleText: '我的',
     }
 }
