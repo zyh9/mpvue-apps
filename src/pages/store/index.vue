@@ -15,8 +15,12 @@
       <swiper-item>
         <storeIndex></storeIndex>
       </swiper-item>
-      <swiper-item>我是第二页</swiper-item>
-      <swiper-item>我是第三页</swiper-item>
+      <swiper-item>
+        <shopDetails></shopDetails>
+      </swiper-item>
+      <swiper-item>
+        <shopOrder></shopOrder>
+      </swiper-item>
     </swiper>
   </div>
 </template>
@@ -24,6 +28,8 @@
 <script>
   // import store from './store'
   import storeIndex from '../../components/storeIndex';
+  import shopDetails from '../../components/shopDetails';
+  import shopOrder from '../../components/shopOrder';
   export default {
     data() {
       return {
@@ -45,14 +51,14 @@
       let query = wx.createSelectorQuery();
       query.select('.store_top').boundingClientRect()
       query.exec(res => {
-        console.log(res)
+        // console.log(res)
       })
       wx.getSystemInfo({
         success: res => {
-          console.log(res)
+          // console.log(res)
           this.winWidth = res.windowWidth;
           //减去上方的高度
-          this.winHeight = res.windowHeight - 126;
+          this.winHeight = res.windowHeight - 136;
         }
       });
     },
@@ -70,20 +76,22 @@
       // }
       //滑动切换
       bindChange(e) {
-        console.log(e)
+        // console.log(e)
         this.currentTab = e.target.current
       },
       /** 
        * 点击tab切换 
        */
       swichNav(e) {
-        console.log(e)
+        // console.log(e)
         if (this.currentTab === e.target.dataset.current) return;
         this.currentTab = e.target.dataset.current;
       }
     },
     components: {
-      storeIndex
+      storeIndex,
+      shopDetails,
+      shopOrder
     }
   }
 </script>

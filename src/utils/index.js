@@ -2,12 +2,8 @@ import msg from './toast';
 
 const baseUrl = '';
 
-// let isJm = true;
-
 const header = () => {
-  return {
-    "":""
-  }
+  return {}
 }
 
 //get数据请求
@@ -21,9 +17,10 @@ const get = (url, params = {}, headers) => {
     initHeaders = Object.assign({}, initHeaders, headers);
   }
   return new Promise((resolve, reject) => {
-    let address = str ? `${url}${str}t?${time}` : `${url}t?${time}`;
+    let address = str ? `${url}?${str}&t=${time}` : `${url}?t=${time}`;
     wx.request({
       url: baseUrl + address,
+      header: { 'content-type': 'application/json' },
       method: "GET",
       success: res => {
         setTimeout(_ => {
@@ -49,11 +46,9 @@ const post = function (url, data = {}, headers) {
   }
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${baseUrl}${url}t?${time}`,
-      data: {
-        ...data
-      },
-      header: initHeaders,
+      url: `${baseUrl}${url}?=t${time}`,
+      data: data,
+      header:  { 'content-type': 'application/json' },
       method: "POST",
       success: res => {
         setTimeout(_ => {
@@ -68,4 +63,4 @@ const post = function (url, data = {}, headers) {
   })
 }
 
-export default {get,post};
+export default { get, post };
