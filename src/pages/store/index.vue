@@ -1,7 +1,7 @@
 <template>
   <div class="store">
     <div class="store_top">
-      <img src="../../static/userImg.png" alt="" class="shop_img">
+      <img src="../../../static/userImg.png" alt="" class="shop_img">
       <div class="top_right">
         <p class="name">XXXXX的便利店</p>
         <p class="address">地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东</p>

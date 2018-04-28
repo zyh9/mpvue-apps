@@ -19,12 +19,11 @@
             return {
                 pos: [],
                 mapCtx: {},
-                point: require('../../static/circlel.png'),
                 controls: [{
                         //控价id
                         id: 1,
                         //图标路径
-                        iconPath: require('../../static/myAddr.png'),
+                        iconPath: require('../../../static/myAddr.png'),
                         //位置
                         position: {
                             left: 0,
@@ -39,7 +38,7 @@
                         //控价id
                         id: 2,
                         //图标路径
-                        iconPath: require('../../static/circlel.png'),
+                        iconPath: require('../../../static/circlel.png'),
                         //位置
                         position: {
                             left: 20,
