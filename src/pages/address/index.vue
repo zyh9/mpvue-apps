@@ -3,12 +3,19 @@
         <div class="address_top">
             <p class="city">{{city}}</p>
             <input type="text" placeholder="请输入地址" v-model="val" class="input_address">
+            <i class="clear" @click="val=''" v-if="val">+</i>
         </div>
         <scroll-view scroll-y="true" :style="{height: winHeight+'px'}">
+            <!-- <ul class="address_list">
+                    <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
+                        <p class="address_title">{{v.title}}</p>
+                        <p class="address_con">{{v.address}}</p>
+                    </li>
+                </ul> -->
             <ul class="address_list">
-                <li v-for="(v,i) in addressList" :key="i">
-                    <p class="address_title">{{v.title}}</p>
-                    <p class="address_con">{{v.address}}</p>
+                <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
+                    <p class="address_title">{{v.city}} {{v.district}}</p>
+                    <p class="address_con">{{v.name}}</p>
                 </li>
             </ul>
         </scroll-view>
@@ -22,6 +29,10 @@
     import QQMapWX from '../../utils/qqmap-wx-jssdk.js';
     const QQMap = new QQMapWX({
         key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
+    })
+    import BMapWX from '../../utils/bmap-wx.js';
+    const BMap = new BMapWX({
+        ak: 'dZjnRr2t8nBpGswyCB731AFD'
     })
     export default {
         data() {
@@ -51,17 +62,19 @@
                 }
             })
             // 实例化API核心类
-            wx.getLocation({
-                type: 'wgs84',
-                altitude: true,
-                success: res => {
-                    this.cityInfo(res)
-                },
-                fail: err => {}
-            })
+            // wx.getLocation({
+            //     type: 'wgs84',
+            //     success: res => {
+            //         console.log(res)
+            //         this.QQcityInfo(res)
+            //     },
+            //     fail: err => {}
+            // })
+            this.BDMapInfo()
         },
         methods: {
-            cityInfo(info) {
+            //坐标转地址
+            QQcityInfo(info) {
                 // 调用接口
                 QQMap.reverseGeocoder({
                     location: {
@@ -77,6 +90,7 @@
                     }
                 })
             },
+            //地址搜索列表
             siteInfo() {
                 QQMap.search({
                     keyword: this.val,
@@ -87,13 +101,50 @@
                     fail: err => {
                         console.log(err)
                     }
-                });
+                })
+            },
+            //所在城市获取
+            BDMapInfo() {
+                BMap.regeocoding({
+                    success: res => {
+                        // console.log(res)
+                        this.city = res.originalData.result.addressComponent.city;
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
+                })
+            },
+            //地址搜索列表
+            bdMap() {
+                BMap.suggestion({
+                    query: this.val,
+                    region: this.city,
+                    success: res => {
+                        console.log(res)
+                        this.addressList = res.result;
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
+                })
+            },
+            //确定搜索地址
+            setAddress(e) {
+                let {
+                    address
+                } = e.currentTarget.dataset;
+                console.log(address)
             }
         },
         components: {},
         watch: {
             val: function(newVal, oldVal) {
-                this.siteInfo()
+                // this.siteInfo()
+                this.bdMap()
+                if (!newVal) {
+                    this.addressList = [];
+                }
             }
         }
     }
@@ -111,6 +162,7 @@
         display: flex;
         align-items: center;
         height: 60rpx;
+        position: relative;
         .city {
             height: 100%;
             color: #666;
@@ -128,6 +180,21 @@
             flex-flow: 1;
             background: #e6e6e6;
             border-radius: 30rpx;
+        }
+        .clear{
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 50%;
+            background: #999;
+            color: #666;
+            font-size: 28rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            position: absolute;
+            right:50rpx;
+            z-index: 2;
         }
     }
     .address_list {

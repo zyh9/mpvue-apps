@@ -335,7 +335,9 @@
             },
             settlement() {
                 if (this.shopList.length) {
-                    console.log('待开发。。。')
+                    wx.navigateTo({
+                        url: '/pages/submit/main'
+                    })
                 } else {
                     msg('您还没有选择商品哦')
                 }

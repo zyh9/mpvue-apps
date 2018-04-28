@@ -45,7 +45,8 @@
                 wx.login({
                     success: () => {
                         wx.getUserInfo({
-                            success: (res) => {
+                            success: res => {
+                                // console.log(res.userInfo)
                                 this.userInfo = res.userInfo
                                 wx.setStorageSync('userInfo', res.userInfo)
                             }
@@ -69,6 +70,7 @@
                 //                 this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
                 //             }
                 //             this.loading = false;
+                //             wx.hideLoading()
                 //         }, 600)
                 //     }
                 // })

@@ -14,6 +14,11 @@ export default {
       '^pages/index/main',
       'pages/cart/main',
       'pages/user/main',
+      'pages/map/main',
+      'pages/store/main',
+      'pages/address/main',
+      'pages/details/main',
+      'pages/submit/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light
@@ -41,6 +46,12 @@ export default {
         pagePath: "pages/index/main",
         //图标下方文字描述
         text: "首页"
+      },
+      {
+        selectedIconPath: "static/subject-active.png",
+        iconPath: "static/subject.png",
+        pagePath: 'pages/map/main',
+        text: "地图"
       },
       {
         selectedIconPath: "static/subject-active.png",
