@@ -46,10 +46,13 @@
         currentTab: 0,
       }
     },
-    created() {
+    onShow() { //页面渲染就会触发
+      this.currentTab = 0;
+      let history = wx.getStorageSync('history') || [];
+      console.log(history)
     },
+    created() {},
     mounted() {
-      wx.clearStorageSync()
       let query = wx.createSelectorQuery();
       query.select('.store_top').boundingClientRect()
       query.exec(res => {
@@ -62,7 +65,7 @@
           //减去上方的高度
           this.winHeight = res.windowHeight - 136;
         }
-      });
+      })
     },
     computed: {
       // count () {

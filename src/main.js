@@ -4,7 +4,7 @@ import App from './App'
 const app = new Vue(App)
 app.$mount()
 
-require('./common/reset.less');
+import './common/reset.less';
 
 export default {
   // 这个字段走 app.json
@@ -16,18 +16,22 @@ export default {
       'pages/user/main',
     ],
     window: {
+      //下拉 loading 的样式，仅支持 dark/light
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      //上方导航栏背景颜色
+      navigationBarBackgroundColor: '#2395ff',
+      //上方导航栏标题文字内容
       navigationBarTitleText: 'UU',
-      navigationBarTextStyle: 'black',
+      //上方导航栏标题颜色，仅支持 black/white
+      navigationBarTextStyle: 'white',
     },
     tabBar: {
-      //导航栏背景颜色
+      //下方导航栏背景颜色
       backgroundColor: "#fff",
       //文字选中颜色
-      selectedColor:"skyblue",
+      selectedColor: "skyblue",
       //文字初始颜色
-      color:'#9c93b4',
+      color: '#9c93b4',
       list: [{
         //图标选中状态
         selectedIconPath: "static/index-active.png",
@@ -36,21 +40,21 @@ export default {
         //页面所属路径
         pagePath: "pages/index/main",
         //图标下方文字描述
-        text:"首页"
+        text: "首页"
       },
-       {
+      {
         selectedIconPath: "static/subject-active.png",
         iconPath: "static/subject.png",
         pagePath: 'pages/cart/main',
-        text:"购物车"
+        text: "购物车"
       },
-       {
+      {
         selectedIconPath: "static/user-active.png",
         iconPath: "static/user.png",
         pagePath: 'pages/user/main',
-        text:"我的"
+        text: "我的"
       }
-    ]
+      ]
     },
   }
 }

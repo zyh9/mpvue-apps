@@ -31,6 +31,7 @@
         data() {
             return {}
         },
+        mounted() {},
         methods: {
             tel() {
                 wx.makePhoneCall({

@@ -219,7 +219,7 @@
             // console.log(history)
             //针对num等于0的数据仍保留做清空处理
             this.shopList = history.filter(e => e.num != 0)
-            // console.log(this.shopList)
+            console.log(this.shopList)
             if (history.length) {
                 this.right.forEach(e => {
                     history.forEach(ele => {

@@ -2,7 +2,7 @@
     <div class="container">
         <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler">
             <div v-for="(v,i) in movies" :key="i" class="list-item">
-                <div v-for="(item,index) in v" :key="index" class="movie-item">
+                <div v-for="(item,index) in v" :key="index" class="movie-item" :data-item="item" @click="goDetails">
                     <img :src="item.cover" alt="信息">
                     <p class="title">{{item.title}}评分<span class="rate">{{item.rate}}</span></p>
                     <p class="year-type">{{item.types}} / {{item.year}}</p>
@@ -16,17 +16,22 @@
 </template>
 
 <script>
+    import util from '../../utils/index';
     export default {
         data() {
             return {
                 userInfo: {},
                 movies: [],
                 page: 1,
-                size: 6,
+                size: 8,
                 loading: true
             }
         },
         created() {
+            wx.showNavigationBarLoading()
+            setTimeout(_ => {
+                wx.hideNavigationBarLoading()
+            }, 1000)
             // 调用应用实例的方法获取全局数据
             this.getUserInfo()
         },
@@ -42,6 +47,7 @@
                         wx.getUserInfo({
                             success: (res) => {
                                 this.userInfo = res.userInfo
+                                wx.setStorageSync('userInfo', res.userInfo)
                             }
                         })
                     }
@@ -49,19 +55,42 @@
             },
             loadMovies() {
                 this.loading = true;
-                wx.request({
-                    url: `https://db.miaov.com/doubanapi/v0/movie/list?page=${this.page}&size=${this.size}`,
-                    success: (res) => {
-                        setTimeout(_ => {
-                            let {
-                                data
-                            } = res.data;
-                            for (let i = 0; i < data.length; i += 2) {
-                                this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
-                            }
-                            this.loading = false;
-                        }, 600)
+                // wx.showLoading({
+                //     title: '加载中...',
+                // })
+                // wx.request({
+                //     url: `https://db.miaov.com/doubanapi/v0/movie/list?page=${this.page}&size=${this.size}`,
+                //     success: (res) => {
+                //         setTimeout(_ => {
+                //             let {
+                //                 data
+                //             } = res.data;
+                //             for (let i = 0; i < data.length; i += 2) {
+                //                 this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
+                //             }
+                //             this.loading = false;
+                //         }, 600)
+                //     }
+                // })
+                util.get(
+                    'https://db.miaov.com/doubanapi/v0/movie/list', {
+                        page: this.page,
+                        size: this.size
                     }
+                ).then(res => {
+                    // console.log(res)
+                    setTimeout(_ => {
+                        let {
+                            data
+                        } = res.data;
+                        for (let i = 0; i < data.length; i += 2) {
+                            this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
+                        }
+                        this.loading = false;
+                        // wx.hideLoading()
+                    }, 600)
+                }).catch(err => {
+                    console.log(err)
                 })
             },
             scrollHandler() {
@@ -69,6 +98,15 @@
                 this.page++;
                 this.loadMovies()
             },
+            goDetails(e) {
+                let {
+                    _id
+                } = e.currentTarget.dataset.item;
+                console.log(_id)
+                wx.navigateTo({
+                    url: '/pages/details/main?id=' + _id
+                })
+            }
         },
         components: {},
     }
@@ -130,9 +168,10 @@
     }
     .movie-item img {
         width: 100%;
+        height: 220rpx;
     }
     .movie-item .title {
-        font-size: 28rpx;
+        font-size: 24rpx;
         text-align: center;
         color: #333;
         margin: 5rpx 0;
@@ -142,7 +181,7 @@
     }
     .movie-item .year-type {
         text-align: center;
-        font-size: 20rpx;
+        font-size: 22rpx;
         color: #888;
     }
 </style>
