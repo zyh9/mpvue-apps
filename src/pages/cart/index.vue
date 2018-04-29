@@ -1,27 +1,42 @@
 <template>
   <div class="cart">
     <ul class="cart_details">
-      <li class="cart_item">
-        <div class="lis_top">
-          <div class="shop_name">
-            <img src="" alt="" class="icon">
-            <p class="name_info">张姐烤肉拌饭</p>
+      <!-- <li class="cart_item">
+                                      <div class="lis_top">
+                                        <div class="shop_name">
+                                          <img src="" alt="" class="icon">
+                                          <p class="name_info">张姐烤肉拌饭</p>
+                                        </div>
+                                        <img src="" alt="" class="direction">
+                                      </div>
+                                      <div class="lis_center">
+                                        <ul class="order_shop_list">
+                                          <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
+                                            <div class="item_left">
+                                              <img src="" alt="" class="item_shop_img">
+                                              <div class="ltem_left_info">
+                                                <p>烤肉拌饭</p>
+                                                <span>12元</span>
+                                              </div>
+                                            </div>
+                                            <p>X1</p>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </li> -->
+      <li v-for="(v,i) in cartList" :key="i" class="list-item_r" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-index="i">
+        <img :src="v.img" alt="">
+        <div class="li_info">
+          <p>{{v.text}}</p>
+          <p>月售100单</p>
+          <div class="li_b">
+            <p class="price">¥{{v.price}}</p>
+            <div class="count">
+              <i class="lower" @click="lower" :data-info="v" v-if="v.num>0">-</i>
+              <span v-if="v.num>0">{{v.num}}</span>
+              <i class="add" @click="add" :data-info="v">+</i>
+            </div>
           </div>
-          <img src="" alt="" class="direction">
-        </div>
-        <div class="lis_center">
-          <ul class="order_shop_list">
-            <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
-              <div class="item_left">
-                <img src="" alt="" class="item_shop_img">
-                <div class="ltem_left_info">
-                  <p>烤肉拌饭</p>
-                  <span>12元</span>
-                </div>
-              </div>
-              <p>X1</p>
-            </li>
-          </ul>
         </div>
       </li>
     </ul>
@@ -35,13 +50,65 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        cartList: [],
+        startX: null,
+        delBtnWidth: 160
+      }
     },
     onShow() { //页面渲染就会触发
       let history = wx.getStorageSync('history') || [];
       console.log(history)
+      this.cartList = history;
     },
     mounted() {},
+    methods: {
+      touchS(e) {
+        if (e.touches.length == 1) {
+          this.startX = e.touches[0].clientX;
+          console.log(this.startX)
+        }
+      },
+      touchM(e) {
+        let index = e.currentTarget.dataset.index;
+        if (e.touches.length == 1) {
+          //手指滑动开始的位置记录
+          let moveX = e.touches[0].clientX;
+          let disX = this.startX - moveX;
+          let left = "";
+          if (disX == 0 || disX < 0) { //如果移动距离小于等于0，位置不变
+            left = "margin-left:0px";
+          } else if (disX > 0) { //移动距离大于0，left值等于手指移动距离
+            left = "margin-left:-" + disX + "px";
+            if (disX >= this.delBtnWidth) {
+              left = "left:-" + this.delBtnWidth + "px";
+            }
+          }
+          // console.log(left)
+          // var list = this.data.goodsList.list;
+          // if (index != "" && index != null) {
+          //   list[parseInt(index)].left = left;
+          //   this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
+          // }
+        }
+      },
+      touchE(e) {
+        let index = e.currentTarget.dataset.index;
+        if (e.mp.changedTouches.length == 1) {
+          //手指抬起的位置
+          let endX = e.mp.changedTouches[0].clientX;
+          let disX = this.startX - endX;
+          console.log(disX,this.delBtnWidth / 2)
+          //如果距离小于删除按钮的1/2，不显示删除按钮
+          var left = disX > this.delBtnWidth / 2 ? "margin-left:-" + this.delBtnWidth + "px" : "margin-left:0px";
+          console.log(left)
+          // var list = this.data.goodsList.list;
+          // if (index !== "" && index != null) {
+          //   list[parseInt(index)].left = left;
+          //   this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
+        }
+      },
+    },
     components: {}
   }
 </script>
@@ -54,6 +121,45 @@
   }
   .cart_details {
     overflow: hidden;
+  }
+  .list-item_r {
+    padding: 16rpx;
+    border-bottom: 1rpx solid #eee;
+    display: flex;
+    align-items: center;
+    img {
+      width: 120rpx;
+      height: 120rpx;
+      margin-right: 20rpx;
+    }
+    .li_info {
+      flex-grow: 1;
+      .li_b {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .price {
+          color: #f00;
+        }
+        .count {
+          display: flex;
+          align-items: center;
+          .lower,
+          .add {
+            width: 30rpx;
+            height: 30rpx;
+            border-radius: 50%;
+            background: #2395ff;
+            color: #fff;
+            line-height: 30rpx;
+            text-align: center;
+          }
+          span {
+            margin: 0 16rpx;
+          }
+        }
+      }
+    }
   }
   .cart_item {
     background: #fff;

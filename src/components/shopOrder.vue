@@ -4,10 +4,10 @@
     <li class="order_item">
       <div class="lis_top">
         <div class="shop_name">
-          <img src="" alt="" class="icon">
+          <img src="../../static/userImg.png" alt="" class="icon">
           <p class="name_info">张姐烤肉拌饭</p>
         </div>
-        <img src="" alt="" class="direction">
+        <img src="../../static/userImg.png" alt="" class="direction">
       </div>
       <div class="lis_center">
         <ul class="order_shop_list">
@@ -81,7 +81,6 @@
             width: 50rpx;
             height: 50rpx;
             margin-right: 20rpx;
-            background: #f00;
           }
           .name_info {
             font-size: 24rpx;
@@ -91,7 +90,6 @@
         .direction {
           width: 50rpx;
           height: 50rpx;
-          background: #f00;
         }
       }
       .lis_center {

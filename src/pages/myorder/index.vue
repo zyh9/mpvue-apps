@@ -62,6 +62,11 @@
                 currentTab: 0,
             }
         },
+        onShow() { //页面渲染就会触发
+            this.currentTab = 0;
+            let history = wx.getStorageSync('history') || [];
+            console.log(history)
+        },
         mounted() {
             let query = wx.createSelectorQuery();
             query.select('.my_order_top').boundingClientRect()
@@ -92,16 +97,16 @@
                         return this.orderList;
                         break;
                     case 1:
-                        return this.orderList.filter(e=>e.type==0);
+                        return this.orderList.filter(e => e.type == 0);
                         break;
                     case 2:
-                        return this.orderList.filter(e=>e.type==1);
+                        return this.orderList.filter(e => e.type == 1);
                         break;
                     case 3:
-                        return this.orderList.filter(e=>e.type==2);
+                        return this.orderList.filter(e => e.type == 2);
                         break;
                     case 4:
-                        return this.orderList.filter(e=>e.type==3);
+                        return this.orderList.filter(e => e.type == 3);
                         break;
                 }
             }

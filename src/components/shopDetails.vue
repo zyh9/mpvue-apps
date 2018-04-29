@@ -1,25 +1,25 @@
 <template>
     <div class="shop_details">
         <div class="address">
-            <img src="" alt="" class="icon">
+            <img src="../../static/userImg.png" alt="" class="icon">
             <p>地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东11111111</p>
         </div>
         <div class="shop_info_list">
             <div class="shop_tel" @click="tel">
-                <img src="" alt="" class="icon">
+                <img src="../../static/userImg.png" alt="" class="icon">
                 <p>商家电话</p>
             </div>
             <div class="shop_wx" @click="copyWx">
-                <img src="" alt="" class="icon">
+                <img src="../../static/userImg.png" alt="" class="icon">
                 <p>商家微信</p>
             </div>
         </div>
         <div class="shop_service">
-            <img src="" alt="" class="icon">
+            <img src="../../static/userImg.png" alt="" class="icon">
             <p>UU跑腿配送</p>
         </div>
         <div class="shop_business">
-            <img src="" alt="" class="icon">
+            <img src="../../static/userImg.png" alt="" class="icon">
             <p>营业时间：9:00-20:00</p>
         </div>
     </div>
@@ -70,7 +70,6 @@
                 width: 50rpx;
                 height: 50rpx;
                 margin-right: 20rpx;
-                background: #f00;
             }
             p {
                 font-size: 24rpx;
@@ -99,7 +98,6 @@
                     width: 50rpx;
                     height: 50rpx;
                     margin-right: 20rpx;
-                    background: #f00;
                 }
                 p {
                     font-size: 24rpx;
@@ -119,7 +117,6 @@
                 width: 50rpx;
                 height: 50rpx;
                 margin-right: 20rpx;
-                background: #f00;
             }
             p {
                 font-size: 24rpx;

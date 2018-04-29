@@ -24,7 +24,7 @@
         </div>
         <div class="shop_cart">
             <div class="cart_left" @click="blockCart">
-                <img src="" alt="">
+                <img src="../../static/userImg.png" alt="">
                 <p class="money">总价格{{count}}</p>
             </div>
             <p class="settlement" @click="settlement">去结算{{count}}元</p>
@@ -73,14 +73,14 @@
                         text: '热销1产品1',
                         id: 1,
                         price: 12,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '001'
                     }, {
                         text: '热销1产品2',
                         id: 1,
                         price: 14,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '002'
                     },
@@ -88,7 +88,7 @@
                         text: '热销1产品3',
                         id: 1,
                         price: 16,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '003'
                     },
@@ -96,14 +96,14 @@
                         text: '热销1产品4',
                         id: 1,
                         price: 18,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '004'
                     }, {
                         text: '热销1产品5',
                         id: 1,
                         price: 10,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '005'
                     },
@@ -111,7 +111,7 @@
                         text: '热销1产品6',
                         id: 1,
                         price: 8,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '006'
                     },
@@ -119,14 +119,14 @@
                         text: '热销2产品1',
                         id: 2,
                         price: 12,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '007'
                     }, {
                         text: '热销2产品2',
                         id: 2,
                         price: 14,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '008'
                     },
@@ -134,7 +134,7 @@
                         text: '热销2产品3',
                         id: 2,
                         price: 16,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '009'
                     },
@@ -142,14 +142,14 @@
                         text: '热销2产品4',
                         id: 2,
                         price: 18,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '010'
                     }, {
                         text: '热销2产品5',
                         id: 2,
                         price: 10,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '011'
                     },
@@ -157,7 +157,7 @@
                         text: '热销2产品6',
                         id: 2,
                         price: 8,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '012'
                     },
@@ -165,14 +165,14 @@
                         text: '热销3产品1',
                         id: 3,
                         price: 12,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '013'
                     }, {
                         text: '热销3产品2',
                         id: 3,
                         price: 14,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '014'
                     },
@@ -180,7 +180,7 @@
                         text: '热销3产品3',
                         id: 3,
                         price: 16,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '015'
                     },
@@ -188,14 +188,14 @@
                         text: '热销3产品4',
                         id: 3,
                         price: 18,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '016'
                     }, {
                         text: '热销3产品5',
                         id: 3,
                         price: 10,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '017'
                     },
@@ -203,7 +203,7 @@
                         text: '热销3产品6',
                         id: 3,
                         price: 8,
-                        img: 'https://i.loli.net/2018/04/27/5ae2e812b12e9.jpg',
+                        img: require('../../static/jp.jpg'),
                         num: 0,
                         shopId: '018'
                     }
@@ -450,7 +450,6 @@
             img {
                 width: 60rpx;
                 height: 60rpx;
-                background: #f00;
                 margin-left: 20rpx;
             }
             .money {
@@ -481,8 +480,8 @@
             padding: 20rpx;
             color: #666;
             font-size: 24rpx;
-            .pack_price {}
-            .clear {}
+            // .pack_price {}
+            // .clear {}
         }
         .shop_list {
             width: 100%;
