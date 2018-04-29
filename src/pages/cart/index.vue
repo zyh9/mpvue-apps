@@ -1,6 +1,34 @@
 <template>
   <div class="cart">
-    <p class="shop_cart">我的购物车</p>
+    <ul class="cart_details">
+      <li class="cart_item">
+        <div class="lis_top">
+          <div class="shop_name">
+            <img src="" alt="" class="icon">
+            <p class="name_info">张姐烤肉拌饭</p>
+          </div>
+          <img src="" alt="" class="direction">
+        </div>
+        <div class="lis_center">
+          <ul class="order_shop_list">
+            <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
+              <div class="item_left">
+                <img src="" alt="" class="item_shop_img">
+                <div class="ltem_left_info">
+                  <p>烤肉拌饭</p>
+                  <span>12元</span>
+                </div>
+              </div>
+              <p>X1</p>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+    <div class="cart_bottom">
+      <p>总价：12元</p>
+      <div class="lis_bottom_btn">结算</div>
+    </div>
   </div>
 </template>
 
@@ -19,19 +47,111 @@
 </script>
 
 <style lang="less">
-.cart{
-  height: 100%;
-  background: #f5f5f5;
-  overflow: hidden;
-}
-  .shop_cart {
+  .cart {
+    height: 100%;
+    background: #f5f5f5;
+    overflow: hidden;
+  }
+  .cart_details {
+    overflow: hidden;
+  }
+  .cart_item {
     background: #fff;
     margin-top: 20rpx;
-    padding: 20rpx;
-    color: #666;
-    font-size: 24rpx;
+    .lis_top {
+      padding: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1rpx solid #e6e6e6;
+      .shop_name {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        .icon {
+          width: 50rpx;
+          height: 50rpx;
+          margin-right: 20rpx;
+          background: #f00;
+        }
+        .name_info {
+          font-size: 24rpx;
+          color: #666;
+        }
+      }
+      .direction {
+        width: 50rpx;
+        height: 50rpx;
+        background: #f00;
+      }
+    }
+    .lis_center {
+      padding: 0 20rpx;
+      .order_shop_list {
+        .list_lis_info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1rpx solid #e6e6e6;
+          padding: 10rpx 0;
+          .item_left {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: flex-start;
+          }
+          .item_shop_img {
+            width: 50rpx;
+            height: 50rpx;
+            background: #f00;
+            margin-right: 20rpx;
+          }
+          .ltem_left_info {
+            p {
+              padding: 8rpx 0;
+              font-size: 24rpx;
+              color: #666;
+            }
+            span {
+              font-size: 24rpx;
+              color: #999;
+            }
+          }
+        }
+        li:nth-last-of-type(1) {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+  .cart_bottom {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background: #ccc;
+    height: 80rpx;
+    p {
+      font-size: 24rpx;
+      color: #666;
+      margin-left: 20rpx;
+      height: 100%;
+      flex-grow: 1;
+      line-height: 80rpx;
+    }
+    .lis_bottom_btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ff8b03;
+      font-size: 24rpx;
+      color: #fff;
+      height: 100%;
+      width: 160rpx;
+    }
   }
 </style>

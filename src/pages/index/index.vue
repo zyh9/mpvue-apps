@@ -27,7 +27,15 @@
                 loading: true
             }
         },
+        onShareAppMessage() {
+            return {
+                title: '这是一个demo',
+                path: "pages/index/main",
+                imageUrl: '../../../static/jp.jpg'
+            }
+        },
         created() {
+            //全局的设置
             wx.showNavigationBarLoading()
             setTimeout(_ => {
                 wx.hideNavigationBarLoading()
