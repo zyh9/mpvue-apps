@@ -2,29 +2,29 @@
   <div class="cart">
     <ul class="cart_details">
       <!-- <li class="cart_item">
-                                      <div class="lis_top">
-                                        <div class="shop_name">
-                                          <img src="" alt="" class="icon">
-                                          <p class="name_info">张姐烤肉拌饭</p>
-                                        </div>
-                                        <img src="" alt="" class="direction">
-                                      </div>
-                                      <div class="lis_center">
-                                        <ul class="order_shop_list">
-                                          <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
-                                            <div class="item_left">
-                                              <img src="" alt="" class="item_shop_img">
-                                              <div class="ltem_left_info">
-                                                <p>烤肉拌饭</p>
-                                                <span>12元</span>
-                                              </div>
-                                            </div>
-                                            <p>X1</p>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </li> -->
-      <li v-for="(v,i) in cartList" :key="i" class="list-item_r" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-index="i">
+              <div class="lis_top">
+                <div class="shop_name">
+                  <img src="" alt="" class="icon">
+                  <p class="name_info">张姐烤肉拌饭</p>
+                </div>
+                <img src="" alt="" class="direction">
+              </div>
+              <div class="lis_center">
+                <ul class="order_shop_list">
+                  <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
+                    <div class="item_left">
+                      <img src="" alt="" class="item_shop_img">
+                      <div class="ltem_left_info">
+                        <p>烤肉拌饭</p>
+                        <span>12元</span>
+                      </div>
+                    </div>
+                    <p>X1</p>
+                  </li>
+                </ul>
+              </div>
+            </li> -->
+      <li v-for="(v,i) in cartList" :key="i" class="cart_list-item" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-index="i" :style="{marginLeft:leftMove}">
         <img :src="v.img" alt="">
         <div class="li_info">
           <p>{{v.text}}</p>
@@ -52,8 +52,9 @@
     data() {
       return {
         cartList: [],
-        startX: null,
-        delBtnWidth: 160
+        startX: 0,
+        delBtnWidth: 80,
+        leftMove: 0
       }
     },
     onShow() { //页面渲染就会触发
@@ -66,7 +67,6 @@
       touchS(e) {
         if (e.touches.length == 1) {
           this.startX = e.touches[0].clientX;
-          console.log(this.startX)
         }
       },
       touchM(e) {
@@ -75,21 +75,18 @@
           //手指滑动开始的位置记录
           let moveX = e.touches[0].clientX;
           let disX = this.startX - moveX;
-          let left = "";
+          let left = 0;
           if (disX == 0 || disX < 0) { //如果移动距离小于等于0，位置不变
-            left = "margin-left:0px";
+            left = "0px";
           } else if (disX > 0) { //移动距离大于0，left值等于手指移动距离
-            left = "margin-left:-" + disX + "px";
+            left = "-" + disX + "px";
             if (disX >= this.delBtnWidth) {
-              left = "left:-" + this.delBtnWidth + "px";
+              left = "-" + this.delBtnWidth + "px";
             }
           }
-          // console.log(left)
-          // var list = this.data.goodsList.list;
-          // if (index != "" && index != null) {
-          //   list[parseInt(index)].left = left;
-          //   this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
-          // }
+          if (index != "" && index != null) {
+            console.log('移动left触发')
+          }
         }
       },
       touchE(e) {
@@ -98,14 +95,12 @@
           //手指抬起的位置
           let endX = e.mp.changedTouches[0].clientX;
           let disX = this.startX - endX;
-          console.log(disX,this.delBtnWidth / 2)
+          let left = 0;
           //如果距离小于删除按钮的1/2，不显示删除按钮
-          var left = disX > this.delBtnWidth / 2 ? "margin-left:-" + this.delBtnWidth + "px" : "margin-left:0px";
-          console.log(left)
-          // var list = this.data.goodsList.list;
-          // if (index !== "" && index != null) {
-          //   list[parseInt(index)].left = left;
-          //   this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
+          left = disX > this.delBtnWidth / 2 ? "-" + this.delBtnWidth + "px" : "0px";
+          if (index !== "" && index != null) {
+            console.log('抬起left触发')
+          }
         }
       },
     },
@@ -122,11 +117,14 @@
   .cart_details {
     overflow: hidden;
   }
-  .list-item_r {
+  .cart_list-item {
     padding: 16rpx;
     border-bottom: 1rpx solid #eee;
     display: flex;
     align-items: center;
+    transition: margin-left 0.6s ease;
+    width: 100%;
+    box-sizing: border-box;
     img {
       width: 120rpx;
       height: 120rpx;

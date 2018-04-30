@@ -279,9 +279,9 @@
                     })
                 })
                 //针对num等于0的数据仍保留做清空处理
-                this.shopList && (this.shopList = this.shopList.filter(e => e.num != 0))
-                    //购物车为空，列表栏隐藏
-                    !this.shopList.length && (this.isActive = false)
+                this.shopList && (this.shopList = this.shopList.filter(e => e.num != 0));
+                //购物车为空，列表栏隐藏
+                !this.shopList.length && (this.isActive = false)
                 wx.setStorageSync('history', this.shopList)
             },
             addShop(e) {
@@ -479,8 +479,7 @@
             justify-content: space-between;
             padding: 20rpx;
             color: #666;
-            font-size: 24rpx;
-            // .pack_price {}
+            font-size: 24rpx; // .pack_price {}
             // .clear {}
         }
         .shop_list {
