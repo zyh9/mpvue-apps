@@ -12,15 +12,17 @@ export default {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
       'pages/index/main',
-      '^pages/cart/main',
+      'pages/my-cart/main',
       'pages/user/main',
       'pages/map/main',
-      'pages/store/main',
-      'pages/address/main',
-      'pages/details/main',
-      'pages/submit/main',
-      'pages/myorder/main',
-      'pages/shopinfo/main',
+      'pages/my-store/main',
+      'pages/select-address/main',
+      'pages/my-address/main',
+      '^pages/add-address/main',
+      'pages/movie-details/main',
+      'pages/submit-order/main',
+      'pages/my-order/main',
+      'pages/my-shop-info/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light
@@ -58,7 +60,7 @@ export default {
       {
         selectedIconPath: "static/subject-active.png",
         iconPath: "static/subject.png",
-        pagePath: 'pages/cart/main',
+        pagePath: 'pages/my-cart/main',
         text: "购物车"
       },
       {

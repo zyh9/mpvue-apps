@@ -114,7 +114,7 @@
                 } = e.currentTarget.dataset.item;
                 console.log(_id)
                 wx.navigateTo({
-                    url: '/pages/details/main?id=' + _id
+                    url: '/pages/movie-details/main?id=' + _id
                 })
             }
         },

@@ -2,15 +2,29 @@ import msg from './toast';
 
 const baseUrl = '';
 
+const header = _ => {
+  //可以从session获取数据赋值
+  return {
+    'CityName': '',
+    'LocationX': 0,
+    'LocationY': 0,
+  }
+}
+
+
 //get数据请求
 const get = (url, params = {}, headers) => {
   let time = new Date().getTime();
   const str = Object.entries(params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
+  let editHeaders = Object.assign({}, { "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8' })
+  if (headers) {
+    editHeaders = Object.assign({}, editHeaders, { "token": wx.getStorageSync("token") }, headers)
+  }
   return new Promise((resolve, reject) => {
     let address = str ? `${url}?${str}&t=${time}` : `${url}?t=${time}`;
     wx.request({
       url: baseUrl + address,
-      header: { 'content-type': 'application/json' },
+      header: editHeaders,
       method: "GET",
       success: res => {
         setTimeout(_ => {
@@ -28,11 +42,15 @@ const get = (url, params = {}, headers) => {
 //post数据请求
 const post = function (url, data = {}, headers) {
   let time = new Date().getTime();
+  let editHeaders = Object.assign({}, { "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8' })
+  if (headers) {
+    editHeaders = Object.assign({}, editHeaders, { "token": wx.getStorageSync("token") }, headers)
+  }
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${baseUrl}${url}?=t${time}`,
       data: data,
-      header: { 'content-type': 'application/json' },
+      header: editHeaders,
       method: "POST",
       success: res => {
         setTimeout(_ => {

@@ -214,24 +214,23 @@
                 isActive: false,
             }
         },
-        mounted() {
+        onLoad() {
             let history = wx.getStorageSync('history') || [];
             // console.log(history)
             //针对num等于0的数据仍保留做清空处理
             this.shopList = history.filter(e => e.num != 0)
             console.log(this.shopList)
-            if (history.length) {
-                this.right.forEach(e => {
-                    history.forEach(ele => {
-                        if (e.shopId == ele.shopId) {
-                            e.num = ele.num;
-                        }
-                    })
+            this.right.forEach(e => {
+                //针对购物车的商品删除或者减至为0的设置，全部归为初始值
+                e.num = 0;
+                //空数组不会执行forEach，所以可省略针对this.shopList的length判断
+                this.shopList.forEach(ele => {
+                    if (e.shopId == ele.shopId) {
+                        e.num = ele.num;
+                    }
                 })
                 this.newList = this.newList.length ? this.newList : this.right;
-            } else {
-                this.newList = this.newList.length ? this.newList : this.right;
-            }
+            })
         },
         methods: {
             checked(e) {
@@ -336,7 +335,7 @@
             settlement() {
                 if (this.shopList.length) {
                     wx.navigateTo({
-                        url: '/pages/submit/main'
+                        url: '/pages/submit-order/main'
                     })
                 } else {
                     msg('您还没有选择商品哦')
@@ -354,7 +353,10 @@
                 return this.shopList.length ? n : 0;
             }
         },
-        components: {}
+        components: {},
+        watch: {
+            shopList: function(newVal, oldVal) {}
+        }
     }
 </script>
 

@@ -40,7 +40,7 @@
     methods: {
       address() {
         wx.navigateTo({
-          url: '/pages/address/main'
+          url: '/pages/select-address/main'
         })
       }
     },

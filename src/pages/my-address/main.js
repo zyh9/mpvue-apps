@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
     config: {
-        navigationBarTitleText: '收货地址',
+        navigationBarTitleText: '我的收货地址',
     }
 }

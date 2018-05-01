@@ -49,7 +49,7 @@
     onShow() { //页面渲染就会触发
       this.currentTab = 0;
       let history = wx.getStorageSync('history') || [];
-      console.log(history)
+      // console.log(history)
     },
     created() {},
     mounted() {

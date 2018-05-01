@@ -29,22 +29,22 @@
     methods: {
       store() {
         wx.navigateTo({
-          url: '/pages/store/main'
+          url: '/pages/my-store/main'
         })
       },
       address() {
         wx.navigateTo({
-          url: '/pages/address/main'
+          url: '/pages/select-address/main'
         })
       },
       order() {
         wx.navigateTo({
-          url: '/pages/myorder/main'
+          url: '/pages/my-order/main'
         })
       },
       shopInfo() {
         wx.navigateTo({
-          url: '/pages/shopinfo/main'
+          url: '/pages/my-shop-info/main'
         })
       }
     },
