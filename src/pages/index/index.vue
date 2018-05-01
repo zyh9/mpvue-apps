@@ -29,9 +29,9 @@
         },
         onShareAppMessage() {
             return {
-                title: '这是一个demo',
+                title: 'UU商城',
                 path: "pages/index/main",
-                imageUrl: '../../../static/jp.jpg'
+                imageUrl: require('../../../static/jp.jpg')
             }
         },
         created() {

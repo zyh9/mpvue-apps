@@ -25,8 +25,7 @@
     data() {
       return {}
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
       addAddress() {
         wx.navigateTo({
@@ -63,7 +62,10 @@
             .pos {
               font-size: 30rpx;
             }
-            .name {}
+            .name {
+              color: #666;
+              font-size: 24rpx;
+            }
             .local_address {
               color: #666;
               font-size: 24rpx;
