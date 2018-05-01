@@ -11,17 +11,16 @@
     <div class="options">
       <p>收货地址</p>
       <picker mode="region" @change="regionChange" :value="region" :custom-item="customItem" class="citySelect">
-      <view class="picker">
-        {{region[0]}} {{region[1]}} {{region[2]}}
-      </view>
-    </picker>
+        <view class="picker">
+          {{region[0]}} {{region[1]}} {{region[2]}}
+        </view>
+      </picker>
       <img src="../../../static/userImg.png" alt="">
     </div>
     <div class="options">
       <p>门牌号</p>
       <input type="text" placeholder="详细地址，例1号楼2层201室">
     </div>
-    
   </div>
 </template>
 
@@ -33,8 +32,7 @@
         customItem: '请选择'
       }
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
       regionChange(e) {
         console.log(e)
@@ -64,10 +62,12 @@
       }
       input {
         flex-grow: 1;
-      }
-      .citySelect{
-        flex-grow: 1;
+        font-size: 24rpx;
         color: #666;
+      }
+      .citySelect {
+        flex-grow: 1;
+        color: #777;
       }
       img {
         width: 50rpx;

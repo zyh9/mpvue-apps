@@ -1,29 +1,6 @@
 <template>
   <div class="cart">
     <ul class="cart_details">
-      <!-- <li class="cart_item">
-                              <div class="lis_top">
-                                <div class="shop_name">
-                                  <img src="" alt="" class="icon">
-                                  <p class="name_info">张姐烤肉拌饭</p>
-                                </div>
-                                <img src="" alt="" class="direction">
-                              </div>
-                              <div class="lis_center">
-                                <ul class="order_shop_list">
-                                  <li class="list_lis_info" v-for="(v,i) in 3" :key="i">
-                                    <div class="item_left">
-                                      <img src="" alt="" class="item_shop_img">
-                                      <div class="ltem_left_info">
-                                        <p>烤肉拌饭</p>
-                                        <span>12元</span>
-                                      </div>
-                                    </div>
-                                    <p>X1</p>
-                                  </li>
-                                </ul>
-                              </div>
-                            </li> -->
       <li v-for="(v,i) in cartList" :key="i" class="cart_list-item" @touchstart="touchS" @touchmove="touchM" @touchend="touchE" :data-index="i" :style="{marginLeft:v.leftVal}">
         <img :src="v.img" alt="">
         <div class="li_info">
@@ -171,7 +148,11 @@
     overflow: hidden;
   }
   .cart_details {
-    overflow: hidden;
+    height: 100%;
+    padding-bottom: 80rpx;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   .cart_list-item {
     padding: 16rpx;
@@ -227,76 +208,8 @@
       font-size: 24rpx;
     }
   }
-  .cart_item {
-    background: #fff;
-    margin-top: 20rpx;
-    .lis_top {
-      padding: 20rpx;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1rpx solid #e6e6e6;
-      .shop_name {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        .icon {
-          width: 50rpx;
-          height: 50rpx;
-          margin-right: 20rpx;
-          background: #f00;
-        }
-        .name_info {
-          font-size: 24rpx;
-          color: #666;
-        }
-      }
-      .direction {
-        width: 50rpx;
-        height: 50rpx;
-        background: #f00;
-      }
-    }
-    .lis_center {
-      padding: 0 20rpx;
-      .order_shop_list {
-        .list_lis_info {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-bottom: 1rpx solid #e6e6e6;
-          padding: 10rpx 0;
-          .item_left {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-            justify-content: flex-start;
-          }
-          .item_shop_img {
-            width: 50rpx;
-            height: 50rpx;
-            background: #f00;
-            margin-right: 20rpx;
-          }
-          .ltem_left_info {
-            p {
-              padding: 8rpx 0;
-              font-size: 24rpx;
-              color: #666;
-            }
-            span {
-              font-size: 24rpx;
-              color: #999;
-            }
-          }
-        }
-        li:nth-last-of-type(1) {
-          border-bottom: none;
-        }
-      }
-    }
-  }
   .cart_bottom {
+    height: 80rpx;
     display: flex;
     align-items: center;
     justify-content: space-between;

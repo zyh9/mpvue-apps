@@ -104,6 +104,10 @@
                     color: #666;
                 }
             }
+            .shop_tel {
+                border-right: 1rpx solid #e6e6e6;
+                box-sizing: border-box;
+            }
         }
         .shop_service,
         .shop_business {

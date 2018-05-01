@@ -2,10 +2,10 @@
     <div class="store_index">
         <div class="store_index_list">
             <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler" class="scroll_left">
-                <div v-for="(v,i) in left" :key="i" class="list-item_l" :data-id="v.id" @click="checked" :class="{left_select:i==selected}">{{v.text}}</div>
+                <div v-for="(v,i) in left" :key="i" class="list_item_l" :data-id="v.id" @click="checked" :class="{left_select:i==selected}">{{v.text}}</div>
             </scroll-view>
             <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler" class="scroll_right">
-                <div v-for="(v,i) in newList" :key="i" class="list-item_r">
+                <div v-for="(v,i) in newList" :key="i" class="list_item_r">
                     <img :src="v.img" alt="">
                     <div class="li_info">
                         <p>{{v.text}}</p>
@@ -374,7 +374,7 @@
         .scroll_left {
             width: 260rpx;
             border-right: 1rpx solid #eee;
-            .list-item_l {
+            .list_item_l {
                 text-align: center;
                 padding: 20rpx 40rpx;
                 border-bottom: 1rpx solid #eee;
@@ -386,7 +386,7 @@
         }
         .scroll_right {
             flex-grow: 1;
-            .list-item_r {
+            .list_item_r {
                 padding: 16rpx;
                 border-bottom: 1rpx solid #eee;
                 display: flex;
@@ -461,14 +461,16 @@
             }
         }
         .settlement {
+            width: 200rpx;
             height: 100%;
             color: #fff;
             background: #ff8b03;
             font-size: 24rpx;
             white-space: nowrap;
-            padding: 0 30rpx;
+            padding: 0 20rpx;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
     }
     .history {

@@ -18,11 +18,12 @@ export default {
       'pages/my-store/main',
       'pages/select-address/main',
       'pages/my-address/main',
-      '^pages/add-address/main',
+      'pages/add-address/main',
       'pages/movie-details/main',
       'pages/submit-order/main',
       'pages/my-order/main',
       'pages/my-shop-info/main',
+      '^pages/order-details/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light
