@@ -14,4 +14,8 @@
 		
 		改为export default QQMapWX; 引入改为import QQMapWX from 'XXX/qqmap-wx-jssdk.js'; 即可
 
-[微信小程序JavaScript SDK](http://lbs.qq.com/qqmap_wx_jssdk/index.html)
+		百度的微信小程序JavaScript SDK何其类似，不再赘述
+
+[腾讯 微信小程序 SDK](http://lbs.qq.com/qqmap_wx_jssdk/index.html)
+
+[百度 微信小程序 SDK](https://github.com/baidumapapi/wxapp-jsapi)
