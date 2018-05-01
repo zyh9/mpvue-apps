@@ -51,14 +51,20 @@
             getUserInfo() {
                 // 调用登录接口
                 wx.login({
-                    success: () => {
+                    success: (res) => {
+                        console.log(res.code)
                         wx.getUserInfo({
                             success: res => {
-                                // console.log(res.userInfo)
                                 this.userInfo = res.userInfo
                                 wx.setStorageSync('userInfo', res.userInfo)
+                            },
+                            fail: err => {
+                                console.log(err)
                             }
                         })
+                    },
+                    fail: err => {
+                        console.log(err)
                     }
                 })
             },

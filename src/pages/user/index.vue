@@ -36,7 +36,7 @@
     },
     mounted() {
       this.userInfo = wx.getStorageSync('userInfo')
-      // console.log(this.userInfo)
+      console.log(this.userInfo)
     },
     methods: {
       store() {
