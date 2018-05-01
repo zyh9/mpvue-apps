@@ -4,8 +4,8 @@
       <img :src="userInfo.avatarUrl" alt="" class="user_img">
       <p class="user_name">{{userInfo.nickName}}</p>
     </div>
-    <div class="options" @click="store">
-      <p>点击进入个人店铺页</p>
+    <div class="options">
+      <p>绑定手机号</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
     <div class="options" @click="order">
@@ -13,16 +13,16 @@
       <img src="../../../static/userImg.png" alt="">
     </div>
     <div class="options" @click="address">
-      <p>我的收货地址</p>
+      <p>我的地址</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
-    <div class="options" @click="shopInfo">
-      <p>查看店铺信息</p>
+    <div class="options" @click="history">
+      <p>历史店铺</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
-    <div class="uu_tips">
-      <p>软件服务由UU跑腿提供</p>
-      <p class="me_shop">我也要开店</p>
+    <div class="options">
+      <p>我要开店</p>
+      <img src="../../../static/userImg.png" alt="">
     </div>
   </div>
 </template>
@@ -39,11 +39,6 @@
       // console.log(this.userInfo)
     },
     methods: {
-      store() {
-        wx.navigateTo({
-          url: '/pages/my-store/main'
-        })
-      },
       address() {
         wx.navigateTo({
           url: '/pages/select-address/main'
@@ -54,9 +49,9 @@
           url: '/pages/my-order/main'
         })
       },
-      shopInfo() {
+      history(){
         wx.navigateTo({
-          url: '/pages/my-shop-info/main'
+          url: '/pages/history-shop/main'
         })
       }
     },

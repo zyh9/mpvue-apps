@@ -23,7 +23,11 @@ export default {
       'pages/submit-order/main',
       'pages/my-order/main',
       'pages/my-shop-info/main',
-      '^pages/order-details/main',
+      'pages/order-details/main',
+      'pages/plat-index/main',
+      'pages/join-uu/main',
+      '^pages/mine/main',
+      'pages/history-shop/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light
@@ -42,32 +46,55 @@ export default {
       selectedColor: "skyblue",
       //文字初始颜色
       color: '#9c93b4',
-      list: [{
+      list: [
+      // {
+      //   //图标选中状态
+      //   selectedIconPath: "static/index-active.png",
+      //   //图标未选中状态
+      //   iconPath: "static/index.png",
+      //   //页面所属路径
+      //   pagePath: "pages/index/main",
+      //   //图标下方文字描述
+      //   text: "首页"
+      // },
+      // {
+      //   selectedIconPath: "static/subject-active.png",
+      //   iconPath: "static/subject.png",
+      //   pagePath: 'pages/map/main',
+      //   text: "地图"
+      // },
+      // {
+      //   selectedIconPath: "static/subject-active.png",
+      //   iconPath: "static/subject.png",
+      //   pagePath: 'pages/my-cart/main',
+      //   text: "购物车"
+      // },
+      // {
+      //   selectedIconPath: "static/user-active.png",
+      //   iconPath: "static/user.png",
+      //   pagePath: 'pages/user/main',
+      //   text: "我的"
+      // }
+      {
         //图标选中状态
         selectedIconPath: "static/index-active.png",
         //图标未选中状态
         iconPath: "static/index.png",
         //页面所属路径
-        pagePath: "pages/index/main",
+        pagePath: "pages/plat-index/main",
         //图标下方文字描述
-        text: "首页"
+        text: "UU小店"
       },
       {
         selectedIconPath: "static/subject-active.png",
         iconPath: "static/subject.png",
-        pagePath: 'pages/map/main',
-        text: "地图"
-      },
-      {
-        selectedIconPath: "static/subject-active.png",
-        iconPath: "static/subject.png",
-        pagePath: 'pages/my-cart/main',
-        text: "购物车"
+        pagePath: 'pages/join-uu/main',
+        text: "入驻U商"
       },
       {
         selectedIconPath: "static/user-active.png",
         iconPath: "static/user.png",
-        pagePath: 'pages/user/main',
+        pagePath: 'pages/mine/main',
         text: "我的"
       }
       ]
