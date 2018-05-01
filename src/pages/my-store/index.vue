@@ -1,16 +1,18 @@
 <template>
   <div class="store">
-    <div class="store_top">
-      <img src="../../../static/userImg.png" alt="" class="shop_img">
-      <div class="top_right">
-        <p class="name">XXXXX的便利店</p>
-        <p class="address">地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东</p>
-        <p class="time">营业时间：9:30-22:00</p>
+    <div class="store_top_info">
+      <div class="store_top">
+        <img src="../../../static/userImg.png" alt="" class="shop_img">
+        <div class="top_right">
+          <p class="name">XXXXX的便利店</p>
+          <p class="address">地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东</p>
+          <p class="time">营业时间：9:30-22:00</p>
+        </div>
       </div>
+      <ul class="store_info">
+        <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav">{{v.name}}</li>
+      </ul>
     </div>
-    <ul class="store_info">
-      <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav">{{v.name}}</li>
-    </ul>
     <swiper :current="currentTab" class="swiper-box" duration="300" :style="{height:winHeight+'px'}" @change="bindChange">
       <swiper-item>
         <storeIndex></storeIndex>
@@ -54,17 +56,17 @@
     created() {},
     mounted() {
       let query = wx.createSelectorQuery();
-      query.select('.store_top').boundingClientRect()
+      query.select('.store_top_info').boundingClientRect()
       query.exec(res => {
-        // console.log(res)
-      })
-      wx.getSystemInfo({
-        success: res => {
-          // console.log(res)
-          this.winWidth = res.windowWidth;
-          //减去上方的高度
-          this.winHeight = res.windowHeight - 136;
-        }
+        let height = res[0].height;
+        wx.getSystemInfo({
+          success: res => {
+            // console.log(res)
+            this.winWidth = res.windowWidth;
+            //减去上方的高度
+            this.winHeight = res.windowHeight - height;
+          }
+        })
       })
     },
     computed: {
@@ -102,53 +104,56 @@
 </script>
 
 <style lang="less">
-  .store_top {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 30rpx;
-    .shop_img {
-      width: 100rpx;
-      height: 100rpx;
-      display: block;
-    }
-    .top_right {
-      padding-left: 30rpx;
-      flex-grow: 1;
-      .name {
-        font-size: 24rpx;
-        color: #666;
+  .store_top_info {
+    overflow: hidden;
+    .store_top {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 30rpx;
+      .shop_img {
+        width: 100rpx;
+        height: 100rpx;
+        display: block;
       }
-      .address {
-        font-size: 24rpx;
-        color: #666;
-        display: -webkit-box !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        word-break: break-all;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-      }
-      .time {
-        font-size: 24rpx;
-        color: #666;
+      .top_right {
+        padding-left: 30rpx;
+        flex-grow: 1;
+        .name {
+          font-size: 24rpx;
+          color: #666;
+        }
+        .address {
+          font-size: 24rpx;
+          color: #666;
+          display: -webkit-box !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: break-all;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+        }
+        .time {
+          font-size: 24rpx;
+          color: #666;
+        }
       }
     }
-  }
-  .store_info {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    li {
-      color: #666;
-      font-size: 24rpx;
-      flex-flow: 1;
-      width: 100%;
-      text-align: center;
-      padding: 16rpx;
-    }
-    .li_select {
-      color: skyblue;
+    .store_info {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      li {
+        color: #666;
+        font-size: 24rpx;
+        flex-flow: 1;
+        width: 100%;
+        text-align: center;
+        padding: 16rpx;
+      }
+      .li_select {
+        color: skyblue;
+      }
     }
   }
 </style>

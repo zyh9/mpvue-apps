@@ -13,7 +13,7 @@ export default {
     pages: [
       'pages/index/main',
       'pages/my-cart/main',
-      'pages/user/main',
+      '^pages/user/main',
       'pages/map/main',
       'pages/my-store/main',
       'pages/select-address/main',
@@ -26,7 +26,7 @@ export default {
       'pages/order-details/main',
       'pages/plat-index/main',
       'pages/join-uu/main',
-      '^pages/mine/main',
+      'pages/mine/main',
       'pages/history-shop/main',
     ],
     window: {
@@ -47,56 +47,57 @@ export default {
       //文字初始颜色
       color: '#9c93b4',
       list: [
-      // {
-      //   //图标选中状态
-      //   selectedIconPath: "static/index-active.png",
-      //   //图标未选中状态
-      //   iconPath: "static/index.png",
-      //   //页面所属路径
-      //   pagePath: "pages/index/main",
-      //   //图标下方文字描述
-      //   text: "首页"
-      // },
-      // {
-      //   selectedIconPath: "static/subject-active.png",
-      //   iconPath: "static/subject.png",
-      //   pagePath: 'pages/map/main',
-      //   text: "地图"
-      // },
-      // {
-      //   selectedIconPath: "static/subject-active.png",
-      //   iconPath: "static/subject.png",
-      //   pagePath: 'pages/my-cart/main',
-      //   text: "购物车"
-      // },
-      // {
-      //   selectedIconPath: "static/user-active.png",
-      //   iconPath: "static/user.png",
-      //   pagePath: 'pages/user/main',
-      //   text: "我的"
-      // }
       {
         //图标选中状态
         selectedIconPath: "static/index-active.png",
         //图标未选中状态
         iconPath: "static/index.png",
         //页面所属路径
-        pagePath: "pages/plat-index/main",
+        pagePath: "pages/index/main",
         //图标下方文字描述
-        text: "UU小店"
+        text: "首页"
       },
       {
         selectedIconPath: "static/subject-active.png",
         iconPath: "static/subject.png",
-        pagePath: 'pages/join-uu/main',
-        text: "入驻U商"
+        pagePath: 'pages/map/main',
+        text: "地图"
+      },
+      {
+        selectedIconPath: "static/subject-active.png",
+        iconPath: "static/subject.png",
+        pagePath: 'pages/my-cart/main',
+        text: "购物车"
       },
       {
         selectedIconPath: "static/user-active.png",
         iconPath: "static/user.png",
-        pagePath: 'pages/mine/main',
+        pagePath: 'pages/user/main',
         text: "我的"
       }
+
+      // {
+      //   //图标选中状态
+      //   selectedIconPath: "static/index-active.png",
+      //   //图标未选中状态
+      //   iconPath: "static/index.png",
+      //   //页面所属路径
+      //   pagePath: "pages/plat-index/main",
+      //   //图标下方文字描述
+      //   text: "UU小店"
+      // },
+      // {
+      //   selectedIconPath: "static/subject-active.png",
+      //   iconPath: "static/subject.png",
+      //   pagePath: 'pages/join-uu/main',
+      //   text: "入驻U商"
+      // },
+      // {
+      //   selectedIconPath: "static/user-active.png",
+      //   iconPath: "static/user.png",
+      //   pagePath: 'pages/mine/main',
+      //   text: "我的"
+      // }
       ]
     },
   }

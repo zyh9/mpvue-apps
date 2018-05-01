@@ -90,6 +90,8 @@
           item
         } = e.currentTarget.dataset;
         console.log(item)
+        this.cartList = this.cartList.filter(ele => ele.shopId != item.shopId)
+        wx.setStorageSync('history', this.cartList)
       },
       lowerCart(e) {
         let {
@@ -99,11 +101,6 @@
           if (ele.shopId == info.shopId) {
             ele.num--;
           }
-          // this.newList.forEach(item => {
-          //   if (item.shopId == ele.shopId) {
-          //     item.num = ele.num;
-          //   }
-          // })
         })
         //针对num等于0的数据仍保留做清空处理
         this.cartList && (this.cartList = this.cartList.filter(e => e.num != 0));
@@ -117,11 +114,6 @@
           if (ele.shopId == info.shopId) {
             ele.num++;
           }
-          // this.newList.forEach(item => {
-          //   if (item.shopId == ele.shopId) {
-          //     item.num = ele.num;
-          //   }
-          // })
         })
         wx.setStorageSync('history', this.cartList)
       },

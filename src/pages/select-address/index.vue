@@ -7,11 +7,11 @@
         </div>
         <scroll-view scroll-y="true" :style="{height: winHeight+'px'}">
             <!-- <ul class="address_list">
-                    <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
-                        <p class="address_title">{{v.title}}</p>
-                        <p class="address_con">{{v.address}}</p>
-                    </li>
-                </ul> -->
+                        <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
+                            <p class="address_title">{{v.title}}</p>
+                            <p class="address_con">{{v.address}}</p>
+                        </li>
+                    </ul> -->
             <ul class="address_list">
                 <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
                     <p class="address_title">{{v.city}} {{v.district}}</p>
@@ -42,7 +42,6 @@
                 addressList: [],
                 winWidth: '',
                 winHeight: '',
-                topHeight: ''
             }
         },
         created() {},
@@ -51,15 +50,15 @@
             query.select('.address_top').boundingClientRect()
             query.exec(res => {
                 // console.log(res)
-                this.topHeight = res.height;
-            })
-            wx.getSystemInfo({
-                success: res => {
-                    // console.log(res)
-                    this.winWidth = res.windowWidth;
-                    //减去上方的高度
-                    this.winHeight = res.windowHeight - 50;
-                }
+                let height = res[0].height;
+                wx.getSystemInfo({
+                    success: res => {
+                        // console.log(res)
+                        this.winWidth = res.windowWidth;
+                        //减去上方的高度
+                        this.winHeight = res.windowHeight - height;
+                    }
+                })
             })
             // 实例化API核心类
             // wx.getLocation({
@@ -181,7 +180,7 @@
             background: #e6e6e6;
             border-radius: 30rpx;
         }
-        .clear{
+        .clear {
             width: 30rpx;
             height: 30rpx;
             border-radius: 50%;
@@ -193,7 +192,7 @@
             justify-content: center;
             transform: rotate(45deg);
             position: absolute;
-            right:50rpx;
+            right: 50rpx;
             z-index: 2;
         }
     }

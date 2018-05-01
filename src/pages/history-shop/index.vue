@@ -80,15 +80,15 @@
             let query = wx.createSelectorQuery();
             query.select('.histoty_shop_top').boundingClientRect()
             query.exec(res => {
-                // console.log(res)
-            })
-            wx.getSystemInfo({
-                success: res => {
-                    // console.log(res)
-                    this.winWidth = res.windowWidth;
-                    //减去上方的高度
-                    this.winHeight = res.windowHeight - 34;
-                }
+                let height = res[0].height;
+                wx.getSystemInfo({
+                    success: res => {
+                        // console.log(res)
+                        this.winWidth = res.windowWidth;
+                        //减去上方的高度
+                        this.winHeight = res.windowHeight - height;
+                    }
+                })
             })
         },
         methods: {
