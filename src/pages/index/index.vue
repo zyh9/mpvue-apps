@@ -73,21 +73,6 @@
                 // wx.showLoading({
                 //     title: '加载中...',
                 // })
-                // wx.request({
-                //     url: `https://db.miaov.com/doubanapi/v0/movie/list?page=${this.page}&size=${this.size}`,
-                //     success: (res) => {
-                //         setTimeout(_ => {
-                //             let {
-                //                 data
-                //             } = res.data;
-                //             for (let i = 0; i < data.length; i += 2) {
-                //                 this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
-                //             }
-                //             this.loading = false;
-                //             wx.hideLoading()
-                //         }, 600)
-                //     }
-                // })
                 util.get(
                     'https://db.miaov.com/doubanapi/v0/movie/list', {
                         page: this.page,
@@ -118,7 +103,7 @@
                 let {
                     _id
                 } = e.currentTarget.dataset.item;
-                console.log(_id)
+                // console.log(_id)
                 wx.navigateTo({
                     url: '/pages/movie-details/main?id=' + _id
                 })
