@@ -19,7 +19,12 @@
     </div>
     <div class="options">
       <p>店铺类型</p>
-      <input type="text" placeholder="待开发。。。">
+      <checkbox-group @change="checkboxChange">
+        <label class="checkbox" v-for="(v,i) in typeList" :key="i">
+              <checkbox :value="v.value" :checked="v.checked" :disabled="v.disabled" color="#666" class="checkbox_info" />
+              {{v.value}}
+            </label>
+      </checkbox-group>
     </div>
     <div class="options">
       <p>店铺地址</p>
@@ -58,6 +63,19 @@
         customItem: '请选择',
         startTime: '00:00',
         endTime: '00:00',
+        typeList: [{
+            name: 'food',
+            value: '餐饮类',
+            checked: false,
+            disabled: false
+          },
+          {
+            name: 'other',
+            value: '其它',
+            checked: false,
+            disabled: false
+          },
+        ]
       }
     },
     mounted() {},
@@ -71,6 +89,9 @@
       },
       endTimeChange(e) {
         this.endTime = e.target.value;
+      },
+      checkboxChange: function(e) {
+        console.log(e.target.value)
       }
     },
     components: {}
@@ -101,6 +122,15 @@
       align-items: center;
       padding: 20rpx;
       border-bottom: 1rpx solid #e6e6e6;
+      .checkbox {
+        margin-right: 20rpx;
+        font-size: 24rpx;
+        color: #666;
+        .checkbox_info {
+          margin-right: 4rpx;
+          transform: scale(.7);
+        }
+      }
       p {
         font-size: 24rpx;
         color: #333;
