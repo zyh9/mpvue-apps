@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="order_details_con">
-      <div class="options">
+      <div class="shop_info_sum">
         <img src="../../../static/userImg.png" alt="">
         <p>张姐烤肉拌饭</p>
       </div>
@@ -175,7 +175,7 @@
     }
     .order_details_con {
       margin-bottom: 20rpx;
-      .options {
+      .shop_info_sum {
         background: #fff;
         display: flex;
         justify-content: flex-start;

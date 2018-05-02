@@ -1,6 +1,6 @@
 import msg from './toast';
 
-const baseUrl = '';
+const baseUrl = 'http://192.168.10.66:6001';
 
 const header = _ => {
   //可以从session获取数据赋值

@@ -6,7 +6,7 @@
     </div>
     <div class="options">
       <p>联系电话</p>
-      <input type="text" placeholder="请填写收件人电话">
+      <input type="text" placeholder="请填写收件人电话" maxlength="11">
     </div>
     <div class="options">
       <p>收货地址</p>
@@ -18,7 +18,7 @@
       <img src="../../../static/userImg.png" alt="">
     </div>
     <div class="options">
-      <p>门牌号</p>
+      <p>详细地址</p>
       <input type="text" placeholder="详细地址，例1号楼2层201室">
     </div>
   </div>
@@ -47,7 +47,6 @@
   .add_address {
     height: 100%;
     background: #f5f5f5;
-    font-size: 24rpx;
     .options {
       background: #fff;
       display: flex;
@@ -56,6 +55,8 @@
       padding: 20rpx;
       border-bottom: 1rpx solid #e6e6e6;
       p {
+        font-size: 24rpx;
+        color: #333;
         width: 140rpx;
         text-align: left;
         transform: translateY(3rpx);

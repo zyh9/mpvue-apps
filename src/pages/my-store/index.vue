@@ -86,9 +86,7 @@
         // console.log(e)
         this.currentTab = e.target.current
       },
-      /** 
-       * 点击tab切换 
-       */
+      //点击tab切换 
       swichNav(e) {
         // console.log(e)
         if (this.currentTab === e.target.dataset.current) return;
