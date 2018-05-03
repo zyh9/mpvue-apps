@@ -36,7 +36,7 @@ export default {
       'pages/history-shop/main',
       //后台登录页面
       'pages/admin-shop-index/main',
-      'pages/admin-shop-login/main',
+      '^pages/admin-shop-login/main',
       'pages/admin-shop-signup/main',
       //修改信息页面
       'pages/admin-modify-mobile/main',
@@ -59,7 +59,7 @@ export default {
       //我的个人信息
       'pages/admin-user-info/main',
       //店铺管理
-      '^pages/admin-store-manage/main',
+      'pages/admin-store-manage/main',
       'pages/admin-store-templet/main',
       //商品管理
       'pages/admin-commodity-manage/main',

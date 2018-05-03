@@ -66,12 +66,12 @@
         }, 1000)
       },
       modify() {
-        wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/admin-user-info/main'
         })
       },
       cancel() {
-        wx.redirectTo({
+        wx.navigateTo({
           url: '/pages/admin-user-info/main'
         })
       }

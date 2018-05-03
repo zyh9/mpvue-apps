@@ -11,6 +11,9 @@
         <button class="sms_click" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
       </div>
       <div class="btn" @click="next">下一步</div>
+      <div class="login_mode">
+        <p @click="login">已有账号，前往登陆</p>
+      </div>
     </div>
     <div class="tel_right" :class="currentTab>0?'right':''">
       <div class="options">
@@ -67,6 +70,11 @@
       },
       signup() {
         console.log('注册成功')
+      },
+      login() {
+        wx.navigateTo({
+          url: '/pages/admin-shop-login/main'
+        })
       }
     },
     watch: {
@@ -213,6 +221,17 @@
     }
     .btn_sum {
       overflow: hidden;
+    }
+    .login_mode {
+      padding: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      p {
+        font-size: 28rpx;
+        color: #333;
+        text-decoration: underline;
+      }
     }
   }
 </style>
