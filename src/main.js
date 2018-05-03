@@ -38,18 +38,27 @@ export default {
       'pages/admin-shop-index/main',
       'pages/admin-shop-login/main',
       'pages/admin-shop-signup/main',
-      'pages/admin-shop-set-password/main',
       //修改信息页面
       'pages/admin-modify-mobile/main',
       'pages/admin-modify-password/main',
       //后台页面
       'pages/admin-index/main',
       'pages/admin-order/main',
-      'pages/admin-user/main',
+      '^pages/admin-user/main',
       //后台店铺信息页面
-      '^pages/admin-shop-info/main',
+      'pages/admin-shop-info/main',
       //后台订单详情
       'pages/admin-order-details/main',
+      //我的钱包
+      'pages/admin-user-purse/main',
+      'pages/admin-user-recharge/main',
+      'pages/admin-user-withdraw/main',
+      //我的收款码
+      'pages/admin-collection-code/main',
+      'pages/admin-receipt-records/main',
+      //我的个人信息
+      'pages/admin-user-info/main',
+      
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler">
+        <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler" @scroll="eventScroll">
             <div v-for="(v,i) in movies" :key="i" class="list-item">
                 <div v-for="(item,index) in v" :key="index" class="movie-item" :data-item="item" @click="goDetails">
                     <img :src="item.cover" alt="信息">
@@ -107,6 +107,10 @@
                 wx.navigateTo({
                     url: '/pages/movie-details/main?id=' + _id
                 })
+            },
+            //监听滚动距离
+            eventScroll(e){
+                console.log(e.target.scrollTop)
             }
         },
         components: {},

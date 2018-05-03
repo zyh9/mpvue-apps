@@ -6,7 +6,7 @@ app.$mount()
 
 export default {
     config: {
-        navigationBarTitleText: '设置密码',
+        navigationBarTitleText: '我的收款码',
         //上方导航栏颜色
         // navigationBarBackgroundColor:'#f00',
     }

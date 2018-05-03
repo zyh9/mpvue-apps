@@ -1,15 +1,30 @@
 <template>
-  <div class="shop_signup">
-    <div class="options">
-      <p>联系电话</p>
-      <input type="text" placeholder="请输入您的手机号" maxlength="11" v-model="authTel">
+  <div class="admin_modify_password">
+    <div class="tel_left">
+      <div class="options">
+        <p>联系电话</p>
+        <input type="text" placeholder="请输入您的手机号" maxlength="11" v-model="tel">
+      </div>
+      <div class="password">
+        <p>验证码</p>
+        <input type="text" placeholder="请输入验证码" v-model="val" maxlength="4">
+        <button class="sms_click" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
+      </div>
+      <div class="btn" @click="next">下一步</div>
     </div>
-    <div class="password">
-      <p>验证码</p>
-      <input type="text" placeholder="请输入验证码" v-model="authVal" maxlength="4">
-      <button class="sms_click" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
+    <div class="tel_right" :class="currentTab>0?'right':''">
+      <div class="options">
+        <p>设置密码</p>
+        <input type="password" placeholder="英文字母与数字，最少8位" v-model="password">
+        <i class="clear" @click="password=''" v-if="password">+</i>
+      </div>
+      <div class="password">
+        <p>再次输入</p>
+        <input type="password" placeholder="请再输入一遍" v-model="again">
+        <i class="clear" @click="again=''" v-if="again">+</i>
+      </div>
+      <div class="btn" @click="signup">注册</div>
     </div>
-    <div class="btn_login" @click="next">下一步</div>
   </div>
 </template>
 
@@ -17,16 +32,25 @@
   export default {
     data() {
       return {
-        authTel: '',
-        authVal: '',
+        tel: '',
+        val: '',
         currentTab: 0,
         countdown: null,
         countdownInfo: '获取验证码',
         countdownTimer: null,
+        password: '',
+        again: '',
       }
     },
-    mounted() {},
+    onShow() { //页面渲染就会触发
+    },
     methods: {
+      //点击切换
+      next(e) {
+        this.currentTab = 1;
+        this.countdownTimer = null;
+        clearInterval(this.countdownTimer)
+      },
       //发送验证码
       sendSms() {
         this.countdown = 60;
@@ -40,20 +64,23 @@
           }
         }, 1000)
       },
-      next(){
-         wx.navigateTo({
-          url: '/pages/admin-shop-set-password/main'
-        })
+      signup() {
+        console.log('注册成功')
       }
     },
-    components: {},
     watch: {
-      authTel: function(newVal, oldVal) {
-        this.authTel = newVal.replace(/[^\d]/g, '');
+      tel: function(newVal, oldVal) {
+        //不是数字的替换为空
+        this.tel = newVal.replace(/[^\d]/g, '');
       },
-      authVal: function(newVal, oldVal) {
-        this.authVal = newVal.replace(/[^\d]/g, '');
+      val: function(newVal, oldVal) {
+        this.val = newVal.replace(/[^\d]/g, '');
       },
+      currentTab: function(newVal, oldVal) {
+        wx.setNavigationBarTitle({
+          title: this.currentTab == 0 ? '注册' : '设置密码'
+        })
+      }
     },
     beforeDestroy() { //清除定时器
       clearInterval(this.countdownTimer)
@@ -62,10 +89,30 @@
 </script>
 
 <style lang="less">
-  .shop_signup {
+  .admin_modify_password {
     height: 100%;
-    background: #f5f5f5;
     overflow-x: hidden;
+    position: relative;
+    .tel_left,
+    .tel_right {
+      background: #f5f5f5;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .tel_left {
+      z-index: 5;
+    }
+    .tel_right {
+      z-index: 10;
+      transform: translateX(100%);
+      transition: transform 0.6s ease;
+    }
+    .right {
+      transform: translateX(0);
+    }
     .options {
       background: #fff;
       display: flex;
@@ -84,6 +131,21 @@
         flex-grow: 1;
         font-size: 24rpx;
         color: #666;
+      }
+      .clear {
+        width: 30rpx;
+        height: 30rpx;
+        border-radius: 50%;
+        background: #999;
+        color: #666;
+        font-size: 28rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(45deg);
+        position: absolute;
+        right: 50rpx;
+        z-index: 2;
       }
     }
     .password {
@@ -106,21 +168,6 @@
         color: #666;
         padding-right: 20rpx;
       }
-      .clear {
-        width: 30rpx;
-        height: 30rpx;
-        border-radius: 50%;
-        background: #999;
-        color: #666;
-        font-size: 28rpx;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: rotate(45deg);
-        position: absolute;
-        right: 50rpx;
-        z-index: 2;
-      }
       .sms_click {
         height: 50rpx;
         line-height: 50rpx;
@@ -137,8 +184,23 @@
         color: #999;
         border: 1rpx solid #999;
       }
+      .clear {
+        width: 30rpx;
+        height: 30rpx;
+        border-radius: 50%;
+        background: #999;
+        color: #666;
+        font-size: 28rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(45deg);
+        position: absolute;
+        right: 50rpx;
+        z-index: 2;
+      }
     }
-    .btn_login {
+    .btn {
       background: skyblue;
       margin: 20rpx;
       text-align: center;
@@ -147,6 +209,9 @@
       border-radius: 8rpx;
       color: #fff;
       font-size: 30rpx;
+    }
+    .btn_sum {
+      overflow: hidden;
     }
   }
 </style>

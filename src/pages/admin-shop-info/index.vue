@@ -21,9 +21,9 @@
       <p>店铺类型</p>
       <checkbox-group @change="checkboxChange">
         <label class="checkbox" v-for="(v,i) in typeList" :key="i">
-              <checkbox :value="v.value" :checked="v.checked" :disabled="v.disabled" color="#666" class="checkbox_info" />
-              {{v.value}}
-            </label>
+                <checkbox :value="v.value" :checked="v.checked" :disabled="v.disabled" color="#666" class="checkbox_info" />
+                {{v.value}}
+              </label>
       </checkbox-group>
     </div>
     <div class="options">
@@ -40,8 +40,13 @@
       <input type="text" placeholder="详细地址，例1号楼2层201室">
     </div>
     <div class="options">
+      <p>备餐时间</p>
+      <input type="text" placeholder="请输入平均备餐时间">
+      <span>分钟</span>
+    </div>
+    <div class="options">
       <p>店铺简介</p>
-      <input type="text" placeholder="请输入店铺简介24字以下" maxlength="24">
+      <input type="text" placeholder="请输入店铺简介24字以内" maxlength="24">
     </div>
     <div class="options">
       <p>联系电话</p>
@@ -137,6 +142,10 @@
         width: 140rpx;
         text-align: left;
         transform: translateY(3rpx);
+      }
+      span {
+        font-size: 24rpx;
+        color: #333;
       }
       input {
         flex-grow: 1;

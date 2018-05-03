@@ -4,11 +4,11 @@
       <img :src="userInfo.avatarUrl" alt="" class="user_img">
       <p class="user_name">{{userInfo.nickName}}</p>
     </div>
-    <div class="options">
+    <div class="options" @click="userDetails">
       <p>个人信息</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
-    <div class="options">
+    <div class="options" @click="purse">
       <p>我的钱包</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
@@ -16,7 +16,7 @@
       <p>绑定其他平台</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
-    <div class="options">
+    <div class="options" @click="collectionCode">
       <p>我的收款码</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
@@ -39,6 +39,21 @@
       console.log(this.userInfo)
     },
     methods: {
+      userDetails() {
+        wx.navigateTo({
+          url: '/pages/admin-user-info/main'
+        })
+      },
+      collectionCode() {
+        wx.navigateTo({
+          url: '/pages/admin-collection-code/main'
+        })
+      },
+      purse() {
+        wx.navigateTo({
+          url: '/pages/admin-user-purse/main'
+        })
+      }
     },
     components: {},
   }
