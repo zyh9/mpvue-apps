@@ -26,8 +26,9 @@
                 scrollTop: 0,
             }
         },
-        onPageScroll:function(e) {
-            console.log(e)
+        onPageScroll(e) {
+            console.log(e.scrollTop)
+            this.scrollTop = e.scrollTop;
         },
         mounted() {
             wx.getSystemInfo({
@@ -45,10 +46,19 @@
             },
             //监听滚动距离
             eventScroll(e) {
-                this.scrollTop = e.target.scrollTop;
+                // this.scrollTop = e.target.scrollTop;
             },
             goTop() { // 一键回到顶部
-                this.scrollTop = 0;
+                if (wx.pageScrollTo) {
+                    wx.pageScrollTo({
+                        scrollTop: 0
+                    })
+                } else {
+                    wx.showModal({
+                        title: '提示',
+                        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+                    })
+                }
             }
         },
         components: {},
@@ -62,10 +72,7 @@
 
 <style lang="less">
     .admin_receipt_records {
-        height: 100%;
-        overflow-x: hidden;
         background: #f5f5f5;
-        position: relative;
         .recordList {
             overflow: hidden;
             .record_item {
@@ -95,9 +102,9 @@
             }
         }
         .go_top {
-            position: absolute;
-            right: 20rpx;
-            bottom: 20rpx;
+            position: fixed;
+            right: 30rpx;
+            bottom: 30rpx;
             z-index: 10;
             img {
                 width: 80rpx;

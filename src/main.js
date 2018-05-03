@@ -44,7 +44,7 @@ export default {
       //后台页面
       'pages/admin-index/main',
       'pages/admin-order/main',
-      '^pages/admin-user/main',
+      'pages/admin-user/main',
       //后台店铺信息页面
       'pages/admin-shop-info/main',
       //后台订单详情
@@ -55,7 +55,7 @@ export default {
       'pages/admin-user-withdraw/main',
       //我的收款码
       'pages/admin-collection-code/main',
-      'pages/admin-receipt-records/main',
+      '^pages/admin-receipt-records/main',
       //我的个人信息
       'pages/admin-user-info/main',
       
