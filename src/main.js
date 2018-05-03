@@ -55,10 +55,14 @@ export default {
       'pages/admin-user-withdraw/main',
       //我的收款码
       'pages/admin-collection-code/main',
-      '^pages/admin-receipt-records/main',
+      'pages/admin-receipt-records/main',
       //我的个人信息
       'pages/admin-user-info/main',
-      
+      //店铺管理
+      '^pages/admin-store-manage/main',
+      'pages/admin-store-templet/main',
+      //商品管理
+      'pages/admin-commodity-manage/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

@@ -43,6 +43,7 @@
       }
     },
     onShow() { //页面渲染就会触发
+      this.currentTab = 0;
     },
     methods: {
       //点击切换

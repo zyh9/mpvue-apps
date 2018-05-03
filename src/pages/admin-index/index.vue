@@ -23,11 +23,33 @@
             <p>{{v.text}}</p>
           </li>
         </ul>
+        <div class="switch_group">
+          <div class="switch_item">
+            <p>营业状态</p>
+            <switch @change="businessChange" class="witch" />
+          </div>
+          <div class="switch_item">
+            <p>休息</p>
+            <switch @change="restChange" class="witch" />
+          </div>
+        </div>
       </swiper-item>
       <swiper-item>
-        <div class="me_shop">
-          <img src="../../../static/jp.jpg" alt="">
-          <p class="btn">开通</p>
+        <ul class="platSum">
+          <li v-for="(v,i) in platSum" :key="i">
+            <img src="../../../static/userImg.png" alt="">
+            <p>{{v.text}}</p>
+          </li>
+        </ul>
+        <div class="switch_group">
+          <div class="switch_item">
+            <p>营业状态</p>
+            <switch @change="businessChange" class="witch" />
+          </div>
+          <div class="switch_item">
+            <p>休息</p>
+            <switch @change="restChange" class="witch" />
+          </div>
         </div>
       </swiper-item>
     </swiper>
@@ -88,6 +110,12 @@
         // console.log(e)
         if (this.currentTab === e.target.dataset.current) return;
         this.currentTab = e.target.dataset.current;
+      },
+      businessChange(e) {
+        console.log(e.target)
+      },
+      restChange(e) {
+        console.log(e.target)
       }
     },
     components: {}
@@ -159,6 +187,23 @@
           text-align: center;
           font-size: 26rpx;
           color: #666;
+        }
+      }
+    }
+    .switch_group {
+      .switch_item {
+        padding: 20rpx;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1rpx solid #e6e6e6;
+        background: #fff;
+        p {
+          color: #666;
+          font-size: 26rpx;
+        }
+        .witch {
+          transform: scale(0.8);
         }
       }
     }

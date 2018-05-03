@@ -19,12 +19,9 @@
     </div>
     <div class="options">
       <p>店铺类型</p>
-      <checkbox-group @change="checkboxChange">
-        <label class="checkbox" v-for="(v,i) in typeList" :key="i">
-                <checkbox :value="v.value" :checked="v.checked" :disabled="v.disabled" color="#666" class="checkbox_info" />
-                {{v.value}}
-              </label>
-      </checkbox-group>
+      <radio-group class="radio_group" @change="radioChange">
+        <label class="radio" v-for="(v,i) in typeList" :key="i"><radio :value="v.value" :checked="v.checked" class="radio_info" />{{v.value}}</label>
+      </radio-group>
     </div>
     <div class="options">
       <p>店铺地址</p>
@@ -69,16 +66,12 @@
         startTime: '00:00',
         endTime: '00:00',
         typeList: [{
-            name: 'food',
             value: '餐饮类',
             checked: false,
-            disabled: false
           },
           {
-            name: 'other',
             value: '其它',
             checked: false,
-            disabled: false
           },
         ]
       }
@@ -95,7 +88,7 @@
       endTimeChange(e) {
         this.endTime = e.target.value;
       },
-      checkboxChange: function(e) {
+      radioChange: function(e) {
         console.log(e.target.value)
       }
     },
@@ -127,13 +120,15 @@
       align-items: center;
       padding: 20rpx;
       border-bottom: 1rpx solid #e6e6e6;
-      .checkbox {
-        margin-right: 20rpx;
-        font-size: 24rpx;
-        color: #666;
-        .checkbox_info {
-          margin-right: 4rpx;
-          transform: scale(.7);
+      .radio_group {
+        transform: translateY(4rpx);
+        .radio {
+          margin-right: 20rpx;
+          font-size: 24rpx;
+          color: #666;
+          .radio_info {
+            transform: scale(.7) translateY(-2rpx);
+          }
         }
       }
       p {

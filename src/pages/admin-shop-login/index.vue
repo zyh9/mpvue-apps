@@ -27,9 +27,11 @@
     <div class="btn_login" @click="login">登录</div>
     <div class="login_mode" v-if="currentTab==0">
       <p @click="authLogin" :data-index="1">使用手机验证码登录</p>
+      <p @click="signUp">前往注册</p>
     </div>
     <div class="login_mode" v-if="currentTab==1">
       <p @click="passLogin" :data-index="0">使用密码登录</p>
+      <p @click="signUp">前往注册</p>
     </div>
   </div>
 </template>
@@ -87,6 +89,11 @@
       login() {
         wx.switchTab({
           url: '/pages/admin-index/main'
+        })
+      },
+      signUp() {
+        wx.navigateTo({
+          url: '/pages/admin-shop-signup/main'
         })
       }
     },
@@ -207,7 +214,7 @@
       padding: 20rpx;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       p {
         font-size: 28rpx;
         color: #333;
