@@ -37,6 +37,9 @@
 </template>
 
 <script>
+  import util from '../../utils/index';
+  import msg from '../../utils/toast';
+  console.log(util)
   export default {
     data() {
       return {
@@ -48,10 +51,14 @@
         countdown: null,
         countdownInfo: '获取验证码',
         countdownTimer: null,
+        userInfo: {}
       }
     },
     onShow() { //页面渲染就会触发
       this.currentTab = 0;
+      this.userInfo = wx.getStorageSync('userInfo')
+      // console.log(this.userInfo)
+      // wx.getStorageSync('token')
     },
     methods: {
       //点击切换
@@ -75,6 +82,23 @@
       },
       //发送验证码
       sendSms() {
+        util.post({
+          url: '/api/Customer/Base/SendSmsCode',
+          data: {
+            Mobile: this.authTel,
+            BizType: 1
+          },
+          headers: {
+            appid: '1',
+            // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+          }
+        }).then(res => {
+          if (res.State == 1) {} else {
+            msg(res.Msg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
         this.countdown = 60;
         this.countdownInfo = `${this.countdown}s后重新获取`;
         this.countdownTimer = setInterval(() => {
@@ -87,15 +111,65 @@
         }, 1000)
       },
       login() {
-        wx.switchTab({
-          url: '/pages/admin-index/main'
+        //判断是密码登录还是验证码登录
+        console.log(this.currentTab)
+        // return;
+        // wx.switchTab({
+        //   url: '/pages/admin-index/main'
+        // })
+        util.post({
+          url: '/api/Customer/Base/Login',
+          data: {
+            jsCode: '1',
+            qrCodeId: '20180504',
+            wxUserInfo: JSON.stringify(this.userInfo)
+          },
+          headers: {
+            appid: '1',
+            // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+          }
+        }).then(res => {
+          if (res.State == 1) {} else {
+            msg(res.Msg)
+          }
+        }).catch(err => {
+          console.log(err)
         })
       },
       signUp() {
         wx.redirectTo({
           url: '/pages/admin-shop-signup/main'
         })
-      }
+      },
+      //检测手机号
+      phone(tel) {
+        let reg = /^[1][3,4,5,6,7,8,9]\d{9}$/;
+        if (reg.test(tel)) {
+          this.info = '';
+          return true;
+        } else {
+          if (tel != '') {
+            this.info = '请输入正确的手机号';
+          } else {
+            this.info = '请输入手机号';
+          }
+          return false;
+        }
+      },
+      smsCoding(val) { //短信4位
+        let reg = /^\d{4}$/;
+        if (reg.test(val)) {
+          this.smsInfo = '';
+          return true;
+        } else {
+          if (val != '') {
+            this.smsInfo = '请输入完整的短信验证码';
+          } else {
+            this.smsInfo = '请输入短信验证码';
+          }
+          return false;
+        }
+      },
     },
     watch: {
       tel: function(newVal, oldVal) {

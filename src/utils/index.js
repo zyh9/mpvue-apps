@@ -1,35 +1,35 @@
 import msg from './toast';
 
-// const baseUrl = 'http://192.168.10.66:6001';
-const baseUrl = '';
+const baseUrl = 'http://192.168.10.66:6001';
+// const baseUrl = '';
 
-const header = _ => {
-  //可以从session获取数据赋值
+const commonHeader = _ => {
+  //headers每次必传数据存放位置
   return {
-    'CityName': '',
-    'LocationX': 0,
-    'LocationY': 0,
+    // 'CityName': '',
+    // 'LocationX': 0,
+    // 'LocationY': 0,
   }
 }
 
 
 //get数据请求
-const get = (url, params = {}, headers) => {
+const get = (opt = {}) => {
   let time = new Date().getTime();
-  const str = Object.entries(params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
-  let editHeaders = Object.assign({}, { "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8' })
-  if (headers) {
-    editHeaders = Object.assign({}, editHeaders, { "token": wx.getStorageSync("token") }, headers)
+  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
+  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+  if (opt.headers) {
+    editHeaders = Object.assign({}, editHeaders, opt.headers)
   }
   return new Promise((resolve, reject) => {
-    let address = str ? `${url}?${str}&t=${time}` : `${url}?t=${time}`;
+    let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
     wx.request({
       url: baseUrl + address,
       header: editHeaders,
       method: "GET",
       success: res => {
         setTimeout(_ => {
-          resolve(res)
+          resolve(res.data)
         }, 0)
       },
       fail: err => {
@@ -41,21 +41,22 @@ const get = (url, params = {}, headers) => {
 }
 
 //post数据请求
-const post = function (url, data = {}, headers) {
+const post = function (opt = {}) {
   let time = new Date().getTime();
-  let editHeaders = Object.assign({}, { "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8' })
-  if (headers) {
-    editHeaders = Object.assign({}, editHeaders, { "token": wx.getStorageSync("token") }, headers)
+  //'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+  if (opt.headers) {
+    editHeaders = Object.assign({}, editHeaders, opt.headers)
   }
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${baseUrl}${url}?=t${time}`,
-      data: data,
+      url: `${baseUrl}${opt.url}?=t${time}`,
+      data: opt.data || {},
       header: editHeaders,
       method: "POST",
       success: res => {
         setTimeout(_ => {
-          resolve(res)
+          resolve(res.data)
         }, 0)
       },
       fail: err => {

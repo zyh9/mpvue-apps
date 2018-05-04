@@ -43,7 +43,6 @@
         ],
         sPageY: 0, //初始坐标
         mPageY: 0, //移动坐标
-        mBox: false,
         cIndex: -1, //点击索引
         mObj: {}, //移动数据
         liHeight: 0, //单个配置的高度
@@ -59,7 +58,7 @@
         this.deployList.forEach((e, i) => {
           e.top = i * this.liHeight;
           e.zIndex = 5;
-          e.transition = '0.1s';
+          // e.transition = 'top 0.1s linear';
         })
         // console.log(this.deployList)
       })
@@ -104,7 +103,6 @@
         this.deployList.forEach((e, i) => {
           e.top = i * this.liHeight;
           e.zIndex = 5;
-          e.transition = '0.1s';
         })
       },
     },

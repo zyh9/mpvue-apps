@@ -48,6 +48,8 @@
 
 ### 小程序拖拽实现
 
+> transition的加入并没有提升界面交互效果，反倒很不美观，索性去掉它吧。。。
+
 ```javascript
 	<template>
 	  <div class="store_deploy">
@@ -110,7 +112,7 @@
 	        this.deployList.forEach((e, i) => {
 	          e.top = i * this.liHeight;
 	          e.zIndex = 5;
-	          e.transition = '0.1s';
+	          e.transition = 'top 0.1s linear';
 	        })
 	        // console.log(this.deployList)
 	      })
@@ -155,7 +157,6 @@
 	        this.deployList.forEach((e, i) => {
 	          e.top = i * this.liHeight;
 	          e.zIndex = 5;
-	          e.transition = '0.1s';
 	        })
 	      },
 	    },

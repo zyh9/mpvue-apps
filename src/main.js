@@ -11,7 +11,7 @@ export default {
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页
     pages: [
-      '^pages/index/main',
+      'pages/index/main',
       'pages/movie-details/main',
       'pages/map/main',
       'pages/my-cart/main',
@@ -61,7 +61,7 @@ export default {
       //店铺管理
       'pages/admin-store-manage/main',
       'pages/admin-store-templet/main',
-      'pages/admin-store-deploy/main',
+      '^pages/admin-store-deploy/main',
       //商品管理
       'pages/admin-commodity-manage/main',
     ],
