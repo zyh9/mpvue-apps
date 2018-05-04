@@ -92,7 +92,7 @@
         })
       },
       signUp() {
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/admin-shop-signup/main'
         })
       }

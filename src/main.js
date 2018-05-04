@@ -36,7 +36,7 @@ export default {
       'pages/history-shop/main',
       //后台登录页面
       'pages/admin-shop-index/main',
-      '^pages/admin-shop-login/main',
+      'pages/admin-shop-login/main',
       'pages/admin-shop-signup/main',
       //修改信息页面
       'pages/admin-modify-mobile/main',
@@ -61,8 +61,9 @@ export default {
       //店铺管理
       'pages/admin-store-manage/main',
       'pages/admin-store-templet/main',
+      'pages/admin-store-deploy/main',
       //商品管理
-      'pages/admin-commodity-manage/main',
+      '^pages/admin-commodity-manage/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

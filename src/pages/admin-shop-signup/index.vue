@@ -72,7 +72,7 @@
         console.log('注册成功')
       },
       login() {
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/admin-shop-login/main'
         })
       }
