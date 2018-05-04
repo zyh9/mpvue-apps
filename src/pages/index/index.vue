@@ -43,6 +43,7 @@
             // 调用应用实例的方法获取全局数据
             this.getUserInfo()
         },
+        onShow() {},
         mounted() {
             //获取电影条目
             this.loadMovies()
@@ -109,7 +110,7 @@
                 })
             },
             //监听滚动距离
-            eventScroll(e){
+            eventScroll(e) {
                 console.log(e.target.scrollTop)
             }
         },

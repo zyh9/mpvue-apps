@@ -11,7 +11,7 @@ export default {
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页
     pages: [
-      'pages/index/main',
+      '^pages/index/main',
       'pages/movie-details/main',
       'pages/map/main',
       'pages/my-cart/main',
@@ -63,7 +63,7 @@ export default {
       'pages/admin-store-templet/main',
       'pages/admin-store-deploy/main',
       //商品管理
-      '^pages/admin-commodity-manage/main',
+      'pages/admin-commodity-manage/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

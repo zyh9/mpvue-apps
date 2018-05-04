@@ -162,6 +162,10 @@
     }
     .li_info {
       flex-grow: 1;
+      p {
+        color: #666;
+        font-size: 26rpx;
+      }
       .li_b {
         display: flex;
         align-items: center;
@@ -181,9 +185,11 @@
             color: #fff;
             line-height: 30rpx;
             text-align: center;
+            font-size: 24rpx;
           }
           span {
             margin: 0 16rpx;
+            font-size: 24rpx;
           }
         }
       }
