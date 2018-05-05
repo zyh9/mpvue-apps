@@ -68,6 +68,8 @@
                 }, 1000)
             },
             commitSms() {
+                //测试$emit
+                // this.$emit('log-in',true)
                 this.phone(this.authTel);
                 this.smsCoding(this.authVal);
                 if (this.phone(this.authTel) && this.smsCoding(this.authVal)) {
@@ -84,7 +86,9 @@
                             // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
                         }
                     }).then(res => {
-                        if (res.State == 1) {} else {
+                        if (res.State == 1) {
+                            this.$emit('log-in',true)
+                        } else {
                             this.msg(res.Msg)
                         }
                     }).catch(err => {

@@ -28,7 +28,7 @@ export default {
       'pages/my-shop-info/main',
       //店铺页面
       'pages/my-store/main',
-      'pages/product-details/main',
+      '^pages/product-details/main',
       //提交订单
       'pages/submit-order/main',
       //地址页面
@@ -45,7 +45,7 @@ export default {
       'pages/history-shop/main',
       //后台登录页面
       'pages/admin-shop-index/main',
-      '^pages/admin-shop-login/main',
+      'pages/admin-shop-login/main',
       'pages/admin-shop-signup/main',
       //修改信息页面
       'pages/admin-modify-mobile/main',

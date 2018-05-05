@@ -57,7 +57,7 @@ import login from '../../components/Login';
                 this.isActive = true;
             },
             loginEmit(val) {
-                // console.log(val)
+                console.log(val)
             },
 
         },
