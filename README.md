@@ -62,6 +62,105 @@
 	}
 ```
 
+### vuex的加入（纯属瞎搞）
+
+		小程序内部是不能手动去刷新页面的，这就为状态管理的实现提供了可能性
+		
+		某些状态不需要长期存储，索性投入vuex的怀抱吧。。。
+		
+		// 引用数据请求
+		import util from './utils/index';
+		Vue.prototype.util = util;
+		// 引用toast提示
+		import msg from './utils/toast';
+		Vue.prototype.msg = msg;
+		// 引用vuex
+		import store from './store/index';
+		Vue.prototype.$store = store;
+		
+		发起action => 
+		
+		this.$store.dispatch('code',{a:1,b:2})
+		
+		获取state数据 =>
+		
+		this.$store.state.mutations
+
+```javascript
+	// store/index.js
+	import Vue from 'vue';
+	import Vuex from 'vuex';
+	import mutations from './mutations';
+	import actions from './actions';
+	
+	Vue.use(Vuex)
+	
+	export default new Vuex.Store({
+		modules:{
+			mutations
+		},
+		actions
+	})
+	
+	
+	
+	
+	// store/types.js
+	import keymirror from 'keymirror'
+	
+	let types = keymirror({
+	    COMMIT_CODE:null,
+	})
+	
+	export {types};
+	
+	
+	
+	
+	// store/actions.js
+	import {types} from './types.js'
+	
+	const actions = {
+	    code({commit},val){
+	        commit(types.COMMIT_CODE,val)
+	    },
+	}
+	
+	export default actions;
+	
+	
+	
+	
+	// store/mutations.js
+	import {types} from './types.js'
+	
+	// 定义state的值
+	const state = {
+	    qrcode:null
+	}
+	
+	// 每个action的提交引发state的改变
+	const mutations = {
+	    [types.COMMIT_CODE](state,val){
+	        state.qrcode = val
+	    },
+	}
+	
+	// 获取到变化的值
+	const getters = {
+	    qrcode(state){
+	        return state.qrcode;
+	    }
+	}
+	
+	// 导出
+	export default{
+		state,
+		mutations,
+		getters
+	}
+```
+
 ### 小程序拖拽实现
 
 > transition的加入并没有提升界面交互效果，反倒很不美观，索性去掉它吧。。。
@@ -128,7 +227,7 @@
 	        this.deployList.forEach((e, i) => {
 	          e.top = i * this.liHeight;
 	          e.zIndex = 5;
-	          e.transition = 'top 0.1s linear';
+	          // e.transition = 'top 0.1s linear';
 	        })
 	        // console.log(this.deployList)
 	      })

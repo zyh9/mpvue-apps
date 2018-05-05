@@ -77,6 +77,8 @@
             })
             //获取电影条目
             this.loadMovies()
+            this.$store.dispatch('code',{a:1,b:2})
+            console.log(this.$store.state.mutations)
         },
         methods: {
             //所在城市获取

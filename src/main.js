@@ -13,6 +13,9 @@ Vue.prototype.util = util;
 // 引用toast提示
 import msg from './utils/toast';
 Vue.prototype.msg = msg;
+// 引用vuex
+import store from './store/index';
+Vue.prototype.$store = store;
 
 export default {
   // 这个字段走 app.json

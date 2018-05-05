@@ -48,6 +48,7 @@
                         }
                     }).then(res => {
                         if (res.State == 1) {
+                            this.msg(res.Msg)
                             this.countdown = 60;
                             this.countdownInfo = `${this.countdown}s后重新获取`;
                             this.countdownTimer = setInterval(() => {
