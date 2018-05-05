@@ -20,6 +20,21 @@
 
 [百度 微信小程序 SDK](https://github.com/baidumapapi/wxapp-jsapi)
 
+### autoprefixer配置
+
+> npm i autoprefixer -D
+
+> 在文件.postcssrc.js里面添加"autoprefixer":{}
+
+```javascript
+	module.exports = {
+	  "plugins": {
+	    "postcss-mpvue-wxss": {},
+	    "autoprefixer":{}
+	  }
+	}
+```
+
 ### 小程序之一键回到顶部和获取滚动条当前位置
 
 > 1.获取滚动条当前位置
@@ -29,6 +44,7 @@
 		console.log(e)
 	}
 ```
+
 > 2.回到顶部
 
 ```javascript

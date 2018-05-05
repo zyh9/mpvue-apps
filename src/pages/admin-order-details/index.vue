@@ -64,7 +64,6 @@
 </template>
 
 <script>
-    import msg from '../../utils/toast';
     export default {
         data() {
             return {}

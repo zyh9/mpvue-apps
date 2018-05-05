@@ -50,7 +50,6 @@
 </template>
 
 <script>
-    import msg from '../utils/toast';
     export default {
         data() {
             return {
@@ -321,7 +320,7 @@
                 if (this.shopList.length) {
                     this.isActive = !this.isActive;
                 } else {
-                    msg('您还没有选择商品哦')
+                    this.msg('您还没有选择商品哦')
                 }
             },
             clearCart() {
@@ -338,7 +337,7 @@
                         url: '/pages/submit-order/main'
                     })
                 } else {
-                    msg('您还没有选择商品哦')
+                    this.msg('您还没有选择商品哦')
                 }
             },
         },

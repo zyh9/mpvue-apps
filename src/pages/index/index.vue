@@ -16,7 +16,10 @@
 </template>
 
 <script>
-    import util from '../../utils/index';
+    import BMapWX from '../../utils/bmap-wx.js';
+    const BMap = new BMapWX({
+        ak: 'dZjnRr2t8nBpGswyCB731AFD'
+    })
     export default {
         data() {
             return {
@@ -36,28 +39,51 @@
         },
         created() {
             //全局的设置
-            wx.showNavigationBarLoading()
-            setTimeout(_ => {
-                wx.hideNavigationBarLoading()
-            }, 1000)
+            // wx.showNavigationBarLoading()
+            // setTimeout(_ => {
+            //     wx.hideNavigationBarLoading()
+            // }, 1000)
             // 调用应用实例的方法获取全局数据
             this.getUserInfo()
+            //调用百度地图
+            this.BDMapInfo()
         },
         onShow() {},
         mounted() {
             //获取电影条目
-            this.loadMovies()
+            // this.loadMovies()
         },
         methods: {
+            //所在城市获取
+            BDMapInfo() {
+                BMap.regeocoding({
+                    success: res => {
+                        // console.log(res.wxMarkerData[0])
+                        //x,y(经度,纬度)
+                        let pos = {
+                            city: res.originalData.result.addressComponent.city,
+                            //经度
+                            longitude: res.wxMarkerData[0].longitude,
+                            //纬度
+                            latitude: res.wxMarkerData[0].latitude
+                        }
+                        console.log(pos)
+                        wx.setStorageSync('BMap', pos)
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
+                })
+            },
             getUserInfo() {
                 // 调用登录接口
                 wx.login({
                     success: (res) => {
-                        console.log(res.code)
                         wx.getUserInfo({
                             success: res => {
                                 this.userInfo = res.userInfo
                                 wx.setStorageSync('userInfo', res.userInfo)
+                                this.userLogin()
                             },
                             fail: err => {
                                 console.log(err)
@@ -69,17 +95,38 @@
                     }
                 })
             },
+            userLogin() {
+                this.util.post({
+                    url: '/api/Customer/Base/Login',
+                    data: {
+                        jsCode: '1',
+                        qrCodeId: '20180504',
+                        wxUserInfo: JSON.stringify(this.userInfo)
+                    },
+                    headers: {
+                        appid: '1',
+                        // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+                    }
+                }).then(res => {
+                    if (res.State == 1) {} else {
+                        this.msg(res.Msg)
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
             loadMovies() {
                 this.loading = true;
                 // wx.showLoading({
                 //     title: '加载中...',
                 // })
-                util.get(
-                    'https://db.miaov.com/doubanapi/v0/movie/list', {
+                this.util.get({
+                    url: 'https://db.miaov.com/doubanapi/v0/movie/list',
+                    params: {
                         page: this.page,
                         size: this.size
                     }
-                ).then(res => {
+                }).then(res => {
                     // console.log(res)
                     setTimeout(_ => {
                         let {

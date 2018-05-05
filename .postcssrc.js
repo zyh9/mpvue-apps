@@ -2,6 +2,7 @@
 
 module.exports = {
   "plugins": {
-    "postcss-mpvue-wxss": {}
+    "postcss-mpvue-wxss": {},
+    "autoprefixer":{}
   }
 }

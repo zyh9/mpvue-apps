@@ -8,7 +8,7 @@
       <div class="password">
         <p>验证码</p>
         <input type="text" placeholder="请输入验证码" v-model="val" maxlength="4">
-        <button class="sms_click" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
+        <button class="sms_click" plain="true" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
       </div>
       <div class="btn" @click="next">下一步</div>
       <div class="login_mode">

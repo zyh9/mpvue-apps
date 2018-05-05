@@ -2,9 +2,17 @@ import Vue from 'vue'
 import App from './App'
 
 const app = new Vue(App)
+
 app.$mount()
 
 import './common/reset.less';
+
+// 引用数据请求
+import util from './utils/index';
+Vue.prototype.util = util;
+// 引用toast提示
+import msg from './utils/toast';
+Vue.prototype.msg = msg;
 
 export default {
   // 这个字段走 app.json
@@ -20,6 +28,7 @@ export default {
       'pages/my-shop-info/main',
       //店铺页面
       'pages/my-store/main',
+      'pages/product-details/main',
       //提交订单
       'pages/submit-order/main',
       //地址页面
@@ -36,7 +45,7 @@ export default {
       'pages/history-shop/main',
       //后台登录页面
       'pages/admin-shop-index/main',
-      'pages/admin-shop-login/main',
+      '^pages/admin-shop-login/main',
       'pages/admin-shop-signup/main',
       //修改信息页面
       'pages/admin-modify-mobile/main',
@@ -61,7 +70,7 @@ export default {
       //店铺管理
       'pages/admin-store-manage/main',
       'pages/admin-store-templet/main',
-      '^pages/admin-store-deploy/main',
+      'pages/admin-store-deploy/main',
       //商品管理
       'pages/admin-commodity-manage/main',
     ],

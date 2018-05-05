@@ -14,7 +14,6 @@
 </template>
 
 <script>
-  import util from '../../utils/index';
   export default {
     data() {
       return {
@@ -30,9 +29,9 @@
     },
     methods: {
       movieDetails(id) {
-        util.get(
-          'https://db.miaov.com/doubanapi/v0/movie/detail/' + id,
-        ).then(res => {
+        this.util.get({
+          url: 'https://db.miaov.com/doubanapi/v0/movie/detail/' + id
+        }).then(res => {
           // console.log(res)
           let {
             data
@@ -76,7 +75,7 @@
           margin: 0 0 20rpx 20rpx;
         }
       }
-      .summary{
+      .summary {
         color: #666;
         font-size: 24rpx;
       }

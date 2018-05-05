@@ -87,7 +87,6 @@
 </template>
 
 <script>
-  import msg from '../../utils/toast';
   export default {
     data() {
       return {}
@@ -103,10 +102,10 @@
         wx.setClipboardData({
           data: 'zyh941109',
           success: res => {
-            msg("复制成功")
+            this.msg("复制成功")
           },
           fail: err => {
-            msg("复制失败")
+            this.msg("复制失败")
           }
         })
       }

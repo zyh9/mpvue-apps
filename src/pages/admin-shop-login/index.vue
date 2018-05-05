@@ -20,7 +20,7 @@
         <div class="password">
           <p>验证码</p>
           <input type="text" placeholder="请输入验证码" v-model="authVal" maxlength="4">
-          <button class="sms_click" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
+          <button class="sms_click" plain="true" @click="sendSms" :disabled="countdown>0?true:false" :class="countdown>0?'disabled':''">{{countdownInfo}}</button>
         </div>
       </swiper-item>
     </swiper>
@@ -37,9 +37,6 @@
 </template>
 
 <script>
-  import util from '../../utils/index';
-  import msg from '../../utils/toast';
-  console.log(util)
   export default {
     data() {
       return {
@@ -51,7 +48,8 @@
         countdown: null,
         countdownInfo: '获取验证码',
         countdownTimer: null,
-        userInfo: {}
+        userInfo: {},
+        info: ''
       }
     },
     onShow() { //页面渲染就会触发
@@ -82,23 +80,26 @@
       },
       //发送验证码
       sendSms() {
-        util.post({
-          url: '/api/Customer/Base/SendSmsCode',
-          data: {
-            Mobile: this.authTel,
-            BizType: 1
-          },
-          headers: {
-            appid: '1',
-            // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
-          }
-        }).then(res => {
-          if (res.State == 1) {} else {
-            msg(res.Msg)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
+        if (this.phone(this.authTel)) {
+          this.util.post({
+            url: '/api/Customer/Base/SendSmsCode',
+            data: {
+              Mobile: this.authTel,
+              BizType: 1
+            },
+            headers: {
+              appid: '1',
+              // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+            }
+          }).then(res => {
+            if (res.State == 1) {} else {
+              this.msg(res.Msg)
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+        return;
         this.countdown = 60;
         this.countdownInfo = `${this.countdown}s后重新获取`;
         this.countdownTimer = setInterval(() => {
@@ -117,7 +118,7 @@
         // wx.switchTab({
         //   url: '/pages/admin-index/main'
         // })
-        util.post({
+        this.util.post({
           url: '/api/Customer/Base/Login',
           data: {
             jsCode: '1',
@@ -130,7 +131,7 @@
           }
         }).then(res => {
           if (res.State == 1) {} else {
-            msg(res.Msg)
+            this.msg(res.Msg)
           }
         }).catch(err => {
           console.log(err)
@@ -150,8 +151,10 @@
         } else {
           if (tel != '') {
             this.info = '请输入正确的手机号';
+            this.msg(this.info)
           } else {
             this.info = '请输入手机号';
+            this.msg(this.info)
           }
           return false;
         }

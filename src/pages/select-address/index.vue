@@ -23,8 +23,6 @@
 </template>
 
 <script>
-    import util from '../../utils/index';
-    import msg from '../../utils/toast';
     // 引入SDK核心类
     import QQMapWX from '../../utils/qqmap-wx-jssdk.js';
     const QQMap = new QQMapWX({
@@ -81,11 +79,11 @@
                         longitude: info.longitude
                     },
                     success: res => {
-                        // console.log(res)
+                        console.log(res)
                         this.city = res.result.address_component.city
                     },
                     fail: err => {
-                        msg('位置信息获取失败')
+                        this.msg('位置信息获取失败')
                     }
                 })
             },
@@ -106,7 +104,7 @@
             BDMapInfo() {
                 BMap.regeocoding({
                     success: res => {
-                        // console.log(res)
+                        console.log(res)
                         this.city = res.originalData.result.addressComponent.city;
                     },
                     fail: err => {
@@ -179,6 +177,8 @@
             flex-flow: 1;
             background: #e6e6e6;
             border-radius: 30rpx;
+            color: #666;
+            font-size: 24rpx;
         }
         .clear {
             width: 30rpx;
