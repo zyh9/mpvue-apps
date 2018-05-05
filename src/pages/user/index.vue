@@ -24,10 +24,12 @@
       <p>软件服务由UU跑腿提供</p>
       <p class="me_shop">我也要开店</p>
     </div>
+    <login v-if="true" @log-in="loginEmit"></login>
   </div>
 </template>
 
 <script>
+  import login from '../../components/Login';
   export default {
     data() {
       return {
@@ -58,9 +60,14 @@
         wx.navigateTo({
           url: '/pages/my-shop-info/main'
         })
-      }
+      },
+      loginEmit(val) {
+        console.log(val)
+      },
     },
-    components: {},
+    components: {
+      login
+    },
   }
 </script>
 

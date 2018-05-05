@@ -20,9 +20,6 @@
       <swiper-item>
         <shopDetails></shopDetails>
       </swiper-item>
-      <swiper-item>
-        <shopOrder></shopOrder>
-      </swiper-item>
     </swiper>
   </div>
 </template>
@@ -31,7 +28,7 @@
   // import store from './store'
   import storeIndex from '../../components/storeIndex';
   import shopDetails from '../../components/shopDetails';
-  import shopOrder from '../../components/shopOrder';
+  // import shopOrder from '../../components/shopOrder';
   export default {
     data() {
       return {
@@ -39,8 +36,6 @@
           name: '首页'
         }, {
           name: '店铺信息'
-        }, {
-          name: '我的订单'
         }],
         winWidth: 0,
         winHeight: 0,
@@ -96,7 +91,7 @@
     components: {
       storeIndex,
       shopDetails,
-      shopOrder
+      // shopOrder
     }
   }
 </script>

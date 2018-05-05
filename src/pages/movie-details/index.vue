@@ -29,17 +29,24 @@
     },
     methods: {
       movieDetails(id) {
-        this.util.get({
-          url: 'https://db.miaov.com/doubanapi/v0/movie/detail/' + id
-        }).then(res => {
-          // console.log(res)
-          let {
-            data
-          } = res.data;
-          console.log(data)
-          this.movie = data;
-        }).catch(err => {
-          console.log(err)
+        wx.request({
+          url: 'https://db.miaov.com/doubanapi/v0/movie/detail/' + id,
+          data: {},
+          header: {
+            'content-type': 'application/json'
+          },
+          method: 'GET',
+          success: res => {
+            setTimeout(_ => {
+              let {
+                data
+              } = res.data;
+              this.movie = data;
+            }, 600)
+          },
+          fail: err => {
+            console.log(err)
+          }
         })
       }
     },

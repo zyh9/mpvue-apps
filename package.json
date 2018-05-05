@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "mpvue": "^1.0.11",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "we-cropper": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^8.4.1",

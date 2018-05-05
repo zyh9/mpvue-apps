@@ -1,6 +1,16 @@
 <template>
     <div class="container">
-        <scroll-view scroll-y="true" style="height: 100%" lower-threshold="60" @scrolltolower="scrollHandler" @scroll="eventScroll">
+        <div class="search">
+            <input type="text" placeholder="请输入输入商品名称" class="input_address">
+            <p>搜索</p>
+        </div>
+        <scroll-view scroll-y="true" :style="{height: winHeight+'px'}" lower-threshold="60" @scrolltolower="scrollHandler" @scroll="eventScroll">
+            <ul class="classification_list">
+                <li class="classification_item" v-for="(ele,ind) in 7" :key="ind">
+                    <img src="../../../static/userImg.png" alt="">
+                    <p>商品{{ind+1}}</p>
+                </li>
+            </ul>
             <div v-for="(v,i) in movies" :key="i" class="list-item">
                 <div v-for="(item,index) in v" :key="index" class="movie-item" :data-item="item" @click="goDetails">
                     <img :src="item.cover" alt="信息">
@@ -27,7 +37,9 @@
                 movies: [],
                 page: 1,
                 size: 8,
-                loading: true
+                loading: true,
+                winWidth: 0,
+                winHeight: 0,
             }
         },
         onShareAppMessage() {
@@ -50,8 +62,21 @@
         },
         onShow() {},
         mounted() {
+            let query = wx.createSelectorQuery();
+            query.select('.search').boundingClientRect()
+            query.exec(res => {
+                let height = res[0].height;
+                wx.getSystemInfo({
+                    success: res => {
+                        // console.log(res)
+                        this.winWidth = res.windowWidth;
+                        //减去上方的高度
+                        this.winHeight = res.windowHeight - height;
+                    }
+                })
+            })
             //获取电影条目
-            // this.loadMovies()
+            this.loadMovies()
         },
         methods: {
             //所在城市获取
@@ -67,7 +92,7 @@
                             //纬度
                             latitude: res.wxMarkerData[0].latitude
                         }
-                        console.log(pos)
+                        // console.log(pos)
                         wx.setStorageSync('BMap', pos)
                     },
                     fail: err => {
@@ -97,7 +122,7 @@
             },
             userLogin() {
                 this.util.post({
-                    url: '/api/Customer/Base/Login',
+                    url: '/api/Customer/Base/WxJsCodeLogin',
                     data: {
                         jsCode: '1',
                         qrCodeId: '20180504',
@@ -108,7 +133,9 @@
                         // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
                     }
                 }).then(res => {
-                    if (res.State == 1) {} else if (res.State == -10) {
+                    if (res.State == 1) {
+                        wx.setStorageSync('loginInfo', res.Body)
+                    } else if (res.State == -10) {
                         this.userLogin()
                     } else {
                         this.msg(res.Msg)
@@ -122,26 +149,31 @@
                 // wx.showLoading({
                 //     title: '加载中...',
                 // })
-                this.util.get({
+                wx.request({
                     url: 'https://db.miaov.com/doubanapi/v0/movie/list',
-                    params: {
+                    data: {
                         page: this.page,
                         size: this.size
+                    },
+                    header: {
+                        'content-type': 'application/json'
+                    },
+                    method: 'GET',
+                    success: res => {
+                        setTimeout(_ => {
+                            let {
+                                data
+                            } = res.data;
+                            for (let i = 0; i < data.length; i += 2) {
+                                this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
+                            }
+                            this.loading = false;
+                            // wx.hideLoading()
+                        }, 600)
+                    },
+                    fail: err => {
+                        console.log(err)
                     }
-                }).then(res => {
-                    // console.log(res)
-                    setTimeout(_ => {
-                        let {
-                            data
-                        } = res.data;
-                        for (let i = 0; i < data.length; i += 2) {
-                            this.movies.push([data[i], data[i + 1] ? data[i + 1] : null])
-                        }
-                        this.loading = false;
-                        // wx.hideLoading()
-                    }, 600)
-                }).catch(err => {
-                    console.log(err)
                 })
             },
             scrollHandler() {
@@ -160,7 +192,7 @@
             },
             //监听滚动距离
             eventScroll(e) {
-                console.log(e.target.scrollTop)
+                // console.log(e.target.scrollTop)
             }
         },
         components: {},
@@ -209,6 +241,70 @@
         position: absolute;
         top: 0;
         left: 0;
+        .search {
+            background: #fff;
+            padding: 20rpx;
+            display: flex;
+            align-items: center;
+            height: 60rpx;
+            position: relative;
+            .input_address {
+                width: 100%;
+                height: 60rpx;
+                padding: 0 20rpx;
+                flex-flow: 1;
+                background: #e6e6e6;
+                border-radius: 30rpx;
+                color: #666;
+                font-size: 24rpx;
+            }
+            .clear {
+                width: 30rpx;
+                height: 30rpx;
+                border-radius: 50%;
+                background: #999;
+                color: #666;
+                font-size: 28rpx;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transform: rotate(45deg);
+                position: absolute;
+                right: 50rpx;
+                z-index: 2;
+            }
+            p {
+                height: 100%;
+                color: #666;
+                font-size: 24rpx;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 120rpx;
+            }
+        }
+    }
+    .classification_list {
+        overflow: hidden;
+        .classification_item {
+            width: 25%;
+            float: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 12rpx 0;
+            img {
+                width: 80rpx;
+                height: 80rpx;
+            }
+            p {
+                color: #666;
+                font-size: 24rpx;
+                text-align: center;
+                padding: 5rpx 0;
+            }
+        }
     }
     .list-item {
         width: 100%;
@@ -220,23 +316,23 @@
         width: 48%;
         margin: 1%;
         float: left;
-    }
-    .movie-item img {
-        width: 100%;
-        height: 220rpx;
-    }
-    .movie-item .title {
-        font-size: 24rpx;
-        text-align: center;
-        color: #333;
-        margin: 5rpx 0;
-    }
-    .movie-item .title .rate {
-        color: #f00;
-    }
-    .movie-item .year-type {
-        text-align: center;
-        font-size: 22rpx;
-        color: #888;
+        img {
+            width: 100%;
+            height: 220rpx;
+        }
+        .title {
+            font-size: 24rpx;
+            text-align: center;
+            color: #333;
+            margin: 5rpx 0;
+            .rate {
+                color: #f00;
+            }
+        }
+        .year-type {
+            text-align: center;
+            font-size: 22rpx;
+            color: #888;
+        }
     }
 </style>

@@ -24,14 +24,13 @@
                 countdownInfo: '获取验证码',
                 countdownTimer: null,
                 userInfo: {},
-                info: ''
             }
         },
         onShow() { //页面渲染就会触发
         },
         mounted() {
             this.userInfo = wx.getStorageSync('userInfo')
-            // console.log(this.userInfo)
+            // console.log(this.userInfo)  
         },
         methods: {
             //发送验证码
@@ -45,33 +44,33 @@
                         },
                         headers: {
                             appid: '1',
-                            // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     }).then(res => {
-                        if (res.State == 1) {} else {
+                        if (res.State == 1) {
+                            this.countdown = 60;
+                            this.countdownInfo = `${this.countdown}s后重新获取`;
+                            this.countdownTimer = setInterval(() => {
+                                this.countdown--;
+                                this.countdownInfo = `${this.countdown}s后重新获取`;
+                                if (this.countdown <= 0) {
+                                    clearInterval(this.countdownTimer)
+                                    this.countdownInfo = '重新获取';
+                                }
+                            }, 1000)
+                        } else {
                             this.msg(res.Msg)
                         }
                     }).catch(err => {
                         console.log(err)
                     })
                 }
-                return;
-                this.countdown = 60;
-                this.countdownInfo = `${this.countdown}s后重新获取`;
-                this.countdownTimer = setInterval(() => {
-                    this.countdown--;
-                    this.countdownInfo = `${this.countdown}s后重新获取`;
-                    if (this.countdown <= 0) {
-                        clearInterval(this.countdownTimer)
-                        this.countdownInfo = '重新获取';
-                    }
-                }, 1000)
             },
             commitSms() {
                 //测试$emit
+                let BMap = wx.getStorageSync('BMap');
+                // console.log(BMap)
                 // this.$emit('log-in',true)
-                this.phone(this.authTel);
-                this.smsCoding(this.authVal);
                 if (this.phone(this.authTel) && this.smsCoding(this.authVal)) {
                     this.util.post({
                         url: '/api/Customer/Base/CommitSmsCode',
@@ -79,15 +78,18 @@
                             Mobile: this.authTel,
                             BizType: 1,
                             VerifyCode: this.authVal,
-                            Loction: {}
+                            Loction: JSON.stringify({
+                                longitude: BMap.longitude,
+                                latitude: BMap.latitude
+                            })
                         },
                         headers: {
                             appid: '1',
-                            // token: 'e6a3823d1e6c4dbe954fe7fbfc4b7140'
+                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     }).then(res => {
                         if (res.State == 1) {
-                            this.$emit('log-in',true)
+                            this.$emit('log-in', true)
                         } else {
                             this.msg(res.Msg)
                         }
@@ -100,15 +102,12 @@
             phone(tel) {
                 let reg = /^[1][3,4,5,6,7,8,9]\d{9}$/;
                 if (reg.test(tel)) {
-                    this.info = '';
                     return true;
                 } else {
                     if (tel != '') {
-                        this.info = '请输入正确的手机号';
-                        this.msg(this.info)
+                        this.msg('请输入正确的手机号')
                     } else {
-                        this.info = '请输入手机号';
-                        this.msg(this.info)
+                        this.msg('请输入手机号')
                     }
                     return false;
                 }
@@ -116,15 +115,12 @@
             smsCoding(val) { //短信4位
                 let reg = /^\d{4}$/;
                 if (reg.test(val)) {
-                    this.smsInfo = '';
                     return true;
                 } else {
                     if (val != '') {
-                        this.smsInfo = '请输入完整的短信验证码';
-                        this.msg(this.info)
+                        this.msg('请输入完整的短信验证码')
                     } else {
-                        this.smsInfo = '请输入短信验证码';
-                        this.msg(this.info)
+                        this.msg('请输入短信验证码')
                     }
                     return false;
                 }
@@ -135,7 +131,7 @@
                 this.authTel = newVal.replace(/[^\d]/g, '');
             },
             authVal: function(newVal, oldVal) {
-                this.authTel = newVal.replace(/[^\d]/g, '');
+                this.authVal = newVal.replace(/[^\d]/g, '');
             },
         },
         beforeDestroy() { //清除定时器

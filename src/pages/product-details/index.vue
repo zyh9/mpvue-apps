@@ -21,12 +21,10 @@
             </div>
             <div class="cancel" @click="isActive = false">取消</div>
         </div>
-        <login v-if="true" @log-in="loginEmit"></login>
     </div>
 </template>
 
 <script>
-import login from '../../components/Login';
     export default {
         data() {
             return {
@@ -56,14 +54,8 @@ import login from '../../components/Login';
             share() {
                 this.isActive = true;
             },
-            loginEmit(val) {
-                console.log(val)
-            },
-
         },
-        components: {
-            login
-        }
+        components: {}
     }
 </script>
 
