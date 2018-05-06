@@ -108,6 +108,23 @@
             this.msg("复制失败")
           }
         })
+      },
+      //订单详情
+      orderDetails() {
+        this.util.post({
+          url: '/api/Customer/Order/OrderDetail',
+          data: {
+            "OrderID": 0
+          },
+          headers: {
+            appid: '1',
+            token: wx.getStorageSync('loginInfo').Token || ''
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     components: {}

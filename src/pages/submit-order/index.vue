@@ -72,7 +72,86 @@
       },
       time() {
         console.log('开发中。。。')
-      }
+      },
+      //价格计算
+      priceNum() {
+        this.util.post({
+            url: '/api/Customer/Order/ComputeGoodsPrice',
+            data: {
+              "ShopId": 0,
+              "Distance": 0,
+              "OrderCityName": "string",
+              "OrderCountyName": "string",
+              "EndAddress": "string",
+              "EndAddressNote": "string",
+              "EndLocation": "string",
+              "CartOrderGoods": [{
+                "GoodsId": 0,
+                "GoodsNum": 0
+              }]
+            },
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
+      },
+      //运费计算
+      Freight() {
+        this.util.post({
+            url: '/api/Customer/Order/ComputeExpressPrice',
+            data: {
+              "ShopId": 0,
+              "Distance": 0,
+              "OrderCityName": "string",
+              "OrderCountyName": "string",
+              "EndAddress": "string",
+              "EndAddressNote": "string",
+              "EndLocation": "string"
+            },
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
+      },
+      //创建订单
+      createOrder() {
+        this.util.post({
+            url: '/api/Customer/Order/CreateOrder',
+            data: {
+              "ReceiveAddressId": 0,
+              "GoodPriceToken": "string",
+              "ExpressPriceToken": "string",
+              "Remarks": "string"
+            },
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
+      },
     },
     components: {}
   }

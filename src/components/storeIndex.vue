@@ -218,7 +218,7 @@
             // console.log(history)
             //针对num等于0的数据仍保留做清空处理
             this.shopList = history.filter(e => e.num != 0)
-            console.log(this.shopList)
+            // console.log(this.shopList)
             this.right.forEach(e => {
                 //针对购物车的商品删除或者减至为0的设置，全部归为初始值
                 e.num = 0;

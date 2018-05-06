@@ -24,7 +24,7 @@
       <p>软件服务由UU跑腿提供</p>
       <p class="me_shop">我也要开店</p>
     </div>
-    <login v-if="true" @log-in="loginEmit"></login>
+    <login v-if="loginMask" @log-in="loginEmit"></login>
   </div>
 </template>
 
@@ -33,12 +33,16 @@
   export default {
     data() {
       return {
-        userInfo: []
+        userInfo: [],
+        loginMask:true
       }
+    },
+    onShow(){
+      this.loginMask = wx.getStorageSync('success') ? false : true;
     },
     mounted() {
       this.userInfo = wx.getStorageSync('userInfo')
-      console.log(this.userInfo)
+      // console.log(this.userInfo)
     },
     methods: {
       store() {
@@ -48,7 +52,7 @@
       },
       address() {
         wx.navigateTo({
-          url: '/pages/select-address/main'
+          url: '/pages/my-address/main'
         })
       },
       order() {
@@ -63,7 +67,13 @@
       },
       loginEmit(val) {
         console.log(val)
+        this.loginMask = false;
       },
+    },
+    computed: {
+      // loginMask: function() {
+      //   return wx.getStorageSync('success') ? false : true;
+      // },
     },
     components: {
       login

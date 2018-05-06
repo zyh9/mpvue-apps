@@ -37,7 +37,7 @@
             sendSms() {
                 if (this.phone(this.authTel)) {
                     this.util.post({
-                        url: '/api/Customer/Base/SendSmsCode',
+                        url: '/api/Customer/VerifyCode/SendSmsCode',
                         data: {
                             Mobile: this.authTel,
                             BizType: 1
@@ -74,15 +74,12 @@
                 // this.$emit('log-in',true)
                 if (this.phone(this.authTel) && this.smsCoding(this.authVal)) {
                     this.util.post({
-                        url: '/api/Customer/Base/CommitSmsCode',
+                        url: '/api/Customer/VerifyCode/CommitSmsCode',
                         data: {
                             Mobile: this.authTel,
                             BizType: 1,
                             VerifyCode: this.authVal,
-                            Loction: JSON.stringify({
-                                longitude: BMap.longitude,
-                                latitude: BMap.latitude
-                            })
+                            Loction: `${BMap.longitude},${BMap.latitude}`
                         },
                         headers: {
                             appid: '1',
@@ -90,6 +87,8 @@
                         }
                     }).then(res => {
                         if (res.State == 1) {
+                            this.msg(res.Msg)
+                            wx.setStorageSync('success', true)
                             this.$emit('log-in', true)
                         } else {
                             this.msg(res.Msg)

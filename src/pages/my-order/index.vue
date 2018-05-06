@@ -110,6 +110,8 @@
                     }
                 })
             })
+            console.log(this.$root.$mp.query)
+            this.orderInfo(0)
         },
         methods: {
             //点击切换
@@ -123,6 +125,26 @@
                 // console.log(e)
                 this.currentTab = e.target.current
             },
+            orderInfo(id) {
+                this.util.post({
+                    url: '/api/Customer/PersonerCenter/UserOrders',
+                    data: {
+                        OrderState: id,
+                        PageSize: 10,
+                        PageIndex: 0
+                    },
+                    headers: {
+                        appid: '1',
+                        token: wx.getStorageSync('loginInfo').Token || ''
+                    }
+                }).then(res => {
+                    if (res.State == 1) {
+                        console.log(res)
+                    }
+                }).catch(err => {
+                    this.msg(err.Msg)
+                })
+            }
         },
         computed: {
             newOrder: function() {

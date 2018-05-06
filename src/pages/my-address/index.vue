@@ -14,7 +14,7 @@
       </li>
     </ul>
     <div class="address_bottom">
-      <p>同步UU跑腿地址</p>
+      <p @click="synchronize">同步UU跑腿地址</p>
       <p @click="addAddress">添加新地址</p>
     </div>
   </div>
@@ -25,13 +25,61 @@
     data() {
       return {}
     },
-    mounted() {},
+    mounted() {
+      this.addressInfo()
+    },
     methods: {
       addAddress() {
         wx.navigateTo({
           url: '/pages/add-address/main'
         })
       },
+      //获取所有地址
+      addressInfo() {
+        this.util.post({
+          url: '/api/Customer/PersonerCenter/Addresses',
+          data: {},
+          headers: {
+            appid: '1',
+            token: wx.getStorageSync('loginInfo').Token || ''
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      //同步UU跑腿地址
+      synchronize() {
+        this.util.post({
+          url: '/api/Customer/PersonerCenter/PaotuiAddresses',
+          data: {},
+          headers: {
+            appid: '1',
+            token: wx.getStorageSync('loginInfo').Token || ''
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      delAddress(){
+        this.util.post({
+          url: '/api/Customer/PersonerCenter/DeleteAddress',
+          data: {
+            "AddressId": 0
+          },
+          headers: {
+            appid: '1',
+            token: wx.getStorageSync('loginInfo').Token || ''
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     components: {}
   }

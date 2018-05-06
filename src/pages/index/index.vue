@@ -40,6 +40,7 @@
                 loading: true,
                 winWidth: 0,
                 winHeight: 0,
+                loginOnoff: true
             }
         },
         onShareAppMessage() {
@@ -77,7 +78,12 @@
             })
             //获取电影条目
             this.loadMovies()
-            this.$store.dispatch('code',{a:1,b:2})
+            //获取店铺信息
+            this.shopInfoSum()
+            this.$store.dispatch('code', {
+                a: 1,
+                b: 2
+            })
             console.log(this.$store.state.mutations)
         },
         methods: {
@@ -124,10 +130,10 @@
             },
             userLogin() {
                 this.util.post({
-                    url: '/api/Customer/Base/WxJsCodeLogin',
+                    url: '/api/Customer/Login/WxJsCodeLogin',
                     data: {
                         jsCode: '1',
-                        qrCodeId: '20180504',
+                        // qrCodeId: '20180504',
                         wxUserInfo: JSON.stringify(this.userInfo)
                     },
                     headers: {
@@ -136,14 +142,91 @@
                     }
                 }).then(res => {
                     if (res.State == 1) {
-                        wx.setStorageSync('loginInfo', res.Body)
+                        let objInfo = res.Body;
+                        // 会覆盖掉原来该 key 对应的内容
+                        wx.setStorageSync('loginInfo', objInfo)
                     } else if (res.State == -10) {
-                        this.userLogin()
+                        if (!(wx.getStorageSync('loginInfo').Token) && this.loginOnoff) {
+                            this.loginOnoff = false;
+                            //再次获取用户信息
+                            this.userLogin()
+                        }
                     } else {
                         this.msg(res.Msg)
                     }
                 }).catch(err => {
                     console.log(err)
+                })
+            },
+            shopInfoSum() {
+                // let shopInfo = await this.shopInfo()
+                // console.log(shopInfo)
+                // let allShopInfo = await this.allShopInfo()
+                // console.log(allShopInfo)
+                // let shopPageInfo = await this.shopPageInfo()
+                // console.log(shopPageInfo)
+                this.shopInfo()
+                this.allShopInfo()
+                this.shopPageInfo()
+            },
+            shopInfo() {
+                return this.util.post({
+                    url: '/api/Customer/Browse/GetShopInfo',
+                    data: {
+                        shopId: 1
+                    },
+                    headers: {
+                        appid: '1',
+                        token: wx.getStorageSync('loginInfo').Token || ''
+                    }
+                })
+                .then(res => {
+                    if (res.State == 1) {
+                        console.log(res)
+                    }
+                }).catch(err => {
+                    this.msg(err.Msg)
+                })
+            },
+            allShopInfo() {
+                return this.util.post({
+                    url: '/api/Customer/Browse/GetShopAllGoods',
+                    data: {
+                        shopId: 1
+                    },
+                    headers: {
+                        appid: '1',
+                        token: wx.getStorageSync('loginInfo').Token || ''
+                    }
+                })
+                .then(res => {
+                    if (res.State == 1) {
+                        console.log(res)
+                    }
+                }).catch(err => {
+                    this.msg(err.Msg)
+                })
+            },
+            shopPageInfo() {
+                return this.util.post({
+                    url: '/api/Customer/Browse/GetShopGoods',
+                    data: {
+                        shopId: 1,
+                        GoodType: 0,
+                        PageSize: 10,
+                        PageIndex: 0
+                    },
+                    headers: {
+                        appid: '1',
+                        token: wx.getStorageSync('loginInfo').Token || ''
+                    }
+                })
+                .then(res => {
+                    if (res.State == 1) {
+                        console.log(res)
+                    }
+                }).catch(err => {
+                    this.msg(err.Msg)
                 })
             },
             loadMovies() {

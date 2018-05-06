@@ -1,5 +1,3 @@
-import msg from './toast';
-
 const baseUrl = 'http://192.168.10.66:6001';
 // const baseUrl = '';
 
@@ -11,7 +9,6 @@ const commonHeader = _ => {
     // 'LocationY': 0,
   }
 }
-
 
 //get数据请求
 const get = (opt = {}) => {
@@ -33,7 +30,6 @@ const get = (opt = {}) => {
         }, 0)
       },
       fail: err => {
-        msg("请稍后重试")
         reject(err);
       }
     })
@@ -50,17 +46,25 @@ const post = function (opt = {}) {
   }
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${baseUrl}${opt.url}?=t${time}`,
+      url: `${baseUrl}${opt.url}?t=${time}`,
       data: opt.data || {},
       header: editHeaders,
       method: "POST",
       success: res => {
         setTimeout(_ => {
-          resolve(res.data)
+          if (res.State == 1) {
+            //返回正常的数据
+            resolve(res.data)
+          } else if (res.State == -10) {
+            //针对token失效问题
+            resolve(res.data)
+          } else {
+            //弹出异常
+            reject(res.data)
+          }
         }, 0)
       },
       fail: err => {
-        msg("请稍后重试")
         reject(err)
       }
     })

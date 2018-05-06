@@ -37,6 +37,32 @@
       regionChange(e) {
         console.log(e)
         this.region = e.target.value;
+      },
+      addAddress() {
+        this.util.post({
+            url: '/api/Customer/PersonerCenter/UpdateAddress',
+            data: {
+              "Id": 0,
+              "AddressTitle": "string",
+              "AddressNote": "string",
+              "AddressLoc": "string",
+              "UserNote": "string",
+              "LinkMan": "string",
+              "LinkManMobile": "string",
+              "LinkManSex": 0
+            },
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
       }
     },
     components: {}
@@ -69,6 +95,7 @@
       .citySelect {
         flex-grow: 1;
         color: #777;
+        font-size: 24rpx;
       }
       img {
         width: 50rpx;
