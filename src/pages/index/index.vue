@@ -78,8 +78,10 @@
             })
             //获取电影条目
             this.loadMovies()
-            //获取店铺信息
-            this.shopInfoSum()
+            //获取店铺信息 catch用来捕获异常
+            this.shopInfoSum().catch(err=>{
+                console.log(err)
+            })
             this.$store.dispatch('code', {
                 a: 1,
                 b: 2
@@ -158,13 +160,13 @@
                     console.log(err)
                 })
             },
-            shopInfoSum() {
-                // let allShopInfo = await this.allShopInfo()
-                // console.log(allShopInfo)
-                // let shopPageInfo = await this.shopPageInfo()
-                // console.log(shopPageInfo)
-                this.allShopInfo()
-                this.shopPageInfo()
+            async shopInfoSum() {
+                let allShopInfo = await this.allShopInfo()
+                console.log(allShopInfo)
+                let shopPageInfo = await this.shopPageInfo()
+                console.log(shopPageInfo)
+                // this.allShopInfo()
+                // this.shopPageInfo()
             },
             allShopInfo() {
                 return this.util.post({
@@ -177,13 +179,13 @@
                         token: wx.getStorageSync('loginInfo').Token || ''
                     }
                 })
-                .then(res => {
-                    if (res.State == 1) {
-                        console.log(res)
-                    }
-                }).catch(err => {
-                    this.msg(err.Msg)
-                })
+                // .then(res => {
+                //     if (res.State == 1) {
+                //         console.log(res)
+                //     }
+                // }).catch(err => {
+                //     this.msg(err.Msg)
+                // })
             },
             shopPageInfo() {
                 return this.util.post({
@@ -199,13 +201,13 @@
                         token: wx.getStorageSync('loginInfo').Token || ''
                     }
                 })
-                .then(res => {
-                    if (res.State == 1) {
-                        console.log(res)
-                    }
-                }).catch(err => {
-                    this.msg(err.Msg)
-                })
+                // .then(res => {
+                //     if (res.State == 1) {
+                //         console.log(res)
+                //     }
+                // }).catch(err => {
+                //     this.msg(err.Msg)
+                // })
             },
             loadMovies() {
                 this.loading = true;

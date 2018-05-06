@@ -76,6 +76,7 @@ export default {
       'pages/admin-store-deploy/main',
       //商品管理
       'pages/admin-commodity-manage/main',
+      'pages/upload-shop-img/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

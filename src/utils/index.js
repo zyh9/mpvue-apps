@@ -59,7 +59,7 @@ const post = function (opt = {}) {
             //针对token失效问题
             resolve(res.data)
           } else {
-            //弹出异常
+            //抛出异常
             reject(res.data)
           }
         }, 0)

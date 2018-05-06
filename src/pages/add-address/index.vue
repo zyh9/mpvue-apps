@@ -6,7 +6,7 @@
     </div>
     <div class="options">
       <p>联系电话</p>
-      <input type="text" placeholder="请填写收件人电话" maxlength="11">
+      <input type="text" placeholder="请填写收件人电话" maxlength="11" v-model="tel">
     </div>
     <div class="options">
       <p>收货地址</p>
@@ -21,6 +21,7 @@
       <p>详细地址</p>
       <input type="text" placeholder="详细地址，例1号楼2层201室">
     </div>
+    <div class="add_btn">添加</div>
   </div>
 </template>
 
@@ -29,14 +30,30 @@
     data() {
       return {
         region: ['点击选择', '', ''],
-        customItem: '请选择'
+        customItem: '请选择',
+        tel: ''
       }
     },
     mounted() {},
     methods: {
+      //检测手机号
+      phone(tel) {
+        let reg = /^[1][3,4,5,6,7,8,9]\d{9}$/;
+        if (reg.test(tel)) {
+          return true;
+        } else {
+          if (tel != '') {
+            this.msg('请输入正确的手机号')
+          } else {
+            this.msg('请输入手机号')
+          }
+          return false;
+        }
+      },
       regionChange(e) {
         console.log(e)
         this.region = e.target.value;
+        console.log(this.region)
       },
       addAddress() {
         this.util.post({
@@ -65,7 +82,16 @@
           })
       }
     },
-    components: {}
+    components: {},
+    watch: {
+      region: function(newVal, oldVal) {
+        let region = newVal.filter(e => e != "请选择")
+        region.length < 2 && this.msg('收货地址信息还没填完整哦');
+      },
+      tel: function(newVal, oldVal) {
+        this.tel = newVal.replace(/[^\d]/g, '');
+      },
+    }
   }
 </script>
 
@@ -102,6 +128,16 @@
         height: 50rpx;
         margin-left: 20rpx;
       }
+    }
+    .add_btn {
+      background: skyblue;
+      margin: 20rpx;
+      text-align: center;
+      height: 80rpx;
+      line-height: 80rpx;
+      border-radius: 8rpx;
+      color: #fff;
+      font-size: 30rpx;
     }
   }
 </style>
