@@ -81,6 +81,7 @@
             //获取店铺信息 catch用来捕获异常
             this.shopInfoSum().catch(err=>{
                 console.log(err)
+                this.msg(err.Msg)
             })
             this.$store.dispatch('code', {
                 a: 1,
