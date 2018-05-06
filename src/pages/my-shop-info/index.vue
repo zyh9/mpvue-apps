@@ -34,7 +34,9 @@
     data() {
       return {}
     },
-    mounted() {},
+    mounted() {
+      this.shopInfo()
+    },
     methods: {
       tel() {
         wx.makePhoneCall({
@@ -51,6 +53,25 @@
             this.msg("复制失败")
           }
         })
+      },
+      shopInfo() {
+        this.util.post({
+            url: '/api/Customer/Browse/GetShopInfo',
+            data: {
+              shopId: 1
+            },
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
       }
     },
     components: {}

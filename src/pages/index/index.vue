@@ -159,34 +159,12 @@
                 })
             },
             shopInfoSum() {
-                // let shopInfo = await this.shopInfo()
-                // console.log(shopInfo)
                 // let allShopInfo = await this.allShopInfo()
                 // console.log(allShopInfo)
                 // let shopPageInfo = await this.shopPageInfo()
                 // console.log(shopPageInfo)
-                this.shopInfo()
                 this.allShopInfo()
                 this.shopPageInfo()
-            },
-            shopInfo() {
-                return this.util.post({
-                    url: '/api/Customer/Browse/GetShopInfo',
-                    data: {
-                        shopId: 1
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || ''
-                    }
-                })
-                .then(res => {
-                    if (res.State == 1) {
-                        console.log(res)
-                    }
-                }).catch(err => {
-                    this.msg(err.Msg)
-                })
             },
             allShopInfo() {
                 return this.util.post({

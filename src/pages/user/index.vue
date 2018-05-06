@@ -34,10 +34,10 @@
     data() {
       return {
         userInfo: [],
-        loginMask:true
+        loginMask: true
       }
     },
-    onShow(){
+    onShow() {
       this.loginMask = wx.getStorageSync('success') ? false : true;
     },
     mounted() {
@@ -69,6 +69,41 @@
         console.log(val)
         this.loginMask = false;
       },
+      userData() {
+        this.util.post({
+            url: '/api/Customer/PersonerCenter/UserCenter',
+            data: {},
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
+      },
+      //用户退出
+      userOut() {
+        this.util.post({
+            url: '/api/Customer/Login/Logout',
+            data: {},
+            headers: {
+              appid: '1',
+              token: wx.getStorageSync('loginInfo').Token || ''
+            }
+          })
+          .then(res => {
+            if (res.State == 1) {
+              console.log(res)
+            }
+          }).catch(err => {
+            this.msg(err.Msg)
+          })
+      }
     },
     computed: {
       // loginMask: function() {

@@ -64,6 +64,7 @@
           console.log(err)
         })
       },
+      //删除某条地址
       delAddress(){
         this.util.post({
           url: '/api/Customer/PersonerCenter/DeleteAddress',

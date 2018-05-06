@@ -103,6 +103,27 @@
                 // console.log(e)
                 this.currentTab = e.target.current
             },
+            //购买过的店铺
+            historyShop() {
+                this.util.post({
+                        url: '/api/Customer/PersonerCenter/BuyShopHistory',
+                        data: {
+                            "PageSize": 0,
+                            "PageIndex": 0
+                        },
+                        headers: {
+                            appid: '1',
+                            token: wx.getStorageSync('loginInfo').Token || ''
+                        }
+                    })
+                    .then(res => {
+                        if (res.State == 1) {
+                            console.log(res)
+                        }
+                    }).catch(err => {
+                        this.msg(err.Msg)
+                    })
+            }
         },
         computed: {
             newHistory: function() {
