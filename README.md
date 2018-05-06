@@ -64,9 +64,11 @@
 
 ### vuex的加入（纯属瞎搞）
 
-		小程序内部是不能手动去刷新页面的，这就为状态管理的实现提供了可能性
+```javascript
 		
-		某些状态不需要长期存储，索性投入vuex的怀抱吧。。。
+		// 小程序内部是不能手动去刷新页面的，这就为状态管理的实现提供了可能性
+		
+		// 某些状态不需要长期存储，索性投入vuex的怀抱吧。。。
 		
 		// 引用数据请求
 		import util from './utils/index';
@@ -78,13 +80,14 @@
 		import store from './store/index';
 		Vue.prototype.$store = store;
 		
-		发起action => 
+		// 发起action => 
 		
 		this.$store.dispatch('code',{a:1,b:2})
 		
-		获取state数据 =>
+		// 获取state数据 =>
 		
 		this.$store.state.mutations
+```
 
 ```javascript
 	// store/index.js
@@ -641,6 +644,7 @@
 	}
 	
 	//post数据请求
+	
 	const post = function (opt = {}) {
 	  let time = new Date().getTime();
 	  //'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
