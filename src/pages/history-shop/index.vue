@@ -90,6 +90,7 @@
                     }
                 })
             })
+            this.historyShop()
         },
         methods: {
             //点击切换
@@ -108,8 +109,8 @@
                 this.util.post({
                         url: '/api/Customer/PersonerCenter/BuyShopHistory',
                         data: {
-                            "PageSize": 0,
-                            "PageIndex": 0
+                            PageSize: 10,
+                            PageIndex: 0
                         },
                         headers: {
                             appid: '1',

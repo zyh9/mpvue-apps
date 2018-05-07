@@ -91,7 +91,9 @@
     data() {
       return {}
     },
-    mounted() {},
+    mounted() {
+      this.orderDetails()
+    },
     methods: {
       tel() {
         wx.makePhoneCall({
@@ -114,7 +116,7 @@
         this.util.post({
           url: '/api/Customer/Order/OrderDetail',
           data: {
-            "OrderID": 0
+            OrderID: 0
           },
           headers: {
             appid: '1',
@@ -123,7 +125,7 @@
         }).then(res => {
           console.log(res)
         }).catch(err => {
-          console.log(err)
+          this.msg(err.Msg)
         })
       }
     },

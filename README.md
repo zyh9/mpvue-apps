@@ -660,10 +660,10 @@
 	      method: "POST",
 	      success: res => {
 	        setTimeout(_ => {
-	          if (res.State == 1) {
+	          if (res.data.State == 1) {
 	            //返回正常的数据
 	            resolve(res.data)
-	          } else if (res.State == -10) {
+	          } else if (res.data.State == -10) {
 	            //针对token失效问题
 	            resolve(res.data)
 	          } else {

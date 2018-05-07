@@ -1,16 +1,17 @@
 <template>
   <div class="store">
     <div class="store_top_info">
-      <div class="store_top">
-        <img src="../../../static/userImg.png" alt="" class="shop_img">
-        <div class="top_right">
-          <p class="name">XXXXX的便利店</p>
-          <p class="address">地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东</p>
-          <p class="time">营业时间：9:30-22:00</p>
-        </div>
+      <div class="store_banner">
+        <img src="../../../static/logo.png" alt="" class="shop_img">
+        <img src="../../../static/share.png" alt="" class="share">
+      </div>
+      <div class="store_text">
+        <p class="name">汉堡王(望京店)</p>
+        <p class="time">营业时间：9:30-22:00</p>
+        <p class="address">地址：河南省郑州市金水区航海路与嵩山路交叉口200米路东</p>
       </div>
       <ul class="store_info">
-        <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav">{{v.name}}</li>
+        <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
       </ul>
     </div>
     <swiper :current="currentTab" class="swiper-box" duration="300" :style="{height:winHeight+'px'}" @change="bindChange">
@@ -71,7 +72,7 @@
     },
     methods: {
       // increment () {
-      //   store.commit('increment')
+      //   store.    ('increment')
       // },
       // decrement () {
       //   store.commit('decrement')
@@ -99,53 +100,86 @@
 <style lang="less">
   .store_top_info {
     overflow: hidden;
-    .store_top {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 30rpx;
+    .store_banner {
+      background: #383838;
+      position: relative;
+      height: 114rpx;
       .shop_img {
-        width: 100rpx;
-        height: 100rpx;
-        display: block;
+        position: absolute;
+        left: 50%;
+        width: 160rpx;
+        height: 160rpx;
+        transform: translateX(-50%);
+        border-radius: 8rpx;
       }
-      .top_right {
-        padding-left: 30rpx;
-        flex-grow: 1;
-        .name {
-          font-size: 24rpx;
-          color: #666;
-        }
-        .address {
-          font-size: 24rpx;
-          color: #666;
-          display: -webkit-box !important;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          word-break: break-all;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-        }
-        .time {
-          font-size: 24rpx;
-          color: #666;
-        }
+      .share {
+        position: absolute;
+        bottom: 0;
+        right: 28rpx;
+        width: 70rpx;
+        height: 70rpx;
+        transform: translateY(50%);
+      }
+    }
+    .store_text {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 58rpx;
+      .name {
+        font-size: 38rpx;
+        color: #383838;
+        font-weight: 700;
+      }
+      .time {
+        font-size: 22rpx;
+        color: #ff4d3a;
+        background-color: rgba(255, 77, 58, 0.13);
+        border-radius: 4rpx;
+        padding: 0 8rpx;
+        margin: 6rpx 0 10rpx;
+      }
+      .address {
+        width: 60%;
+        font-size: 22rpx;
+        color: #939393;
+        display: -webkit-box !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        text-align: center;
       }
     }
     .store_info {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      border-bottom: 1rpx solid #ebebeb;
+      box-sizing: border-box;
       li {
-        color: #666;
-        font-size: 24rpx;
         flex-flow: 1;
         width: 100%;
         text-align: center;
-        padding: 16rpx;
+        height: 70rpx;
+        span {
+          line-height: 70rpx;
+          color: #4d4d4d;
+          font-size: 28rpx;
+          position: relative;
+          z-index: -1;
+          box-sizing: border-box;
+          display: inline-block;
+          height: 100%;
+        }
       }
       .li_select {
-        color: skyblue;
+        span {
+          color: #1d1d1d;
+          border-bottom: 4rpx solid #ff4d3a;
+        }
       }
     }
   }

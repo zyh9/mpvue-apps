@@ -7,11 +7,11 @@
         </div>
         <scroll-view scroll-y="true" :style="{height: winHeight+'px'}">
             <!-- <ul class="address_list">
-                        <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
-                            <p class="address_title">{{v.title}}</p>
-                            <p class="address_con">{{v.address}}</p>
-                        </li>
-                    </ul> -->
+                                    <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
+                                        <p class="address_title">{{v.title}}</p>
+                                        <p class="address_con">{{v.address}}</p>
+                                    </li>
+                                </ul> -->
             <ul class="address_list">
                 <li v-for="(v,i) in addressList" :key="i" :data-address="v" @click="setAddress">
                     <p class="address_title">{{v.city}} {{v.district}}</p>
@@ -41,6 +41,9 @@
                 winWidth: '',
                 winHeight: '',
             }
+        },
+        onShow() {
+            this.val = '';
         },
         created() {},
         mounted() {
@@ -131,7 +134,10 @@
                 let {
                     address
                 } = e.currentTarget.dataset;
-                console.log(address)
+                wx.setStorageSync('address', address)
+                wx.navigateBack({
+                    delta: 1
+                })
             }
         },
         components: {},

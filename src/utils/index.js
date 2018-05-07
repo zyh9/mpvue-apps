@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.10.66:6001';
+const baseUrl = 'http://192.168.10.80:8060';
 // const baseUrl = '';
 
 const commonHeader = _ => {
@@ -52,10 +52,10 @@ const post = function (opt = {}) {
       method: "POST",
       success: res => {
         setTimeout(_ => {
-          if (res.State == 1) {
+          if (res.data.State == 1) {
             //返回正常的数据
             resolve(res.data)
-          } else if (res.State == -10) {
+          } else if (res.data.State == -10) {
             //针对token失效问题
             resolve(res.data)
           } else {

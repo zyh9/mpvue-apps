@@ -1,27 +1,34 @@
 <template>
   <div class="add_address">
     <div class="options">
-      <p>收件人</p>
-      <input type="text" placeholder="请填写收件人姓名">
+      <p class="potions_text">收件人</p>
+      <input type="text" placeholder="请填写收件人姓名" v-model="name">
     </div>
     <div class="options">
-      <p>联系电话</p>
+      <p class="potions_text">联系电话</p>
       <input type="text" placeholder="请填写收件人电话" maxlength="11" v-model="tel">
     </div>
     <div class="options">
-      <p>收货地址</p>
-      <picker mode="region" @change="regionChange" :value="region" :custom-item="customItem" class="citySelect">
-        <view class="picker">
-          {{region[0]}} {{region[1]}} {{region[2]}}
-        </view>
-      </picker>
-      <img src="../../../static/userImg.png" alt="">
+      <p class="potions_text">收货地址</p>
+      <!-- <picker mode="region" @change="regionChange" :value="region" :custom-item="customItem" class="citySelect">
+                            <view class="picker">
+                              {{region[0]}} {{region[1]}} {{region[2]}}
+                            </view>
+                          </picker> -->
+      <div class="select_address" @click="select">
+        <p class="click_select">{{addressTitle}}</p>
+        <img src="../../../static/userImg.png" alt="">
+      </div>
     </div>
     <div class="options">
-      <p>详细地址</p>
-      <input type="text" placeholder="详细地址，例1号楼2层201室">
+      <p class="potions_text">详细地址</p>
+      <input type="text" placeholder="详细地址，例1号楼2层201室" v-model="addressNote">
     </div>
-    <div class="add_btn">添加</div>
+    <div class="options">
+      <p class="potions_text">备注</p>
+      <input type="text" placeholder="请填写备注" v-model="note">
+    </div>
+    <div class="add_btn" @click="addAddress">添加</div>
   </div>
 </template>
 
@@ -31,8 +38,18 @@
       return {
         region: ['点击选择', '', ''],
         customItem: '请选择',
-        tel: ''
+        tel: '',
+        name: '',
+        note: '',
+        userInfo: {},
+        address: {}
       }
+    },
+    onShow() {
+      this.userInfo = wx.getStorageSync('userInfo');
+      console.log(this.userInfo)
+      this.address = wx.getStorageSync('address') || {};
+      console.log(this.address)
     },
     mounted() {},
     methods: {
@@ -50,43 +67,88 @@
           return false;
         }
       },
+      //检测是否填写收件人姓名
+      authName(val) {
+        if (val != '') {
+          return true;
+        } else {
+          this.msg('您还没有输入收件人名字哦')
+          return false
+        };
+      },
+      //检测收货地址标题
+      authTitle(val) {
+        if (val != '' && val != '点击选择') {
+          return true;
+        } else {
+          this.msg('您还没有选择收货地址哦')
+          return false
+        };
+      },
+      //检测收货地址内容
+      authDetails(val) {
+        if (val != '') {
+          return true;
+        } else {
+          this.msg('您还没有输入详细地址哦')
+          return false
+        };
+      },
       regionChange(e) {
         console.log(e)
         this.region = e.target.value;
         console.log(this.region)
       },
+      select() {
+        wx.navigateTo({
+          url: '/pages/select-address/main'
+        })
+      },
       addAddress() {
-        this.util.post({
-            url: '/api/Customer/PersonerCenter/UpdateAddress',
-            data: {
-              "Id": 0,
-              "AddressTitle": "string",
-              "AddressNote": "string",
-              "AddressLoc": "string",
-              "UserNote": "string",
-              "LinkMan": "string",
-              "LinkManMobile": "string",
-              "LinkManSex": 0
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || ''
-            }
-          })
-          .then(res => {
-            if (res.State == 1) {
-              console.log(res)
-            }
-          }).catch(err => {
-            this.msg(err.Msg)
-          })
+        if (this.authName(this.name) && this.phone(this.tel) && this.authTitle(this.addressTitle) && this.authDetails(this.addressNote)) {
+          this.util.post({
+              url: '/api/Customer/PersonerCenter/UpdateAddress',
+              data: {
+                Id: 0,
+                AddressTitle: this.addressTitle,
+                AddressNote: this.addressNote,
+                AddressLoc: `${this.location.lng},${this.location.lat}`,
+                UserNote: this.note,
+                LinkMan: this.name,
+                LinkManMobile: this.tel,
+                LinkManSex: this.userInfo.gender
+              },
+              headers: {
+                appid: '1',
+                token: wx.getStorageSync('loginInfo').Token || ''
+              }
+            })
+            .then(res => {
+              if (res.State == 1) {
+                wx.removeStorageSync('address')
+              }
+            }).catch(err => {
+              this.msg(err.Msg)
+            })
+        }
+      }
+    },
+    computed: {
+      addressTitle: function() {
+        return this.address.city ? `${this.address.city} ${this.address.district}` : '点击选择';
+      },
+      addressNote: function() {
+        return this.address.name ? this.address.name : ''
+      },
+      location:function(){
+        return this.address.location? this.address.location:{}
       }
     },
     components: {},
     watch: {
       region: function(newVal, oldVal) {
         let region = newVal.filter(e => e != "请选择")
-        region.length < 2 && this.msg('收货地址信息还没填完整哦');
+        region.length < 3 && this.msg('收货地址信息还没填完整哦');
       },
       tel: function(newVal, oldVal) {
         this.tel = newVal.replace(/[^\d]/g, '');
@@ -106,7 +168,7 @@
       align-items: center;
       padding: 20rpx;
       border-bottom: 1rpx solid #e6e6e6;
-      p {
+      .potions_text {
         font-size: 24rpx;
         color: #333;
         width: 140rpx;
@@ -128,10 +190,24 @@
         height: 50rpx;
         margin-left: 20rpx;
       }
+      .select_address {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-grow: 1;
+        .click_select {
+          flex-grow: 1;
+          font-size: 24rpx;
+          color: #666;
+        }
+      }
     }
     .add_btn {
+      position: absolute;
+      bottom: 20rpx;
+      left: 20rpx;
+      right: 20rpx;
       background: skyblue;
-      margin: 20rpx;
       text-align: center;
       height: 80rpx;
       line-height: 80rpx;

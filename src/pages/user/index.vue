@@ -20,6 +20,10 @@
       <p>查看店铺信息</p>
       <img src="../../../static/userImg.png" alt="">
     </div>
+    <div class="options" @click="userOut">
+      <p>退出登录</p>
+      <img src="../../../static/userImg.png" alt="">
+    </div>
     <div class="uu_tips">
       <p>软件服务由UU跑腿提供</p>
       <p class="me_shop">我也要开店</p>
@@ -68,6 +72,8 @@
       loginEmit(val) {
         console.log(val)
         this.loginMask = false;
+        //登录成功获取用户信息
+        this.userData()
       },
       userData() {
         this.util.post({
@@ -89,7 +95,7 @@
       //用户退出
       userOut() {
         this.util.post({
-            url: '/api/Customer/Login/Logout',
+            url: '/api/Customer/PersonerCenter/Logout',
             data: {},
             headers: {
               appid: '1',
@@ -99,6 +105,10 @@
           .then(res => {
             if (res.State == 1) {
               console.log(res)
+              this.msg(res.Msg)
+              wx.removeStorageSync('loginInfo')
+              wx.setStorageSync('success',false)
+              this.loginMask = true;
             }
           }).catch(err => {
             this.msg(err.Msg)
@@ -106,9 +116,6 @@
       }
     },
     computed: {
-      // loginMask: function() {
-      //   return wx.getStorageSync('success') ? false : true;
-      // },
     },
     components: {
       login

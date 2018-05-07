@@ -117,6 +117,8 @@
                     success: (res) => {
                         wx.getUserInfo({
                             success: res => {
+                                //userInfo.gender
+                                //性别 0：未知、1：男、2：女
                                 this.userInfo = res.userInfo
                                 wx.setStorageSync('userInfo', res.userInfo)
                                 this.userLogin()
@@ -146,6 +148,7 @@
                 }).then(res => {
                     if (res.State == 1) {
                         let objInfo = res.Body;
+                        console.log(res.Body)
                         // 会覆盖掉原来该 key 对应的内容
                         wx.setStorageSync('loginInfo', objInfo)
                     } else if (res.State == -10) {

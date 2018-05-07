@@ -127,7 +127,7 @@
             },
             orderInfo(id) {
                 this.util.post({
-                    url: '/api/Customer/PersonerCenter/UserOrders',
+                    url: '/api/Customer/Order/UserOrders',
                     data: {
                         OrderState: id,
                         PageSize: 10,
