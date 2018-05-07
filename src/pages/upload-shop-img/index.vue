@@ -1,44 +1,48 @@
 <template>
     <div class="upload_shop_img">
+        <canvas canvas-id="cropper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" disable-scroll="true" :style="{ width: cropperOpt.width + 'px', height: cropperOpt.height + 'px', background: 'rgba(0, 0, 0, .8)' }"></canvas>
+        <div class="cropper-buttons">
+            <div class="upload" @tap="uploadTap">
+                上传图片
+            </div>
+            <div class="getCropperImage" @tap="getCropperImage">
+                生成图片
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import WeCropper from 'we-cropper/dist/we-cropper.min.js';
-    // console.log(WeCropper)
-    const device = wx.getSystemInfoSync() // 获取设备信息
-    const width = device.windowWidth // 示例为一个与屏幕等宽的正方形裁剪框
-    const height = width;
+    import WeCropper from 'we-cropper';
+    const device = wx.getSystemInfoSync();
+    const windowWidth = device.windowWidth;
+    const windowHeight = device.windowHeight - 50;
     export default {
         data() {
             return {
                 cropperOpt: {
-                    id: 'cropper',
-                    width, // 画布宽度
-                    height, // 画布高度
-                    scale: 2.5, // 最大缩放倍数
-                    zoom: 8, // 缩放系数
+                    width: windowWidth,
+                    height: windowHeight,
+                    scale: 2.5,
+                    zoom: 8,
                     cut: {
-                        x: (width - 200) / 2, // 裁剪框x轴起点
-                        y: (width - 200) / 2, // 裁剪框y轴期起点
-                        width: 200, // 裁剪框宽度
-                        height: 200 // 裁剪框高度
+                        x: (windowWidth - 300) / 2,
+                        y: (windowHeight - 300) / 2,
+                        width: 300,
+                        height: 300
                     }
-                }
+                },
+                wecropper: null
             }
         },
-        onLoad(option) {
-            const {
-                cropperOpt
-            } = this.data
-            // 若同一个页面只有一个裁剪容器，在其它Page方法中可通过this.wecropper访问实例
-            new WeCropper(cropperOpt)
+        onLoad() {
+            this.wecropper = new WeCropper(this.cropperOpt)
                 .on('ready', (ctx) => {
-                    console.log(`wecropper is ready for work!`)
+                    // console.log(`wecropper准备工作`)
                 })
                 .on('beforeImageLoad', (ctx) => {
-                    console.log(`before picture loaded, i can do something`)
-                    console.log(`current canvas context: ${ctx}`)
+                    // console.log(`在图片加载之前，我可以做一些事情`)
+                    // console.log(`当前画布上下文:`, ctx)
                     wx.showToast({
                         title: '上传中',
                         icon: 'loading',
@@ -46,18 +50,85 @@
                     })
                 })
                 .on('imageLoad', (ctx) => {
-                    console.log(`picture loaded`)
-                    console.log(`current canvas context: ${ctx}`)
+                    // console.log(`图片加载...`)
+                    // console.log(`当前画布上下文:`, ctx)
                     wx.hideToast()
                 })
-            // 若同一个页面由多个裁剪容器，需要主动做如下处理
-            this.A = new weCropper(cropperOptA)
-            this.B = new weCropper(cropperOptB)
+                .on('beforeDraw', (ctx, instance) => {
+                    // console.log(`在画布画之前，我可以做点什么`)
+                    // console.log(`当前画布上下文:`, ctx)
+                })
+                .updateCanvas()
+            console.log(this.wecropper)
         },
-        components: {}
+        methods: {
+            touchStart(e) {
+                this.wecropper.touchStart(e)
+            },
+            touchMove(e) {
+                this.wecropper.touchMove(e)
+            },
+            touchEnd(e) {
+                this.wecropper.touchEnd(e)
+            },
+            //上传图片
+            uploadTap() {
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: res => {
+                        const src = res.tempFilePaths[0];
+                        console.log(src)
+                        //  获取裁剪图片资源后，给data添加src属性及其值
+                        this.wecropper.pushOrign(src)
+                    }
+                })
+            },
+            //生成预览图
+            getCropperImage() {
+                this.wecropper.getCropperImage((src) => {
+                    if (src) {
+                        console.log(src)
+                        wx.previewImage({
+                            current: '', // 当前显示图片的http链接
+                            urls: [src] // 需要预览的图片http链接列表
+                        })
+                    } else {
+                        console.log('获取图片地址失败，请稍后重试')
+                    }
+                })
+            },
+        },
+        components: {},
     }
 </script>
 
 <style lang="less">
-
+    .upload_shop_img {
+        width: 100%;
+        height: 100%;
+    }
+    .cropper-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        .upload,
+        .getCropperImage {
+            width: 50%;
+            text-align: center;
+        }
+    }
+    .cropper-buttons {
+        background-color: rgba(0, 0, 0, 0.95);
+        color: #04b00f;
+    }
 </style>

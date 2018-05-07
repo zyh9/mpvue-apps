@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "mpvue": "^1.0.11",
+    "mpvue-cropper": "0.0.3",
     "vuex": "^2.3.1",
     "we-cropper": "^1.2.0"
   },
@@ -52,7 +53,9 @@
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^0.5.8",
+    "vue-loader": "^15.0.9",
     "vue-style-loader": "^3.0.1",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware-hard-disk": "^1.10.0",

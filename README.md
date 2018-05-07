@@ -66,27 +66,27 @@
 
 ```javascript
 		
-		// 小程序内部是不能手动去刷新页面的，这就为状态管理的实现提供了可能性
-		
-		// 某些状态不需要长期存储，索性投入vuex的怀抱吧。。。
-		
-		// 引用数据请求
-		import util from './utils/index';
-		Vue.prototype.util = util;
-		// 引用toast提示
-		import msg from './utils/toast';
-		Vue.prototype.msg = msg;
-		// 引用vuex
-		import store from './store/index';
-		Vue.prototype.$store = store;
-		
-		// 发起action => 
-		
-		this.$store.dispatch('code',{a:1,b:2})
-		
-		// 获取state数据 =>
-		
-		this.$store.state.mutations
+	// 小程序内部是不能手动去刷新页面的，这就为状态管理的实现提供了可能性
+	
+	// 某些状态不需要长期存储，索性投入vuex的怀抱吧。。。
+	
+	// 引用数据请求
+	import util from './utils/index';
+	Vue.prototype.util = util;
+	// 引用toast提示
+	import msg from './utils/toast';
+	Vue.prototype.msg = msg;
+	// 引用vuex
+	import store from './store/index';
+	Vue.prototype.$store = store;
+	
+	// 发起action => 
+	
+	this.$store.dispatch('code',{a:1,b:2})
+	
+	// 获取state数据 =>
+	
+	this.$store.state.mutations
 ```
 
 ```javascript
@@ -709,5 +709,5 @@
 	
 	//async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态。抛出的错误对象会被catch方法回调函数接收到
 	
-	shopInfo().then(res=>console.log(res)).catch(err=>{console.log(err)})
+	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
