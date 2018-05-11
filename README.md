@@ -167,7 +167,9 @@
 		console.log(data2)
 	}
 	
-	//async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态。抛出的错误对象会被catch方法回调函数接收到
+	//async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态
+	
+	//抛出的错误对象会被catch方法回调函数接收到
 	
 	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
@@ -188,8 +190,8 @@
 	
 	ES Module:
 	
-	import gcoord from 'gcoord'
-	import { transform, WGS84, GCJ02 } from 'gcoord';
+		import gcoord from 'gcoord'
+		import { transform, WGS84, GCJ02 } from 'gcoord';
 ```
 
 > 小例子
