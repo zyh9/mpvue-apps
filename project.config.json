@@ -10,7 +10,7 @@
 	"miniprogramRoot": "./dist/",
 	"compileType": "miniprogram",
 	"appid": "touristappid",
-	"projectname": "uu-shop",
+	"projectname": "111",
 	"condition": {
 		"search": {
 			"current": -1,

@@ -62,6 +62,150 @@
 	}
 ```
 
+### ES7 async/await 使用
+
+> 先看数据请求代码
+
+```javascript
+	const baseUrl = 'http://192.168.10.80:8060';
+	// const baseUrl = '';
+	
+	const commonHeader = _ => {
+	  //headers每次必传数据存放位置
+	  return {
+	    // 'LocationX': 0,
+	    // 'LocationY': 0,
+	  }
+	}
+	
+	//get数据请求
+	const get = (opt = {}) => {
+	  let time = new Date().getTime();
+	  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
+	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+	  if (opt.headers) {
+	    editHeaders = Object.assign({}, editHeaders, opt.headers)
+	  }
+	  return new Promise((resolve, reject) => {
+	    let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
+	    wx.request({
+	      url: baseUrl + address,
+	      header: editHeaders,
+	      method: "GET",
+	      success: res => {
+	        setTimeout(_ => {
+	          resolve(res.data)
+	        }, 0)
+	      },
+	      fail: err => {
+	        reject(err);
+	      }
+	    })
+	  })
+	}
+	
+	//post数据请求
+	const post = (opt = {}) => {
+	  let time = new Date().getTime();
+	  //'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+	  if (opt.headers) {
+	    editHeaders = Object.assign({}, editHeaders, opt.headers)
+	  }
+	  return new Promise((resolve, reject) => {
+	    wx.request({
+	      url: `${baseUrl}${opt.url}?t=${time}`,
+	      data: opt.data || {},
+	      header: editHeaders,
+	      method: "POST",
+	      success: res => {
+	        setTimeout(_ => {
+	          if (res.data.State == 1) {
+	            //返回正常的数据
+	            resolve(res.data)
+	          } else if (res.data.State == -10) {
+	            //针对token失效问题
+	            resolve(res.data)
+	          } else {
+	            //抛出异常
+	            reject(res.data)
+	          }
+	        }, 0)
+	      },
+	      fail: err => {
+	        reject(err)
+	      }
+	    })
+	  })
+	}
+	
+	export default { get, post}
+```
+
+```javascript
+	// 代码示例
+	let shopInfo = async _ =>{
+		let data1 = await this.util.post({
+			url:'http://XXXXXX',
+			data:{
+				demo:'111'
+			},
+			headers:{
+				token:'222'
+			}
+		})
+		console.log(data1)
+		let data2 = await this.util.post({
+			url:'http://XXXXXX',
+			data:{
+				demo:'111'
+			},
+			headers:{
+				token:'222'
+			}
+		})
+		console.log(data2)
+	}
+	
+	//async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态。抛出的错误对象会被catch方法回调函数接收到
+	
+	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
+```
+
+###  一个处理地理坐标系的js库
+
+> 安装 and 引入
+
+```javascript
+	npm install gcoord --save
+	
+	<script src="https://unpkg.com/gcoord/dist/gcoord.js"></script>
+	
+	CommonJS:
+	
+		const gcoord = require( 'gcoord' );
+		const { transform, WGS84, GCJ02 } = require( 'gcoord' );
+	
+	ES Module:
+	
+	import gcoord from 'gcoord'
+	import { transform, WGS84, GCJ02 } from 'gcoord';
+```
+
+> 小例子
+
+```javascript
+	var result = gcoord.transform(
+	    [ 116.403988, 39.914266 ],    // 经纬度坐标
+	    gcoord.WGS84,                 // 当前坐标系
+	    gcoord.BD09                   // 目标坐标系
+	)
+	
+	console.log( result );  // [ 116.41661560068297, 39.92196580126834 ]
+```
+
+[gcoord github地址](https://github.com/hujiulong/gcoord)
+
 ### vuex的加入（纯属瞎搞）
 
 ```javascript
@@ -353,114 +497,4 @@
 		},
 		components: {}
 	}
-```
-
-### ES7 async/await 使用
-
-> 先看数据请求代码
-
-```javascript
-	const baseUrl = 'http://192.168.10.80:8060';
-	// const baseUrl = '';
-	
-	const commonHeader = _ => {
-	  //headers每次必传数据存放位置
-	  return {
-	    // 'LocationX': 0,
-	    // 'LocationY': 0,
-	  }
-	}
-	
-	//get数据请求
-	const get = (opt = {}) => {
-	  let time = new Date().getTime();
-	  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
-	  if (opt.headers) {
-	    editHeaders = Object.assign({}, editHeaders, opt.headers)
-	  }
-	  return new Promise((resolve, reject) => {
-	    let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
-	    wx.request({
-	      url: baseUrl + address,
-	      header: editHeaders,
-	      method: "GET",
-	      success: res => {
-	        setTimeout(_ => {
-	          resolve(res.data)
-	        }, 0)
-	      },
-	      fail: err => {
-	        reject(err);
-	      }
-	    })
-	  })
-	}
-	
-	//post数据请求
-	const post = (opt = {}) => {
-	  let time = new Date().getTime();
-	  //'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
-	  if (opt.headers) {
-	    editHeaders = Object.assign({}, editHeaders, opt.headers)
-	  }
-	  return new Promise((resolve, reject) => {
-	    wx.request({
-	      url: `${baseUrl}${opt.url}?t=${time}`,
-	      data: opt.data || {},
-	      header: editHeaders,
-	      method: "POST",
-	      success: res => {
-	        setTimeout(_ => {
-	          if (res.data.State == 1) {
-	            //返回正常的数据
-	            resolve(res.data)
-	          } else if (res.data.State == -10) {
-	            //针对token失效问题
-	            resolve(res.data)
-	          } else {
-	            //抛出异常
-	            reject(res.data)
-	          }
-	        }, 0)
-	      },
-	      fail: err => {
-	        reject(err)
-	      }
-	    })
-	  })
-	}
-	
-	export default { get, post}
-```
-
-```javascript
-	// 代码示例
-	let shopInfo = async _ =>{
-		let data1 = await this.util.post({
-			url:'http://XXXXXX',
-			data:{
-				demo:'111'
-			},
-			headers:{
-				token:'222'
-			}
-		})
-		console.log(data1)
-		let data2 = await this.util.post({
-			url:'http://XXXXXX',
-			data:{
-				demo:'111'
-			},
-			headers:{
-				token:'222'
-			}
-		})
-		console.log(data2)
-	}
-	
-	//async函数内部抛出错误，会导致返回的 Promise 对象变为reject状态。抛出的错误对象会被catch方法回调函数接收到
-	
-	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
