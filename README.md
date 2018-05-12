@@ -20,6 +20,40 @@
 
 [百度 微信小程序 SDK](https://github.com/baidumapapi/wxapp-jsapi)
 
+###  一个处理地理坐标系的js库
+
+> 安装 and 引入
+
+```javascript
+	npm install gcoord --save
+	
+	<script src="https://unpkg.com/gcoord/dist/gcoord.js"></script>
+	
+	CommonJS:
+	
+		const gcoord = require( 'gcoord' );
+		const { transform, WGS84, GCJ02 } = require( 'gcoord' );
+	
+	ES Module:
+	
+		import gcoord from 'gcoord'
+		import { transform, WGS84, GCJ02 } from 'gcoord';
+```
+
+> 小例子
+
+```javascript
+	var result = gcoord.transform(
+	    [ 116.403988, 39.914266 ],    // 经纬度坐标
+	    gcoord.WGS84,                 // 当前坐标系
+	    gcoord.BD09                   // 目标坐标系
+	)
+	
+	console.log( result );  // [ 116.41661560068297, 39.92196580126834 ]
+```
+
+[gcoord github地址](https://github.com/hujiulong/gcoord)
+
 ### autoprefixer配置
 
 > npm i autoprefixer -D
@@ -173,40 +207,6 @@
 	
 	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
-
-###  一个处理地理坐标系的js库
-
-> 安装 and 引入
-
-```javascript
-	npm install gcoord --save
-	
-	<script src="https://unpkg.com/gcoord/dist/gcoord.js"></script>
-	
-	CommonJS:
-	
-		const gcoord = require( 'gcoord' );
-		const { transform, WGS84, GCJ02 } = require( 'gcoord' );
-	
-	ES Module:
-	
-		import gcoord from 'gcoord'
-		import { transform, WGS84, GCJ02 } from 'gcoord';
-```
-
-> 小例子
-
-```javascript
-	var result = gcoord.transform(
-	    [ 116.403988, 39.914266 ],    // 经纬度坐标
-	    gcoord.WGS84,                 // 当前坐标系
-	    gcoord.BD09                   // 目标坐标系
-	)
-	
-	console.log( result );  // [ 116.41661560068297, 39.92196580126834 ]
-```
-
-[gcoord github地址](https://github.com/hujiulong/gcoord)
 
 ### vuex的加入（纯属瞎搞）
 
