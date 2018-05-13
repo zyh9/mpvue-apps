@@ -181,21 +181,21 @@
 	let shopInfo = async _ =>{
 		let data1 = await this.util.post({
 			url:'http://XXXXXX',
-			data:{
-				demo:'111'
-			},
 			headers:{
 				token:'222'
+			}
+			data:{
+				demo:'111'
 			}
 		})
 		console.log(data1)
 		let data2 = await this.util.post({
 			url:'http://XXXXXX',
-			data:{
-				demo:'111'
-			},
 			headers:{
 				token:'222'
+			}
+			data:{
+				demo:'111'
 			}
 		})
 		console.log(data2)
