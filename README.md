@@ -294,6 +294,33 @@
 	}
 ```
 
+### 营业时间的数据封装
+
+```javascript
+	// 营业时间格式化 示例：'0-140,180-300' => ['00:00-02:20','03:00-05:00']
+	// 返回一个数组，使用的时候直接String转化为字符串，做相应操作
+	const openTime = str => {
+	  const two = n => {
+	    return n < 10 ? '0' + n : '' + n;
+	  }
+	  if (str.indexOf(',') > -1) {
+	    return str.split(',').map(e => {
+	      let a = two(Math.floor(e.split('-')[0] / 60))
+	      let b = two(Math.floor(e.split('-')[0] % 60))
+	      let c = two(Math.floor(e.split('-')[1] / 60))
+	      let d = two(Math.floor(e.split('-')[1] % 60))
+	      return e = `${a}:${b}-${c}:${d}`;
+	    })
+	  } else {
+	    let a = two(Math.floor(str.split('-')[0] / 60))
+	    let b = two(Math.floor(str.split('-')[0] % 60))
+	    let c = two(Math.floor(str.split('-')[1] / 60))
+	    let d = two(Math.floor(str.split('-')[1] % 60))
+	    return [`${a}:${b}-${c}:${d}`];
+	  }
+	}
+```
+
 ### 小程序拖拽实现（待后续完善）
 
 > transition的加入并没有提升界面交互效果，反倒很不美观，索性去掉它吧。。。
