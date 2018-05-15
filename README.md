@@ -431,8 +431,6 @@
 		  }
 		},
 		onShow() { //页面渲染就会触发
-		  let history = wx.getStorageSync('history') || [];
-		  this.cartList = history;
 		  this.cartList.forEach(e => {
 		    e.left = 0;
 		  })
@@ -480,50 +478,17 @@
 		      }
 		    }
 		  },
-		  delShop(e) {
-		    let {
-		      item
-		    } = e.currentTarget.dataset;
-		    console.log(item)
-		    this.cartList = this.cartList.filter(ele => ele.shopId != item.shopId)
-		    wx.setStorageSync('history', this.cartList)
-		  },
-		  lowerCart(e) {
-		    let {
-		      info
-		    } = e.target.dataset;
-		    this.cartList.forEach(ele => {
-		      if (ele.shopId == info.shopId) {
-		        ele.num--;
-		      }
-		    })
-		    //针对num等于0的数据仍保留做清空处理
-		    this.cartList && (this.cartList = this.cartList.filter(e => e.num != 0));
-		    wx.setStorageSync('history', this.cartList)
-		  },
-		  addCart(e) {
-		    let {
-		      info
-		    } = e.target.dataset;
-		    this.cartList.forEach(ele => {
-		      if (ele.shopId == info.shopId) {
-		        ele.num++;
-		      }
-		    })
-		    wx.setStorageSync('history', this.cartList)
-		  },
-		},
-		computed: {
-		  count: function() {
-		    let n = 0;
-		    this.cartList.forEach(e => {
-		      if (e.num > 0) {
-		        n += e.price * e.num;
-		      }
-		    })
-		    return this.cartList.length ? n : 0;
-		  }
 		},
 		components: {}
 	}
 ```
+
+### 关于canvas请求网络图片绘制
+
+		网络图片的绘制在真机实测的时候是不会显示的，可以调用以下方法先获取本地图片路径，再进行canvas绘制
+		
+		wx.downloadFile(OBJECT)  ||  wx.getImageInfo(OBJECT)
+		
+		针对多个图片获取地址的解决方法，将上述两个方法用Promise包装一下
+		
+		再使用async/await来获取所有的图片本地地址，用catch来抛出图片地址获取异常的情况
