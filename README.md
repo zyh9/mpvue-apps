@@ -485,7 +485,7 @@
 
 ### 关于canvas请求网络图片绘制
 
-		网络图片的绘制在真机实测的时候是不会显示的，可以调用以下方法先获取本地图片路径，再进行canvas绘制
+		canvas图片的绘制可以调用以下方法先获取本地图片路径，再进行canvas绘制
 		
 		wx.downloadFile(OBJECT)  ||  wx.getImageInfo(OBJECT)
 		
