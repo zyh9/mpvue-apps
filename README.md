@@ -493,6 +493,22 @@
 		
 		再使用async/await来获取所有的图片本地地址，用catch来抛出图片地址获取异常的情况
 
+```javascript
+	downImg(url) {
+		return new Promise((resolve, reject) => {
+		    wx.downloadFile({
+		        url: url,
+		        success: res => {
+		            resolve(res.tempFilePath)
+		        },
+		        fail: err => {
+		            reject(err)
+		        }
+		    })
+		})
+	}
+```
+
 ### 早睡早起篇
 
 		早九晚二的生活持续三周左右，感觉自己的身体有些吃不消了，脑子瓦特了
