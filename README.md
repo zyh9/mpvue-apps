@@ -101,7 +101,7 @@
 > 先看数据请求代码
 
 ```javascript
-	const baseUrl = 'http://192.168.10.80:8060';
+	const baseUrl = 'http://192.168.1.1:8080';
 	// const baseUrl = '';
 	
 	const commonHeader = _ => {
@@ -524,6 +524,7 @@
 
 ```javascript
 	<div v-html='rules'></div>
+	
 	
 	this.rules=this.rules.replace(/<dl>/g,'<dl class="dl">')
 	.replace(/<dt>/g,'<dt class="dt">')
