@@ -509,6 +509,27 @@
 	}
 ```
 
+
+### 关于v-html
+
+		mpvue官方文档指出：不支持v-html
+		
+		但使用v-html在小程序会编译为<rich-view></rich-view>
+		
+		rich-view支持class样式修改，不能根据标签名设置样式
+		
+		可以使用正则，替换标签，添加类名
+
+> 例如：
+
+```javascript
+	<div v-html='rules'></div>
+	
+	this.rules=this.rules.replace(/<dl>/g,'<dl class="dl">')
+	.replace(/<dt>/g,'<dt class="dt">')
+	.replace(/<dd>/g,'<dd class="dd">')
+```
+
 ### 早睡早起篇
 
 		早九晚二的生活持续三周左右，感觉自己的身体有些吃不消了，脑子瓦特了
