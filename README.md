@@ -512,7 +512,7 @@
 
 ### 关于v-html
 
-		mpvue官方文档指出：不支持v-html
+		mpvue官方文档指出：不支持v-html（貌似现在已经支持了）
 		
 		但使用v-html在小程序会编译为<rich-view></rich-view>
 		
