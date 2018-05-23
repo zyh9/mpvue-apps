@@ -22,6 +22,8 @@
 
 ### 距离计算
 
+> 此距离计算是直线距离的计算，目前我只是用作附近地址的距离计算
+
 ```javascript
 	distance(lat1, lng1, lat2, lng2) {
 	    var radLat1 = lat1 * Math.PI / 180.0;
