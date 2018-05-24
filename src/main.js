@@ -22,7 +22,7 @@ export default {
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页
     pages: [
-      'pages/index/main',
+      '^pages/index/main',
       'pages/movie-details/main',
       'pages/map/main',
       'pages/my-cart/main',
@@ -30,7 +30,7 @@ export default {
       //店铺详情页
       'pages/my-shop-info/main',
       //店铺页面
-      '^pages/my-store/main',
+      'pages/my-store/main',
       'pages/product-details/main',
       //提交订单
       'pages/submit-order/main',
@@ -97,34 +97,34 @@ export default {
       color: '#b2b2b2',
       list: [
         //自主店铺
-        // {
-        //   //图标选中状态
-        //   selectedIconPath: "static/index-active.png",
-        //   //图标未选中状态
-        //   iconPath: "static/index.png",
-        //   //页面所属路径
-        //   pagePath: "pages/index/main",
-        //   //图标下方文字描述
-        //   text: "首页"
-        // },
-        // // {
-        // //   selectedIconPath: "static/subject-active.png",
-        // //   iconPath: "static/subject.png",
-        // //   pagePath: 'pages/map/main',
-        // //   text: "地图"
-        // // },
-        // {
-        //   selectedIconPath: "static/subject-active.png",
-        //   iconPath: "static/subject.png",
-        //   pagePath: 'pages/my-cart/main',
-        //   text: "购物车"
-        // },
-        // {
-        //   selectedIconPath: "static/user-active.png",
-        //   iconPath: "static/user.png",
-        //   pagePath: 'pages/user/main',
-        //   text: "我的"
-        // }
+        {
+          //图标选中状态
+          selectedIconPath: "static/index-active.png",
+          //图标未选中状态
+          iconPath: "static/index.png",
+          //页面所属路径
+          pagePath: "pages/index/main",
+          //图标下方文字描述
+          text: "首页"
+        },
+        {
+          selectedIconPath: "static/subject-active.png",
+          iconPath: "static/subject.png",
+          pagePath: 'pages/map/main',
+          text: "地图"
+        },
+        {
+          selectedIconPath: "static/subject-active.png",
+          iconPath: "static/subject.png",
+          pagePath: 'pages/my-cart/main',
+          text: "购物车"
+        },
+        {
+          selectedIconPath: "static/user-active.png",
+          iconPath: "static/user.png",
+          pagePath: 'pages/user/main',
+          text: "我的"
+        }
 
         // {
         //   //图标选中状态
@@ -173,22 +173,22 @@ export default {
         // }
 
         //平台店铺
-        {
-          //图标选中状态
-          selectedIconPath: "static/tabBar/index-active.png",
-          //图标未选中状态
-          iconPath: "static/tabBar/index.png",
-          //页面所属路径
-          pagePath: "pages/my-store/main",
-          //图标下方文字描述
-          text: "首页"
-        },
-        {
-          selectedIconPath: "static/tabBar/user-active.png",
-          iconPath: "static/tabBar/user.png",
-          pagePath: 'pages/user/main',
-          text: "我的"
-        }
+        // {
+        //   //图标选中状态
+        //   selectedIconPath: "static/tabBar/index-active.png",
+        //   //图标未选中状态
+        //   iconPath: "static/tabBar/index.png",
+        //   //页面所属路径
+        //   pagePath: "pages/my-store/main",
+        //   //图标下方文字描述
+        //   text: "首页"
+        // },
+        // {
+        //   selectedIconPath: "static/tabBar/user-active.png",
+        //   iconPath: "static/tabBar/user.png",
+        //   pagePath: 'pages/user/main',
+        //   text: "我的"
+        // }
 
       ]
     },
