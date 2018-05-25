@@ -137,7 +137,7 @@
 	const get = (opt = {}) => {
 	  let time = new Date().getTime();
 	  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
 	  if (opt.headers) {
 	    editHeaders = Object.assign({}, editHeaders, opt.headers)
 	  }
@@ -162,8 +162,7 @@
 	//post数据请求
 	const post = (opt = {}) => {
 	  let time = new Date().getTime();
-	  //'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json;charset=utf-8' }, commonHeader())
+	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
 	  if (opt.headers) {
 	    editHeaders = Object.assign({}, editHeaders, opt.headers)
 	  }
