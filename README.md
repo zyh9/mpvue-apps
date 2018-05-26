@@ -228,6 +228,84 @@
 	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
 
+### 全局登录的封装
+
+```javascript
+	//地理位置获取
+	const qqMapInfo = _ => {
+		return new Promise((resolve, reject) => {
+			wx.getLocation({
+				type: 'wgs84',
+				success: res => {
+					QQMap.reverseGeocoder({
+						location: {
+							latitude: res.latitude,
+							longitude: res.longitude
+						},
+						success: ok => {
+							//城市
+							let pos = {
+								city: ok.result.address_component.city,
+								latitude: res.latitude,
+								longitude: res.longitude
+							}
+							wx.setStorageSync('QQmap', pos)
+							//调用wxLogin接口
+							wxLogin().then(res => {
+								resolve(res)
+							}).catch(err => {
+								reject(err)
+							})
+						},
+						fail: err => {
+							reject(err)
+						}
+					})
+				},
+				fail: err => {
+					console.log(err)
+				}
+			})
+		})
+	}
+	
+	//全局wxLogin token获取
+	const wxLogin = _ => {
+		// 调用登录接口
+		return new Promise((resolve, reject) => {
+			wx.login({
+				success: res => {
+					userLogin(res.code).then(res => {
+						if (res.State == 1) {
+							resolve(res)
+							wx.setStorageSync('loginInfo', res.Body)
+						} else if (res.State == -10) {
+							wxLogin()
+						}
+					}).catch(err => {
+						reject(err)
+					})
+				},
+				fail: err => {
+					console.log(err)
+				}
+			})
+		})
+	}
+	const userLogin = async code => {
+		return await post({
+			url: '/api/Customer/Login/WxJsCodeLogin',
+			data: {
+				jsCode: code,
+			},
+			headers: {
+				appid: '1',
+				qrcode: ''
+			}
+		})
+	}
+```
+
 ### vuex的加入（纯属瞎搞）
 
 ```javascript
