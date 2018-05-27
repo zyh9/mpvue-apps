@@ -230,6 +230,8 @@
 
 ### 全局登录的封装
 
+> 先获取地理位置信息，然后再获取用户信息
+
 ```javascript
 	//地理位置获取
 	const qqMapInfo = _ => {
@@ -278,8 +280,10 @@
 					userLogin(res.code).then(res => {
 						if (res.State == 1) {
 							resolve(res)
+							//存储用户信息
 							wx.setStorageSync('loginInfo', res.Body)
 						} else if (res.State == -10) {
+							//针对token失效，再次调用
 							wxLogin()
 						}
 					}).catch(err => {
