@@ -122,14 +122,18 @@
 > 先看数据请求代码
 
 ```javascript
-	const baseUrl = 'http://192.168.1.1:8080';
-	// const baseUrl = '';
+	import QQMapWX from './qqmap-wx-jssdk.js';
+	const QQMap = new QQMapWX({
+	  key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
+	})
+	
+	//请求地址
+	const baseUrl = 'http://192.168.6.66:6001';
 	
 	const commonHeader = _ => {
 	  //headers每次必传数据存放位置
 	  return {
-	    // 'LocationX': 0,
-	    // 'LocationY': 0,
+	    // appid: 'wxbf3133166adc4375'
 	  }
 	}
 	
@@ -179,6 +183,11 @@
 	            resolve(res.data)
 	          } else if (res.data.State == -10) {
 	            //针对token失效问题
+	            //调用wxLogin接口
+	            wxLogin()
+	            resolve(res.data)
+	          } else if (res.data.State == -1010) {
+	            //跑腿地址同步
 	            resolve(res.data)
 	          } else {
 	            //抛出异常
@@ -193,7 +202,104 @@
 	  })
 	}
 	
-	export default { get, post}
+	//地理位置获取
+	const qqMapInfo = _ => {
+	  return new Promise((resolve, reject) => {
+	    wx.getLocation({
+	      type: 'wgs84',
+	      success: res => {
+	        QQMap.reverseGeocoder({
+	          location: {
+	            latitude: res.latitude,
+	            longitude: res.longitude
+	          },
+	          success: ok => {
+	            //城市 经纬度
+	            let pos = {
+	              city: ok.result.address_component.city,
+	              latitude: res.latitude,
+	              longitude: res.longitude
+	            }
+	            wx.setStorageSync('QQmap', pos)
+	            //调用wxLogin接口
+	            wxLogin().then(res => {
+	              resolve(res)
+	            }).catch(err => {
+	              reject(err)
+	            })
+	          },
+	          fail: err => {
+	            reject(err)
+	          }
+	        })
+	      },
+	      fail: err => {
+	        console.log(err)
+	      }
+	    })
+	  })
+	}
+	
+	//全局wxLogin token获取
+	const wxLogin = _ => {
+	  // 调用登录接口
+	  return new Promise((resolve, reject) => {
+	    wx.login({
+	      success: res => {
+	        userLogin(res.code).then(res => {
+	          if (res.State == 1) {
+	            resolve(res)
+	            wx.setStorageSync('loginInfo', res.Body)
+	          } else if (res.State == -10) {
+	            wxLogin()
+	          }
+	        }).catch(err => {
+	          reject(err)
+	        })
+	      },
+	      fail: err => {
+	        console.log(err)
+	      }
+	    })
+	  })
+	}
+	const userLogin = async code => {
+	  return await post({
+	    url: '/api/Customer/Login/WxJsCodeLogin',
+	    data: {
+	      jsCode: code,
+	    },
+	    headers: {
+	      appid: '1',
+	      qrcode: ''
+	    }
+	  })
+	}
+	
+	// 营业时间格式化 示例：'0-140,180-300' => ['00:00-02:20','03:00-05:00']
+	// 返回一个数组，使用的时候直接String转化为字符串，做相应操作
+	const openTime = str => {
+	  const two = n => {
+	    return n < 10 ? '0' + n : '' + n;
+	  }
+	  if (str.indexOf(',') > -1) {
+	    return str.split(',').map(e => {
+	      let a = two(Math.floor(e.split('-')[0] / 60))
+	      let b = two(Math.floor(e.split('-')[0] % 60))
+	      let c = two(Math.floor(e.split('-')[1] / 60))
+	      let d = two(Math.floor(e.split('-')[1] % 60))
+	      return e = `${a}:${b}-${c}:${d}`;
+	    })
+	  } else {
+	    let a = two(Math.floor(str.split('-')[0] / 60))
+	    let b = two(Math.floor(str.split('-')[0] % 60))
+	    let c = two(Math.floor(str.split('-')[1] / 60))
+	    let d = two(Math.floor(str.split('-')[1] % 60))
+	    return [`${a}:${b}-${c}:${d}`];
+	  }
+	}
+	
+	export default { get, post, openTime, qqMapInfo };
 ```
 
 ```javascript
@@ -226,88 +332,6 @@
 	//抛出的错误对象会被catch方法回调函数接收到
 	
 	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
-```
-
-### 全局登录的封装
-
-> 先获取地理位置信息，然后再获取用户信息，完成整个信息的获取并设置
-
-```javascript
-	//地理位置获取
-	const qqMapInfo = _ => {
-		return new Promise((resolve, reject) => {
-			wx.getLocation({
-				type: 'wgs84',
-				success: res => {
-					QQMap.reverseGeocoder({
-						location: {
-							latitude: res.latitude,
-							longitude: res.longitude
-						},
-						success: ok => {
-							//城市
-							let pos = {
-								city: ok.result.address_component.city,
-								latitude: res.latitude,
-								longitude: res.longitude
-							}
-							wx.setStorageSync('QQmap', pos)
-							//调用wxLogin接口
-							wxLogin().then(res => {
-								resolve(res)
-							}).catch(err => {
-								reject(err)
-							})
-						},
-						fail: err => {
-							reject(err)
-						}
-					})
-				},
-				fail: err => {
-					console.log(err)
-				}
-			})
-		})
-	}
-	
-	//全局wxLogin token获取
-	const wxLogin = _ => {
-		// 调用登录接口
-		return new Promise((resolve, reject) => {
-			wx.login({
-				success: res => {
-					userLogin(res.code).then(res => {
-						if (res.State == 1) {
-							resolve(res)
-							//存储用户信息
-							wx.setStorageSync('loginInfo', res.Body)
-						} else if (res.State == -10) {
-							//针对token失效，再次调用
-							wxLogin()
-						}
-					}).catch(err => {
-						reject(err)
-					})
-				},
-				fail: err => {
-					console.log(err)
-				}
-			})
-		})
-	}
-	const userLogin = async code => {
-		return await post({
-			url: '/api/Customer/Login/WxJsCodeLogin',
-			data: {
-				jsCode: code,
-			},
-			headers: {
-				appid: '1',
-				qrcode: ''
-			}
-		})
-	}
 ```
 
 ### vuex的加入（纯属瞎搞）
