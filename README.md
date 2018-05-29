@@ -660,3 +660,94 @@
 		可恶的是在20天之内，我才能有自己真实的身份，这一段时间怎么办呢
 		
 		洗洗睡吧，明天还不是得撸代码，哈哈哈...
+
+### 购物车缓存设置（初稿）
+
+> 针对多家店铺的购物车设置，以数组形式存储，每项包含店铺id以及购物车列表
+
+```javascript
+	saveData(info, ShopId) {
+	    console.log(info, ShopId)
+	    // 先获取缓存数据
+	    let cartListSum = wx.getStorageSync('cartListSum') || [];
+	    if (cartListSum.length) {
+	      //先获取到店铺的id
+	      let cartItem = cartListSum.filter(e => e.ShopId == ShopId)
+	      if (cartItem.length) {
+	        // console.log('有此店铺')
+	        // console.log(cartItem[0].cartList, '过滤')
+	        if (info.MultiSpec == 0) { //无规格商品
+	          // console.log(info, '无规格')
+	          //返回info在列表的索引
+	          let n = cartItem[0].cartList.findIndex(e => e.GoodId == info.GoodId)
+	          // console.log(n, '存在索引')
+	          //数据存在就赋值，不存在就push
+	          if (n >= 0) {
+	            // console.log('找到了')
+	            cartItem[0].cartList.forEach(e => {
+	              if (e.GoodId == info.GoodId) {
+	                e.num = info.num;
+	              }
+	            })
+	          } else {
+	            // console.log(cartItem[0].cartList, '没找到')
+	            cartItem[0].cartList.push(info)
+	          }
+	        } else { //有规格商品
+	          // console.log(info, '有规格')
+	          //返回info在列表的索引
+	          let n = cartItem[0].cartList.findIndex(e => e.Id == info.Id)
+	          // console.log(n, '存在索引')
+	          if (n >= 0) {
+	            // console.log('找到了')
+	            cartItem[0].cartList.forEach(e => {
+	              if (e.Id == info.Id) {
+	                e.num = info.num;
+	              }
+	            })
+	          } else {
+	            // console.log(cartItem[0].cartList, '没找到')
+	            cartItem[0].cartList.push(info)
+	          }
+	        }
+	        //针对num等于0的数据仍保留做清空处理
+	        this.cartListItem = cartItem[0].cartList.filter(e => e.num != 0)
+	        // console.log(this.cartListItem)
+	        //走设置
+	        cartListSum.forEach(e => {
+	          if (e.ShopId == ShopId) {
+	            e.cartList = this.cartListItem;
+	          }
+	        })
+	        //针对商品列表为空的店铺做清空处理
+	        cartListSum = cartListSum.filter(e => e.cartList.length > 0);
+	        //缓存length不存在，直接清除
+	        !cartListSum.length && wx.removeStorageSync('cartListSum');
+	        // 再设置缓存数据
+	        wx.setStorageSync('cartListSum', cartListSum);
+	      } else {
+	        // console.log('查无此店铺')
+	        cartListSum.push({
+	          ShopId: ShopId,
+	          cartList: [{
+	            ...info
+	          }]
+	        })
+	        wx.setStorageSync('cartListSum', cartListSum);
+	        let cartItemInit = cartListSum.filter(e => e.ShopId == ShopId);
+	        this.cartListItem = cartItemInit[0].cartList.filter(e => e.num != 0);
+	      }
+	    } else {
+	      //没有缓存，添加店铺id以及第一条数据
+	      cartListSum.push({
+	        ShopId: ShopId,
+	        cartList: [{
+	          ...info
+	        }]
+	      })
+	      wx.setStorageSync('cartListSum', cartListSum);
+	      let cartItemInit = cartListSum.filter(e => e.ShopId == ShopId);
+	      this.cartListItem = cartItemInit[0].cartList.filter(e => e.num != 0);
+	    }
+	}
+```
