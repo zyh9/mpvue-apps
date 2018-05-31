@@ -142,9 +142,7 @@
 	  let time = new Date().getTime();
 	  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
 	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
-	  if (opt.headers) {
-	    editHeaders = Object.assign({}, editHeaders, opt.headers)
-	  }
+	  opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
 	  return new Promise((resolve, reject) => {
 	    let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
 	    wx.request({
@@ -167,9 +165,7 @@
 	const post = (opt = {}) => {
 	  let time = new Date().getTime();
 	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
-	  if (opt.headers) {
-	    editHeaders = Object.assign({}, editHeaders, opt.headers)
-	  }
+	  opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
 	  return new Promise((resolve, reject) => {
 	    wx.request({
 	      url: `${baseUrl}${opt.url}?t=${time}`,
@@ -360,6 +356,8 @@
 	
 	this.$store.state.mutations
 ```
+
+> 示例代码
 
 ```javascript
 	// store/index.js
