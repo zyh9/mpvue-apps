@@ -743,10 +743,10 @@
 	        })
 	        //针对商品列表为空的店铺做清空处理
 	        cartListSum = cartListSum.filter(e => e.cartList.length > 0);
-	        //缓存length不存在，直接清除
-	        !cartListSum.length && wx.removeStorageSync('cartListSum');
 	        // 再设置缓存数据
 	        wx.setStorageSync('cartListSum', cartListSum);
+	        //缓存length不存在，直接清除
+	        !cartListSum.length && wx.removeStorageSync('cartListSum');
 	      } else {
 	        // console.log('查无此店铺')
 	        cartListSum.push({
