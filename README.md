@@ -182,9 +182,6 @@
 	            //调用wxLogin接口
 	            wxLogin()
 	            resolve(res.data)
-	          } else if (res.data.State == -1010) {
-	            //跑腿地址同步
-	            resolve(res.data)
 	          } else {
 	            //抛出异常
 	            reject(res.data)
