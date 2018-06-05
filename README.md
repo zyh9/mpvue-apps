@@ -761,3 +761,27 @@
 	    return this.cartListItem.length ? n / 10000 : 0;
 	}
 ```
+
+### open-type="share" 的坑
+
+```javascript
+	<button class="btn_send" plain="true" open-type="share"></button>
+	
+	//在小程序API是这样定义的
+	1.只有定义了此事件处理函数，右上角菜单才会显示转发按钮
+	2.用户点击转发按钮的时候会调用
+	3.此事件需要 return 一个 Object，用于自定义转发内容
+	
+	onShareAppMessage(res) {
+		if (res.from === 'button') {
+			//button：页面内转发按钮    menu：右上角转发菜单
+			//如果只选择button则执行return里面的path路径，menu则执行当前页面的所在路径
+			console.log(res.target)
+			return {
+				title: '自定义转发标题',
+				path: '/page/user?id=123',
+				imageUrl: ''
+			}
+		}
+	}
+```
