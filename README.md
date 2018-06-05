@@ -746,3 +746,18 @@
 ### js的小数点乘法问题（针对价格计算）
 
 		为了让js执行的更准确，在以后的js小数计算中直接将值扩大10000倍，再除以10000，就可以解决问题
+		
+		必要的时候还是需要加上Math.round（四舍五入）来计算
+
+```javascript
+	count: function() {
+	    let n = 0;
+	    this.cartListItem.forEach(e => {
+	        if (e.num > 0) {
+	            //javascript(js)的小数点乘法除法问题
+	            n += Math.round(e.OriginalPrice * 10000) * e.num;
+	        }
+	    })
+	    return this.cartListItem.length ? n / 10000 : 0;
+	}
+```
