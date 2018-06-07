@@ -630,6 +630,18 @@
 	}
 ```
 
+> 优化图片请求方式，采用异步加载
+
+```javascript
+	Promise.all([this.downImg(this.QrCodeUrl),
+		this.downImg(this.Logo),
+		this.downImg(this.shopInfoList.Logo)
+	]).then(res=>{
+		console.log(res,111)
+	}).catch(err=>{
+		console.log(err,222)
+	})
+```
 
 ### 关于v-html
 
