@@ -2,7 +2,7 @@
   "name": "uu-shop",
   "version": "1.0.0",
   "description": "A Mpvue project",
-  "author": "zyh19941109 <1124596031@qq.com>",
+  "author": "zyh9 <1124596031@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
