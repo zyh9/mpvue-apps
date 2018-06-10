@@ -607,7 +607,7 @@
                 this.Logo = await this.downImg(this.Logo)
                 this.minShopLogo = await this.downImg(this.shopInfoList.Logo + '?x-oss-process=image/resize,h_50/rounded-corners,r_10')
                 // this.shopInfoList.Logo = await this.downImg(this.shopInfoList.Logo)
-                this.shareBg = await this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png?x-oss-process=image/resize,w_300/format,jpg')
+                this.shareBg = await this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png?x-oss-process=image/resize,w_500/format,jpg')
                 this.drawCanvas();
             },
             /* 绘制canvas */

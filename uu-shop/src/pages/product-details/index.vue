@@ -2,7 +2,7 @@
     <div class="product-details" v-if="block">
         <scroll-view scroll-y="true" style="height: 100%;padding:0  35rpx 110rpx;box-sizing:border-box;" lower-threshold="60" @scrolltolower="scrollHandler">
             <div class="shop_top">
-                <img :src="goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_200/format,jpg'" alt="" class="shop_img">
+                <img :src="goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_400/format,jpg'" alt="" class="shop_img">
                 <i class="icon icon_goodsShare" @click="share"></i>
             </div>
             <div class="info">
@@ -25,7 +25,7 @@
                     <div class="graphic" v-if="goodsInfo.GoodPics.length">
                         <div class="item">图文详情</div>
                         <div class="detail">
-                            <img v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v+'?x-oss-process=image/resize,w_200/format,jpg'" mode="widthFix" alt="" />
+                            <img v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v+'?x-oss-process=image/resize,w_400/format,jpg'" mode="widthFix" alt="" />
                         </div>
                     </div>
                 </div>
@@ -372,7 +372,7 @@
             async requireImg() {
                 this.QrCodeUrl = await this.downImg(this.QrCodeUrl)
                 this.minShopLogo = await this.downImg(this.goodsInfo.ShopLogo + '?x-oss-process=image/resize,h_50/rounded-corners,r_10')
-                this.minGoodsPic = await this.downImg(this.goodsInfo.GoodMasterPic + '?x-oss-process=image/resize,h_200/rounded-corners,r_6/format,jpg');
+                this.minGoodsPic = await this.downImg(this.goodsInfo.GoodMasterPic + '?x-oss-process=image/resize,h_400/rounded-corners,r_6/format,jpg');
                 this.drawCanvas();
             },
             downImg(val) {
