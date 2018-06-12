@@ -2,7 +2,7 @@
     <div class="store" v-if="block">
         <div class="store_top_info" v-show="shopInfoList.Logo">
             <div class="store_banner">
-                <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img">
+                <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
                 <i class="icon icon_share share" @click="share"></i>
             </div>
             <div class="store_text">
@@ -27,7 +27,7 @@
                                 <!-- <p class="no_shop" v-if="!item.length">此分类暂无商品信息哦</p> -->
                                 <div class="list_item_r" v-if="item.length" v-for="(v,i) in item" :key="i">
                                     <div class="lis_item_left" @click="goGoodsDetail(v)">
-                                        <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img" lazy-load="true">
+                                        <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img fade_in" lazy-load="true">
                                         <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
                                         <div class="li_info">
                                             <p class="shop_name">{{v.GoodName}}</p>
@@ -149,11 +149,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                <cover-view class="shareCover" >
-                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png" v-show="canvasShow"/>
-                                                                </cover-view>
-                                                                </canvas>
+                                                                    <cover-view class="shareCover" >
+                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                    </cover-view>
+                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -213,7 +213,6 @@
                 itemId: -1, //左侧分类列表id
                 QrCodeUrl: '', //小程序码
                 shareBg: '',
-                canvasShow: false, //canvas浮层图片开关
                 ShopId: '', //店铺id
                 GoodId: '', //商品id
                 scene: '', //二维码信息获取
@@ -260,7 +259,6 @@
             };
             this.noShop = false;
             this.shareCard = false;
-            this.canvasShow = false;
             this.cartActive = false;
             this.maskActive = false;
             this.minShopLogo = '';
@@ -549,8 +547,7 @@
                     })
                     return;
                 }
-                this.shareCard = true;
-                this.maskActive = false;
+                this.maskActive = false; //底部分享按钮
                 wx.showLoading({
                     title: '生成中',
                     mask: true
@@ -647,7 +644,7 @@
                 this.fontLineFeed(ctx, this.shopInfoList.ShopName, 18 * XS, 18 * XS, 175 * XS, 428 * XS)
                 ctx.draw()
                 wx.hideLoading()
-                this.canvasShow = true;
+                this.shareCard = true; //分享图展示
             },
             shareClose() {
                 this.shareCard = false;

@@ -12,7 +12,7 @@
             <li class="nearby_item" v-for="(item,index) in nearbyrList" :key="index" @click="openShop(item)">
                 <div class="item_top">
                     <div class="item_left">
-                        <img :src="item.ShopLogo" alt="" class="item_left_img" lazy-load="true">
+                        <img :src="item.ShopLogo" alt="" class="item_left_img fade_in" lazy-load="true">
                         <div class="item_left_text">
                             <div class="name">
                                 <div class="name_left">

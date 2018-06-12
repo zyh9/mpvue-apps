@@ -37,13 +37,13 @@
         </div>
         <div class="order_details_con">
             <div class="shop_info_sum" @click="openShop">
-                <img :src="orderInfo.ShopLogo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
+                <img class="fade_in" :src="orderInfo.ShopLogo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
                 <p>{{orderInfo.ShopName}}</p>
                 <i class="icon icon_right direction small"></i>
             </div>
             <ul class="con_order_list">
                 <li v-for="(v,i) in orderInfo.OrderGoods" :key="i" class="con_list_item">
-                    <img :src="v.GoodMasterPic+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
+                    <img class="fade_in" :src="v.GoodMasterPic+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
                     <div class="item">
                         <p class="name">{{v.GoodName}}</p>
                         <p class="spec">{{v.SpecName}}</p>

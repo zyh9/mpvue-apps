@@ -2,7 +2,7 @@
     <div class="user">
         <div class="user_info set-flex set-align" @click="login">
             <div class="head">
-                <img :src="userInfo.HeadImg" alt="" v-if="userInfo.HeadImg">
+                <img class="fade_in" :src="userInfo.HeadImg" alt="" v-if="userInfo.HeadImg">
                 <i v-if="!userInfo.HeadImg" class="icon icon_head"></i>
             </div>
             <div class="info" v-if="!isBindPhone">

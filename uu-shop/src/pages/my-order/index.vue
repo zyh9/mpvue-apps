@@ -8,7 +8,7 @@
         <ul class="my_order_list">
             <li class="order_item" v-for="(item,index) in newOrder" :key="index">
                 <div class="lis_top" @click='goShop(item)'>
-                    <img :src="item.ShopLogo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="icon">
+                    <img :src="item.ShopLogo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="icon fade_in">
                     <div class="shop_name_right">
                         <div class="shop_name">
                             <p class="name_info">{{item.ShopName}}</p>

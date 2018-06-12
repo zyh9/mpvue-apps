@@ -2,7 +2,7 @@
     <div class="product-details" v-if="block">
         <scroll-view scroll-y="true" style="height: 100%;padding:0  35rpx 110rpx;box-sizing:border-box;" lower-threshold="60" @scrolltolower="scrollHandler">
             <div class="shop_top">
-                <img :src="goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_400/format,jpg'" alt="" class="shop_img">
+                <img :src="goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_400/format,jpg'" alt="" class="shop_img fade_in">
                 <i class="icon icon_goodsShare" @click="share"></i>
             </div>
             <div class="info">
@@ -25,7 +25,7 @@
                     <div class="graphic" v-if="goodsInfo.GoodPics.length">
                         <div class="item">图文详情</div>
                         <div class="detail">
-                            <img v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v+'?x-oss-process=image/resize,w_400/format,jpg'" mode="widthFix" alt="" />
+                            <img class="fade_in" v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v+'?x-oss-process=image/resize,w_400/format,jpg'" mode="widthFix" alt="" />
                         </div>
                     </div>
                 </div>
@@ -58,11 +58,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                    <cover-view class="shareCover" >
-                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png" v-show="canvasShow"/>
-                    </cover-view>
-                                </canvas>
+                        <cover-view class="shareCover" >
+                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                        </cover-view>
+                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -104,7 +104,6 @@
                 formatMask: false, //规格弹窗
                 formatList: [],
                 QrCodeUrl: '',
-                canvasShow: false, //canvas浮层图片开关
                 GoodId: '', //商品id
                 ShopId: '', //店铺id
                 scene: '', //二维码信息获取
@@ -141,7 +140,6 @@
             this.minGoodsPic = '';
             this.goodsInfo = {};
             this.shareCard = false;
-            this.canvasShow = false;
             if (this.$root.$mp.query.type == 1) {
                 console.log('不走分享')
                 this.getGoodsInfo()
@@ -338,7 +336,6 @@
                     })
                     return;
                 }
-                this.shareCard = true;
                 this.isActive = false;
                 /* 获取商品二维码 */
                 wx.showLoading({
@@ -433,7 +430,7 @@
                 ctx.stroke();
                 ctx.draw()
                 wx.hideLoading()
-                this.canvasShow = true;
+                this.shareCard = true;
             },
             shareClose() {
                 this.shareCard = false;

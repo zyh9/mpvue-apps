@@ -318,11 +318,6 @@ input::-webkit-input-placeholder {
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
-.index_bg {
-  background-size: 100%;
-  background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/admin-shop.png');
-  background-repeat: no-repeat;
-}
 .index_btn {
   background-size: 100% 100%;
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/open-shop.png');
@@ -338,4 +333,15 @@ input::-webkit-input-placeholder {
   height: 180rpx;
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/no_shop.png');
   background-size: 100% 100%;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.fade_in {
+  animation: fadeIn 0.6s forwards;
 }

@@ -18,12 +18,12 @@
       </div>
       <div class="con_order_info">
         <div class="options">
-          <img :src="shopInfo.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
+          <img class="fade_in" :src="shopInfo.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
           <p>{{shopInfo.ShopName}}</p>
         </div>
         <ul class="con_order_list">
           <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-            <img :src="v.GoodsMasterPic" alt="">
+            <img class="fade_in" :src="v.GoodsMasterPic" alt="">
             <div class="item">
               <p class="name">{{v.GoodName}}</p>
               <p class="spec">{{v.SpecName?v.SpecName:''}}</p>
