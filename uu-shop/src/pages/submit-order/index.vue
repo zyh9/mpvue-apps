@@ -18,7 +18,7 @@
       </div>
       <div class="con_order_info">
         <div class="options">
-          <img class="fade_in" :src="shopInfo.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="">
+          <img class="fade_in" :src="shopInfo.Logo" alt="">
           <p>{{shopInfo.ShopName}}</p>
         </div>
         <ul class="con_order_list">
@@ -29,19 +29,19 @@
               <p class="spec">{{v.SpecName?v.SpecName:''}}</p>
               <p class="num">X{{v.num}}</p>
             </div>
-            <div class="sum"><span>¥</span>{{v.sum}}</div>
+            <div class="sum"><span>¥</span>{{v.TotalMoney}}</div>
           </li>
           <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                        <img :src="v.GoodsMasterPic" alt="">
-                                                                                                        <div class="li_info">
-                                                                                                          <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                          <div class="li_bot">
-                                                                                                            <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                            <p class="num">X {{v.num}}</p>
-                                                                                                            <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
-                                                                                                          </div>
-                                                                                                        </div>
-                                                                                                      </li> -->
+                                                                                                                                      <img :src="v.GoodsMasterPic" alt="">
+                                                                                                                                      <div class="li_info">
+                                                                                                                                        <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
+                                                                                                                                        <div class="li_bot">
+                                                                                                                                          <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                                                                                                                          <p class="num">X {{v.num}}</p>
+                                                                                                                                          <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                        </div>
+                                                                                                                                      </div>
+                                                                                                                                    </li> -->
         </ul>
         <div class="consume">
           <p class="consume_l">配送费</p>
@@ -79,9 +79,9 @@
       <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                  <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                  <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                </div> -->
+                                                                                                                <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                              </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -160,12 +160,21 @@
         mask: true
       })
     },
+    onReady() {
+      this.PaotuiMemo = '配送方式+配送时长';
+      this.GoodPriceToken = '';
+      this.noteText = '';
+      wx.removeStorageSync('note');
+    },
     onShow() {
       this.orderMask = false;
-      if (this.$root.$mp.query.orderId) {
+      if (this.$mp.query.orderId) {
         this.cartListItem = wx.getStorageSync('againOrder') || [];
+        console.log('再来')
+        this.againOrderInfo();
       } else {
-        //   // 先获取缓存数据
+        console.log('正常')
+        // 先获取缓存数据
         let cartListSum = wx.getStorageSync('cartListSum') || [];
         // console.log(cartListSum, '000')
         //再找到对应店铺
@@ -173,28 +182,16 @@
         this.cartListItem = cartItem.length ? cartItem[0].cartList : [];
         this.cartListItem.forEach(e => {
           e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
-          e.sum = Math.round(e.OriginalPrice * 10000) * e.num / 10000;
         })
-        // console.log(this.cartListItem, '订单提交页')
+        console.log(this.cartListItem, '订单提交页')
         this.shopInfo = wx.getStorageSync('shopInfo') || [];
+        this.shopInfo.Logo = this.shopInfo.Logo + '?x-oss-process=image/resize,w_100/format,jpg';
+        this.priceNum()
       }
       this.noteText = wx.getStorageSync('note') || '';
       this.selectAddress = wx.getStorageSync('selectAddress') || {};
-      if (this.shopInfo.ShopLoc && this.shopInfo.ShopLoc.split(',')[0] && this.selectAddress.AddressLoc) {
-        this.priceNum()
-      }
       this.block = true;
       wx.hideLoading();
-    },
-    mounted() {
-      this.PaotuiMemo = '配送方式+配送时长';
-      this.GoodPriceToken = '';
-      this.noteText = '';
-      wx.removeStorageSync('note')
-      if (this.$mp.query.orderId) {
-        /* 再来一单*/
-        this.againOrderInfo();
-      }
     },
     methods: {
       copyInfo(id) {
@@ -232,28 +229,6 @@
         );
         return result;
       },
-      //距离计算并转换
-      distance() {
-        QQMap.calculateDistance({
-          mode: 'driving',
-          from: {
-            latitude: this.trans(this.shopInfo.ShopLoc.split(',').map(Number))[1],
-            longitude: this.trans(this.shopInfo.ShopLoc.split(',').map(Number))[0]
-          },
-          to: [{
-            latitude: this.trans(this.selectAddress.AddressLoc.split(',').map(Number))[1],
-            longitude: this.trans(this.selectAddress.AddressLoc.split(',').map(Number))[0]
-          }],
-          success: res => {
-            this.orderDiscance = res.result.elements[0].distance;
-            this.priceNum();
-          },
-          fail: err => {
-            console.log(err);
-            // this.msg(err.message)
-          }
-        })
-      },
       //价格计算
       priceNum() {
         let cartData = [];
@@ -262,7 +237,8 @@
             GoodId: item.GoodId,
             GoodsNum: item.num,
             SpecId: item.Id,
-            OriginalPrice: item.OriginalPrice
+            OriginalPrice: item.OriginalPrice,
+            SalesPrice: item.SalesPrice
           })
         })
         this.util.post({
@@ -280,7 +256,13 @@
           .then(res => {
             if (res.State == 1) {
               this.goodsInfo = res.Body;
-              this.Freight(res.Body.PriceToken)
+              // console.log(this.goodsInfo.GoodsPrice, this.cartListItem)
+              this.cartListItem.forEach((e, i) => { //价格计算赋值
+                e.TotalMoney = this.goodsInfo.GoodsPrice[i].TotalMoney;
+              })
+              if (this.shopInfo.ShopLoc && this.shopInfo.ShopLoc.split(',')[0] && this.selectAddress.AddressLoc) {
+                this.Freight(res.Body.PriceToken)
+              }
             } else if (res.State < -10000) {
               this.orderMsg = res.Msg;
               this.orderMask = true;
@@ -289,7 +271,7 @@
               let cartItem = cartListSum.filter(e => e.ShopId == res.Body.ShopID);
               cartItem[0].cartList = cartItem[0].cartList ? cartItem[0].cartList : [];
               let item = [];
-              console.log(res.Body.GoodsPrice.length, cartItem[0].cartList)
+              // console.log(res.Body.GoodsPrice.length, cartItem[0].cartList)
               if (res.Body.GoodsPrice.length) { //提交订单中存在可以支付的商品
                 cartItem[0].cartList.forEach(e => {
                   res.Body.GoodsPrice.forEach(ele => {
@@ -302,7 +284,7 @@
               } else { //商品订单全部失效，清除店铺信息
                 cartListSum = cartListSum.filter(e => e.ShopId != res.Body.ShopID);
               }
-              console.log(cartItem, cartListSum)
+              // console.log(cartItem, cartListSum)
               //针对商品列表为空的店铺做清空处理
               cartListSum = cartListSum.filter(e => e.cartList.length > 0);
               // 再设置缓存数据
@@ -455,7 +437,7 @@
       },
       noteInfo() {
         if (this.$root.$mp.query.orderId) {
-            wx.setStorageSync('againOrder', this.cartListItem)
+          wx.setStorageSync('againOrder', this.cartListItem)
         }
         wx.setStorageSync('selectAddress', this.selectAddress);
         wx.navigateTo({
@@ -480,7 +462,7 @@
               ShopId: ''
             };
             this.shopInfo.ShopName = res.Body.ShopName;
-            this.shopInfo.Logo = res.Body.ShopLogo;
+            this.shopInfo.Logo = res.Body.ShopLogo + '?x-oss-process=image/resize,w_100/format,jpg';
             this.shopInfo.ShopLoc = res.Body.ShopLoc;
             this.shopInfo.ShopId = res.Body.ShopID;
             this.noteText = res.Body.Remark;
@@ -489,14 +471,15 @@
               goodsDetail.push({
                 GoodId: item.GoodId,
                 GoodName: item.GoodName,
-                GoodsMasterPic: item.GoodMasterPic,
+                GoodsMasterPic: item.GoodMasterPic + '?x-oss-process=image/resize,w_100/format,jpg',
                 OriginalPrice: item.SinglePrice,
                 num: item.GoodNum,
                 SpecName: item.SpecName,
                 Id: item.SpecId, //规格id
-                sum: Math.round(item.SinglePrice * 10000) * item.GoodNum / 10000
+                SalesPrice: item.SalesPrice,
               })
             })
+            console.log(goodsDetail)
             this.cartListItem = goodsDetail;
             let address = res.Body.ReceiveAddress.split('($)');
             this.selectAddress = {
@@ -530,8 +513,6 @@
             latitude: info.latitude,
             longitude: info.longitude
           },
-          get_poi: 1, //返回poi列表
-          poi_options: `address_format=short`,
           success: res => {
             this.selectAddress.CityName = res.result.address_component.city;
             this.selectAddress.CountyName = res.result.address_component.district;

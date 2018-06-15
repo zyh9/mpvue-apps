@@ -21,6 +21,10 @@
             <i class="icon icon_userAddress"></i>
             <p>我的地址</p>
         </div>
+        <div class="options" @click="11">
+            <i class="icon icon_offer"></i>
+            <p>我的优惠券</p>
+        </div>
     </div>
 </template>
 
@@ -47,7 +51,7 @@
                 console.log(e.mp.detail.authSetting["scope.userLocation"])
             },
             address() {
-                if(this.isBindPhone){
+                if (this.isBindPhone) {
                     this.msg('您还没有登录哦')
                     return;
                 }
@@ -56,7 +60,7 @@
                 })
             },
             order() {
-                if(this.isBindPhone){
+                if (this.isBindPhone) {
                     this.msg('您还没有登录哦')
                     return;
                 }

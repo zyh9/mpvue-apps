@@ -3,14 +3,17 @@
         <div class="store_top_info" v-show="shopInfoList.Logo">
             <div class="store_banner">
                 <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
+                <div class="shop_right_details">
+                    <p>简介：店铺简介</p>
+                    <p>{{time}}</p>
+                    <div class="option"><i class="icon_set"></i><span>满500减50</span><i class="icon_right_img"></i></div>
+                </div>
                 <i class="icon icon_share share" @click="share"></i>
             </div>
-            <div class="store_text">
-                <!-- <p class="name">{{shopInfoList.ShopName}}</p> -->
-                <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
-                <p class="time">{{time}}</p>
-                <!-- <p class="address">{{addressInfo}}</p> -->
-            </div>
+            <!-- <div class="store_text">
+                                                                                                                                                            <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
+                                                                                                                                                            <p class="time">{{time}}</p>
+                                                                                                                                                        </div> -->
             <ul class="store_info">
                 <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
             </ul>
@@ -20,7 +23,10 @@
                 <div class="store_index">
                     <div class="store_index_list">
                         <scroll-view scroll-y="true" style="height: 100%" class="scroll_left">
-                            <div v-for="(v,i) in allShopInfoList" :key="i" class="list_item_l" :data-id="i" @click="checked(v,i)" :class="{left_select:i==selected}">{{v.Name}}<i v-if="v.sum>0||v.sum=='99+'">{{v.sum}}</i></div>
+                            <div v-for="(v,i) in allShopInfoList" :key="i" class="list_item_l" :data-id="i" @click="checked(v,i)" :class="{left_select:i==selected}">
+                                <i class="icon_discount" v-if="v.ID==-1"></i>{{v.Name}}
+                                <i class="left_num" v-if="v.sum>0||v.sum=='99+'">{{v.sum}}</i>
+                            </div>
                         </scroll-view>
                         <div class="right_con">
                             <scroll-view v-for="(item,index) in shopPageListSum" :key="index" v-if="selected==index" scroll-y="true" style="height: 100%" lower-threshold="20" @scrolltolower="scrollHandler(selected)" class="scroll_right">
@@ -31,7 +37,12 @@
                                         <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
                                         <div class="li_info">
                                             <p class="shop_name">{{v.GoodName}}</p>
-                                            <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                            <p class="discount" v-if="v.GoodsType==-1">{{v.PriceOffNote}}</p>
+                                            <div class="discount_shop" v-if="v.GoodsType==-1">
+                                                <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
+                                                <p class="original_price">¥{{v.OriginalPrice}}</p>
+                                            </div>
+                                            <p class="price" v-else><span>¥</span>{{v.SalesPrice}}</p>
                                         </div>
                                     </div>
                                     <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
@@ -90,6 +101,10 @@
                         <i class="icon icon_userAddress"></i>
                         <p>我的地址</p>
                     </div>
+                    <div class="options" @click="11">
+                        <i class="icon icon_offer"></i>
+                        <p>我的优惠券</p>
+                    </div>
                 </div>
             </swiper-item>
         </swiper>
@@ -121,7 +136,7 @@
                         <span v-if='v.SpecName'>{{v.SpecName}}</span>
                     </div>
                     <div class="right set-flex set-between">
-                        <p class="shop_list_price">¥{{v.OriginalPrice}}</p>
+                        <p class="shop_list_price">¥{{v.sumPrice}}</p>
                         <div class="count">
                             <i class="icon icon_lower" @click="lower($event)" :data-info="v" v-if="v.num>0"></i>
                             <span v-if="v.num>0">{{v.num}}</span>
@@ -149,11 +164,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                    <cover-view class="shareCover" >
-                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                    </cover-view>
-                                                                    </canvas>
+                                                                                                                                                                                                                <cover-view class="shareCover" >
+                                                                                                                                                                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                </cover-view>
+                                                                                                                                                                                                                </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -305,9 +320,11 @@
                     if (item.MultiSpec == 1) {
                         item.GoodsSpec.forEach(ele => {
                             ele.num = 0;
+                            ele.sumPrice = 0;
                         })
                     } else {
                         item.num = 0;
+                        item.sumPrice = 0;
                     }
                 })
                 this.shopPageListSum.forEach(item => {
@@ -356,6 +373,9 @@
                 //店铺信息
                 let shopInfo = await this.shopInfo()
                 shopInfo.Body.Logo = shopInfo.Body.Logo;
+                wx.setNavigationBarTitle({
+                    title: shopInfo.Body.ShopName
+                })
                 this.shopInfoList = shopInfo.Body;
                 // console.log(this.shopInfoList.ShopTemplateId, '1 餐饮 2 电商')
                 wx.setStorageSync('shopInfo', this.shopInfoList)
@@ -381,9 +401,11 @@
                                 ele.GoodName = item.GoodName;
                                 ele.GoodsMasterPic = item.GoodsMasterPic;
                                 ele.State = item.State;
+                                ele.sumPrice = 0;
                             })
                         } else {
                             item.num = 0;
+                            item.sumPrice = 0;
                             //规格编号
                             item.Id = item.GoodsSpec[0].Id;
                         }
@@ -480,9 +502,11 @@
                                     item.GoodName = e.GoodName;
                                     item.GoodsMasterPic = e.GoodsMasterPic;
                                     item.State = e.State;
+                                    item.sumPrice = 0;
                                 })
                             } else {
                                 e.num = 0;
+                                e.sumPrice = 0;
                             }
                             e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
@@ -706,10 +730,18 @@
                 })
             },
             lower(e) {
+                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
                 if (info.MultiSpec == 0) {
+                    if (info.GoodsType == -1) { //折扣商品
+                        if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
+                            console.log('每人限一份')
+                        } else { //每单限一份
+                            console.log('每单限一份')
+                        }
+                    }
                     this.shopPageListSum.forEach(item => {
                         item.forEach(ele => {
                             if (ele.GoodId == info.GoodId) {
@@ -750,26 +782,33 @@
                 }
             },
             add(e) {
+                console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
                 if (info.MultiSpec == 0) {
-                    this.shopPageListSum.forEach(item => {
-                        item.forEach(ele => {
-                            if (ele.GoodId == info.GoodId) {
-                                ele.num = info.num;
-                                ele.num++;
+                    if (info.GoodsType == -1) { //折扣商品
+                        if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
+                            if (info.IsBuyed == 0) { //未购买
+                                if (info.num == 1) {
+                                    this.msg('每人限1份的商品仅能购买一次')
+                                    return;
+                                }
+                                this.addFun(info)
+                            } else { //已购买
+                                this.msg('每人限1份的商品仅能购买一次')
                             }
-                        })
-                    })
-                    this.sumList.forEach(ele => {
-                        if (ele.GoodId == info.GoodId) {
-                            ele.num = info.num;
-                            ele.num++;
-                            this.saveData(ele, wx.getStorageSync('shopInfo').ShopId)
+                        } else { //每单限一份
+                            if (info.num == 1) {
+                                this.msg('每单仅享1份优惠价')
+                            }
+                            this.addFun(info)
                         }
-                    })
-                } else {
+                    } else {
+                        console.log('非折扣')
+                        this.addFun(info)
+                    }
+                } else { //多规格增加
                     this.shopPageListSum.forEach(item => {
                         item.forEach(ele => {
                             if (ele.MultiSpec == 1) {
@@ -792,6 +831,23 @@
                         }
                     })
                 }
+            },
+            addFun(info) {
+                this.shopPageListSum.forEach(item => {
+                    item.forEach(ele => {
+                        if (ele.GoodId == info.GoodId) {
+                            ele.num = info.num;
+                            ele.num++;
+                        }
+                    })
+                })
+                this.sumList.forEach(ele => {
+                    if (ele.GoodId == info.GoodId) {
+                        ele.num = info.num;
+                        ele.num++;
+                        this.saveData(ele, wx.getStorageSync('shopInfo').ShopId)
+                    }
+                })
             },
             saveData(info, ShopId) {
                 // console.log(info, ShopId)
@@ -1109,9 +1165,30 @@
             count: function() {
                 let n = 0;
                 this.cartListItem.forEach(e => {
-                    if (e.num > 0) {
-                        //javascript(js)的小数点乘法除法问题
-                        n += Math.round(e.OriginalPrice * 10000) * e.num;
+                    if (e.GoodsType == -1) { //折扣
+                        if (e.PriceOffRule.DiscountRule == 2) { //每份仅限一单
+                            if (e.num > 0) {
+                                if (e.num > 1) { //原价
+                                    n += Math.round(e.OriginalPrice * 10000) * (e.num - 1) + Math.round(e.SalesPrice * 10000);
+                                    e.sumPrice += (Math.round(e.OriginalPrice * 10000) * (e.num - 1) + Math.round(e.SalesPrice * 10000)) / 10000;
+                                } else { //折扣价
+                                    n += Math.round(e.SalesPrice * 10000);
+                                    e.sumPrice += Math.round(e.SalesPrice * 10000) / 10000;
+                                }
+                                // console.log(n)
+                            }
+                        } else {
+                            if (e.num > 0) {
+                                n += Math.round(e.SalesPrice * 10000) * e.num;
+                                e.sumPrice = Math.round(e.SalesPrice * 10000) * e.num / 10000;
+                            }
+                        }
+                    } else { //非折扣
+                        if (e.num > 0) {
+                            //javascript(js)的小数点乘法除法问题
+                            n += Math.round(e.SalesPrice * 10000) * e.num;
+                            e.sumPrice = Math.round(e.SalesPrice * 10000) * e.num / 10000;
+                        }
                     }
                 })
                 return this.cartListItem.length ? n / 10000 : 0;
@@ -1259,7 +1336,7 @@
             .scroll_left {
                 width: 180rpx;
                 .list_item_l {
-                    padding: 35rpx 36rpx;
+                    padding: 35rpx 28rpx;
                     color: #444;
                     font-size: 26rpx;
                     overflow: hidden;
@@ -1272,7 +1349,7 @@
                     &:first-child {
                         padding-top: 38rpx;
                     }
-                    i {
+                    .left_num {
                         position: absolute;
                         right: 15rpx;
                         top: 20rpx;
@@ -1340,6 +1417,7 @@
                         .li_info {
                             flex: 1;
                             overflow: hidden;
+                            position: relative;
                             .shop_name {
                                 color: #1d1d1d;
                                 font-size: 28rpx;
@@ -1351,6 +1429,13 @@
                                 width: 300rpx;
                                 font-weight: 700;
                             }
+                            .discount {
+                                position: absolute;
+                                left: 0;
+                                top: 45rpx;
+                                font-size: 22rpx;
+                                color: #999;
+                            }
                             .price {
                                 color: #ff4d3a;
                                 line-height: 60rpx;
@@ -1359,6 +1444,29 @@
                                 font-weight: 700;
                                 span {
                                     font-size: 24rpx;
+                                }
+                            }
+                            .discount_shop {
+                                display: flex;
+                                align-items: center;
+                                .original_price {
+                                    font-size: 22rpx;
+                                    color: #ccc;
+                                    transform: translateY(14rpx);
+                                    margin-left: 12rpx;
+                                    position: relative;
+                                    &:after {
+                                        content: '';
+                                        display: block;
+                                        width: 100%;
+                                        height: 0;
+                                        border-bottom: 1px solid #ccc;
+                                        position: absolute;
+                                        bottom: 50%;
+                                        left: 0;
+                                        transform: scale(1, 0.5);
+                                        transform-origin: 0 0;
+                                    }
                                 }
                             }
                         }
@@ -1441,22 +1549,45 @@
         .store_banner {
             background: #383838;
             position: relative;
-            height: 114rpx;
+            height: 160rpx;
+            padding: 16rpx 36rpx;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
             .shop_img {
-                position: absolute;
-                left: 50%;
                 width: 160rpx;
                 height: 160rpx;
-                transform: translateX(-50%);
                 border-radius: 10rpx;
+                margin-right: 20rpx;
+            }
+            .shop_right_details {
+                flex: 1;
+                overflow: hidden;
+                .option {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+                p,
+                span {
+                    color: #fff;
+                    font-size: 22rpx;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    line-height: 42rpx;
+                }
+                span {
+                    padding: 0 8rpx;
+                    flex: 1;
+                }
             }
             .share {
                 position: absolute;
-                bottom: 0;
+                top: 0;
                 right: 22rpx;
                 width: 86rpx;
                 height: 86rpx;
-                transform: translateY(50%);
             }
         }
         .store_text {
@@ -1674,7 +1805,7 @@
                     flex-direction: column;
                     justify-content: center;
                     height: 77rpx;
-                    width: 335rpx;
+                    max-width: 260rpx;
                     .shop_list_name {
                         color: #1d1d1d;
                         font-size: 28rpx;

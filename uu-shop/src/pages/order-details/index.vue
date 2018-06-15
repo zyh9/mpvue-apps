@@ -6,7 +6,7 @@
             <ul class="lis_bottom_btn">
                 <!-- 再来一单暂去掉 -->
                 <!-- <li class='btn_other' @click='againOrder' v-if='(orderInfo.State>=2&&orderInfo.State<=4)||orderInfo.State==10'>再来一单</li> -->
-                <li v-if='orderInfo.State==1||(orderInfo.State==2&&orderInfo.CancelApplyState==0)' @click="cancelOrder">取消订单</li>
+                <li v-if='orderInfo.State==0||orderInfo.State==1||(orderInfo.State==2&&orderInfo.CancelApplyState==0)' @click="cancelOrder">取消订单</li>
                 <li @click='againOrder' v-if='orderInfo.State>=2||orderInfo.State<0'>再来一单</li>
                 <li class="btn_other" v-if="orderInfo.State==4" @click="okOrder">确认收货</li>
                 <li v-if='orderInfo.State==2&&orderInfo.CancelApplyState==1' @click="cancelOrder">已申请取消</li>
@@ -146,7 +146,7 @@
                 mask: true
             })
         },
-        onShow() {
+        onReady() {
             this.isTracking = false;
             this.orderDetails()
         },

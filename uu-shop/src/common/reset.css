@@ -225,6 +225,11 @@ input::-webkit-input-placeholder {
   height: 41rpx;
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_userAddress.png');
 }
+.icon_offer {
+  width: 41rpx;
+  height: 41rpx;
+  background-image: url('../../static/icon-offer.png');
+}
 .icon_lower {
   width: 58rpx;
   height: 58rpx;
@@ -333,6 +338,30 @@ input::-webkit-input-placeholder {
   height: 180rpx;
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/no_shop.png');
   background-size: 100% 100%;
+}
+.icon_set {
+  width: 28rpx;
+  height: 28rpx;
+  background-image: url('../../static/option.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.icon_right_img {
+  width: 9rpx;
+  height: 18rpx;
+  background-image: url('../../static/white-right.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.icon_discount {
+  width: 28rpx;
+  height: 28rpx;
+  background-image: url('../../static/discount.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: translateY(5rpx);
+  margin-right: 10rpx;
 }
 @keyframes fadeIn {
   0% {

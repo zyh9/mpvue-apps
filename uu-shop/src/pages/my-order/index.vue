@@ -32,7 +32,7 @@
                 <div class="lis_bottom">
                     <ul class="lis_bottom_btn">
                         <!-- 取消订单：商家未接单，商家已接单未发货 -->
-                        <li v-if='item.State==1||(item.State==2&&item.CancelApplyState ==0)' @click="cancelOrder(item)">取消订单</li>
+                        <li v-if='item.State==0||item.State==1||(item.State==2&&item.CancelApplyState ==0)' @click="cancelOrder(item)">取消订单</li>
                         <li v-if='item.State==2&&item.CancelApplyState ==1' @click="cancelOrder(item)">已申请取消</li>
                         <li class="btn_other" v-if='item.State==0' @click="OrderRePay(item)">继续支付</li>
                         <!-- 再来一单  -->
@@ -53,8 +53,6 @@
             return {
                 winWidth: 0,
                 winHeight: 0,
-                // tab切换  
-                currentTab: 0,
                 newOrder: [],
                 page: 1,
                 quest: true,
@@ -73,7 +71,6 @@
             this.page = 1;
             this.quest = true;
             this.newOrder = [];
-            this.currentTab = 0;
             this.nomore = false;
             this.orderInfo()
         },
@@ -291,7 +288,7 @@
             againOrder(orderId) {
                 wx.removeStorageSync('selectAddress');
                 wx.navigateTo({
-                    url: '/pages/submit-order/main?orderId=' + orderId
+                    url: `/pages/submit-order/main?orderId=${orderId}`
                 });
             },
             goShop(item) {

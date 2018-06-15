@@ -7,8 +7,12 @@
             </div>
             <div class="info">
                 <div class="name">{{goodsInfo.GoodName}}</div>
-                <div class="price set-flex set-between">
-                    <p class="shop_price">¥<span>{{goodsInfo.OriginalPrice}}</span></p>
+                <div class="price_sum set-flex set-between">
+                    <div class="discount_shop" v-if="goodsInfo.GoodType==-1">
+                        <p class="shop_price">¥<span>{{goodsInfo.SalesPrice}}</span></p>
+                        <p class="original_price">¥{{goodsInfo.OriginalPrice}}</p>
+                    </div>
+                    <p class="shop_price" v-else>¥<span>{{goodsInfo.SalesPrice}}</span></p>
                     <div class="count" v-if="goodsInfo.State==1&&!isRule">
                         <i class="icon icon_lower" @click="lower" v-if="goodsInfo.num>0" :data-info="goodsInfo"></i>
                         <span v-if="goodsInfo.num>0">{{goodsInfo.num}}</span>
@@ -58,11 +62,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                        <cover-view class="shareCover" >
-                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                        </cover-view>
-                                    </canvas>
+                                                    <cover-view class="shareCover" >
+                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                    </cover-view>
+                                                                </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -205,6 +209,30 @@
                 let {
                     info
                 } = e.target.dataset;
+                console.log(info)
+                if (info.GoodType == -1) {
+                    if (info.GoodSpecs[0].PriceOffRule.DiscountRule == 1) { //每人限一份
+                        if (info.GoodSpecs[0].IsBuyed == 0) {
+                            if (info.num == 1) {
+                                this.msg('每人限1份的商品仅能购买一次')
+                                return;
+                            }
+                            this.addFun(info)
+                        } else { //已购买
+                            this.msg('每人限1份的商品仅能购买一次')
+                        }
+                    } else { //每单限一份
+                        if (info.num == 1) {
+                            this.msg('每单仅享1份优惠价')
+                        }
+                        this.addFun(info)
+                    }
+                } else {
+                    console.log('非折扣')
+                    this.addFun(info)
+                }
+            },
+            addFun(info) {
                 if (info.GoodSpecs.length == 1) {
                     this.goodsInfo.num = info.num;
                     this.goodsInfo.num++;
@@ -244,7 +272,7 @@
                 })
             },
             saveData(info, ShopId) {
-                console.log(info, ShopId)
+                // console.log(info, ShopId)
                 // 先获取缓存数据
                 let cartListSum = wx.getStorageSync('cartListSum') || [];
                 if (cartListSum.length) {
@@ -498,6 +526,8 @@
                                 res.Body.MultiSpec = 0;
                                 res.Body.GoodsMasterPic = res.Body.ShopLogo;
                                 res.Body.OriginalPrice = res.Body.GoodSpecs[0].OriginalPrice;
+                                res.Body.IsBuyed = res.Body.GoodSpecs[0].IsBuyed;
+                                res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
                             } else {
                                 res.Body.GoodSpecs.forEach(item => {
                                     item.num = 0;
@@ -578,9 +608,32 @@
                 line-height: 56rpx;
                 font-weight: 900;
             }
-            .price {
+            .price_sum {
                 margin-bottom: 30rpx;
                 position: relative;
+                .discount_shop {
+                    display: flex;
+                    align-items: center;
+                    .original_price {
+                        font-size: 22rpx;
+                        color: #ccc;
+                        transform: translateY(10rpx);
+                        margin-left: 12rpx;
+                        position: relative;
+                        &:after {
+                            content: '';
+                            display: block;
+                            width: 100%;
+                            height: 0;
+                            border-bottom: 1px solid #ccc;
+                            position: absolute;
+                            bottom: 50%;
+                            left: 0;
+                            transform: scale(1, 0.5);
+                            transform-origin: 0 0;
+                        }
+                    }
+                }
                 .shop_price {
                     font-size: 24rpx;
                     color: #ff4d3a;
