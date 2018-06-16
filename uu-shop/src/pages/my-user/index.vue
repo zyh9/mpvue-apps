@@ -21,7 +21,7 @@
             <i class="icon icon_userAddress"></i>
             <p>我的地址</p>
         </div>
-        <div class="options" @click="11">
+        <div class="options" @click="goCoupon">
             <i class="icon icon_offer"></i>
             <p>我的优惠券</p>
         </div>
@@ -118,6 +118,9 @@
                         url: '/pages/login/main'
                     })
                 }
+            },
+            goCoupon(){
+                wx.navigateTo({ url: '/pages/my-coupon/main?type=1' });
             }
         },
         computed: {},

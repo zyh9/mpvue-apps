@@ -6,7 +6,7 @@
                 <div class="shop_right_details">
                     <p>简介：店铺简介</p>
                     <p>{{time}}</p>
-                    <div class="option"><i class="icon_set"></i><span>满500减50</span><i class="icon_right_img"></i></div>
+                    <div class="option" @click='couponActive=true'><i class="icon_set"></i><span>满500减50</span><i class="icon_right_img"></i></div>
                 </div>
                 <i class="icon icon_share share" @click="share"></i>
             </div>
@@ -101,14 +101,14 @@
                         <i class="icon icon_userAddress"></i>
                         <p>我的地址</p>
                     </div>
-                    <div class="options" @click="11">
+                    <div class="options" @click="goCoupon">
                         <i class="icon icon_offer"></i>
                         <p>我的优惠券</p>
                     </div>
                 </div>
             </swiper-item>
         </swiper>
-        <div class="cart_mask" v-if="cartActive" @click="cartActive = false"></div>
+        <div class="cart_mask" v-if="cartActive||couponActive" @click="cartActive = false,couponActive=false"></div>
         <div class="shop_cart" v-if="currentTab==0">
             <div class="cart_left" @click="blockCart">
                 <div class="cart_img">
@@ -123,6 +123,38 @@
                 <span class="no_operate" v-if="!OpenState">已打烊</span>
                 <div v-if="OpenState&&cartListItem.length" class="settlement" @click="settlement">结算</div>
             </div>
+        </div>
+        <div class="couponList" :class="{couponList_active:couponActive}">
+            <div class="top">
+                <h2 class="title">亲！店里有优惠送您</h2>
+                <p>赶快领取使用吧</p>
+            </div>
+            <div class="coupon">
+                <div class="title"><i class="icon icon_coupon"></i>优惠券</div>
+                <ul class="list">
+                    <li>
+                        <p>满200元减</p>
+                        <div class="money"><span class="number">5</span><span>元</span></div>
+                    </li>
+                     <li>
+                        <p>满200元减</p>
+                        <div class="money"><span class="number">5</span><span>元</span></div>
+                    </li>
+                     <li>
+                        <p>满200元减</p>
+                        <div class="money"><span class="number">5</span><span>元</span></div>
+                    </li>
+                     <li>
+                        <p>满200元减</p>
+                        <div class="money"><span class="number">5</span><span>元</span></div>
+                    </li>
+                </ul>
+                <div class="tip">优惠券规则：优惠券使用规则优惠券使用规则优惠券使用规则优惠券使用规则优惠券使用规则</div>
+                <div class="title"><i class="icon icon_subtraction"></i>满减</div>
+                <div class="text">满200减5配送费；满300减10配送费；满500减50配送费</div>
+                <div class="tip">满减规则：优惠券使用规则优惠券使用规则优惠券使用规则优惠券用规则优惠券使用规则</div>
+            </div>
+            <div class="close" @click='couponActive=false'>关闭</div>
         </div>
         <div class="cartListSum" v-if="cartListItem.length&&currentTab==0" :class="{cartListSum_active:cartActive}">
             <div class="shop_rule">
@@ -235,7 +267,8 @@
                 noShop: false, //店铺是否有商品
                 block: false,
                 Logo: 'https://otherfiles-ali.uupt.com/Stunner/logo-C-R.png?x-oss-process=image/resize,w_100/format,jpg',
-                minShopLogo: ''
+                minShopLogo: '',
+                couponActive:false
             }
         },
         onShareAppMessage(res) {
@@ -1159,6 +1192,9 @@
                     })
                 }
             },
+            goCoupon(){
+                wx.navigateTo({ url: '/pages/my-coupon/main?type=2' });
+            }
         },
         computed: {
             //购物车商品总价
@@ -1856,6 +1892,129 @@
     }
     .cartListSum_active {
         transform: translateY(0%);
+    }
+    .couponList{
+        width: 100%;
+        transform: translateY(100%);
+        transition: transform 0.4s ease;
+        position: absolute;
+        z-index: 30;
+        left: 0;
+        bottom: 0;
+        background: #fff;
+        .top{
+            margin: 0 36rpx 8rpx;
+            position: relative;
+            padding:40rpx 0; 
+            &:after{
+                content: '';
+                display: block;
+                width: 100%;
+                height: 0;
+                border-top: 1px solid #ebebeb;
+                position: absolute;
+                bottom: 0;
+                left:0;
+                transform: scaleY(.5);
+                transform-origin: 0 0;
+            }
+            h2.title{
+                font-size: 36rpx;
+                color:#1a1a1a;
+                text-align: center;
+                font-weight: 900;
+                line-height: 36rpx;
+                margin-bottom: 14rpx;
+            }
+            p{
+                font-size: 24rpx;
+                color:#666;
+                text-align: center;
+                line-height: 24rpx;
+            }
+        }
+        .coupon{
+            margin: 0 36rpx;
+            padding-bottom: 20rpx;
+            max-height: 560rpx;
+            overflow-y: scroll;
+            .title{
+                font-size: 30rpx;
+                color: #1a1a1a;
+                padding: 31rpx 0;
+                margin-top: 12rpx;
+                .icon{
+                    margin-right: 10rpx;
+                }
+            }
+            ul.list{
+                li{
+                    width: 214rpx;
+                    height: 109rpx;
+                    background: url('../../../static/couponBg.png') no-repeat center;
+                    background-size: 100%;
+                    background: red;
+                    margin-bottom: 17rpx;
+                    display: inline-block;
+                    &:nth-child(3n-1){
+                        margin: 0 16rpx 17rpx;
+                    }
+                    p{
+                        text-align: left;
+                        font-size: 18rpx;
+                        color: rgba(255, 255, 255, 0.7);
+                        padding-left: 12rpx;
+                    }
+                    .money{
+                        width: 146rpx;
+                        text-align: center;
+                        span{
+                            font-size: 24rpx;
+                            color: #fff;
+                            &.number{
+                                font-size:65rpx ;
+                            }
+                        }
+                    }
+                }
+            }
+            .tip{
+                font-size: 24rpx;
+                color: #999;
+                line-height: 36rpx;
+            }
+            .text{
+                font-size: 26rpx;
+                color: #ff4d3a;
+                line-height: 36rpx;
+                padding-bottom: 8rpx;
+            }
+        }
+        .close{
+            height: 96rpx;
+            line-height: 96rpx;
+            background: #fff;
+            font-size: 30rpx;
+            color:#1a1a1a;
+            text-align: center;
+            position: relative;
+            &:after{
+                content: '';
+                display: block;
+                width: 100%;
+                height: 0;
+                border-top: 1px solid #ebebeb;
+                position:absolute;
+                top:0;
+                left:0;
+                transform: scaleY(.5);
+                transform-origin: 0 0;
+               
+            }
+        }
+        &.couponList_active {
+            transform: translateY(0%);
+        }
     }
     .share_card {
         position: absolute;

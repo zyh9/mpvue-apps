@@ -7,5 +7,8 @@ app.$mount()
 export default {
     config: {
         navigationBarTitleText: '我的优惠券',
+        backgroundColor:'#f3f3f3',
+        enablePullDownRefresh: true,
+        backgroundTextStyle:'dark'
     }
 }

@@ -363,6 +363,21 @@ input::-webkit-input-placeholder {
   transform: translateY(5rpx);
   margin-right: 10rpx;
 }
+.icon_coupon {
+  width: 28rpx ;
+  height: 28rpx ;
+  background-image: url('../../static/icon_coupon.png');
+}
+.icon_subtraction {
+  width: 28rpx;
+  height: 28rpx;
+  background-image: url('../../static/icon_subtraction.png');
+}
+.icon_shop {
+  width: 22rpx ;
+  height: 22rpx;
+  background-image: url('../../static/icon_shop.png');
+}
 @keyframes fadeIn {
   0% {
     opacity: 0;
