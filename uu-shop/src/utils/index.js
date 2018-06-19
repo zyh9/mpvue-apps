@@ -1,17 +1,23 @@
 import QQMapWX from './qqmap-wx-jssdk.js';
+import msg from './toast';
+
 const QQMap = new QQMapWX({
   key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
 })
 
 //线上地址
-const baseUrl = 'https://stunnercustomer.uupt.com';
+// const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
+const baseUrl = 'http://192.168.6.100:60004';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    v:'1.0.6'
+    v: '1.0.6',
+    appid: '1',
+    token: wx.getStorageSync('loginInfo').Token || '',
+    qrcode: wx.setStorageSync('scene', this.scene) || ''
   }
 }
 
@@ -136,6 +142,8 @@ const wxLogin = _ => {
             wxLogin()
           }
         }).catch(err => {
+          wx.hideLoading()
+          msg(err.Msg)
           reject(err)
         })
       },

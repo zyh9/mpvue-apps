@@ -95,10 +95,6 @@
                             ShopName: this.val,
                             PageSize: 10,
                             PageIndex: this.page
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     }).then(res => {
                         // console.log("正确信息", res)

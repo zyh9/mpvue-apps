@@ -81,11 +81,7 @@
             addressInfo() {
                 this.util.post({
                     url: '/api/Customer/PersonerCenter/Addresses',
-                    data: {},
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || ''
-                    }
+                    data: {}
                 }).then(res => {
                     this.block = true;
                     wx.hideLoading();
@@ -112,11 +108,7 @@
                 if (this.uupt) {
                     this.util.post({
                         url: '/api/Customer/PersonerCenter/PaotuiAddresses',
-                        data: {},
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || ''
-                        }
+                        data: {}
                     }).then(res => {
                         if (!res.Body.length) {
                             this.msg('您还没有UU跑腿的地址哦')
@@ -182,10 +174,6 @@
                         url: '/api/Customer/PersonerCenter/DeleteAddress',
                         data: {
                             AddressId: v.Id
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     }).then(res => {
                         if (res.State == 1) {
@@ -262,10 +250,6 @@
                                     CityName: item.CityName,
                                     CountyName: item.CountyName,
                                     Type: 2
-                                },
-                                headers: {
-                                    appid: '1',
-                                    token: wx.getStorageSync('loginInfo').Token || ''
                                 }
                             })
                             .then(res => {

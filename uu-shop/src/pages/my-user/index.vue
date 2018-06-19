@@ -73,11 +73,6 @@
                     this.util.post({
                             url: '/api/Customer/PersonerCenter/UserCenter',
                             data: {},
-                            headers: {
-                                appid: '1',
-                                token: wx.getStorageSync('loginInfo').Token || '',
-                                qrcode: this.$store.state.mutations.qrcode || ''
-                            }
                         })
                         .then(res => {
                             if (res.State == 1) {
@@ -96,11 +91,6 @@
                 this.util.post({
                         url: '/api/Customer/PersonerCenter/Logout',
                         data: {},
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || '',
-                            qrcode: this.$store.state.mutations.qrcode || ''
-                        }
                     })
                     .then(res => {
                         if (res.State == 1) {
@@ -119,8 +109,10 @@
                     })
                 }
             },
-            goCoupon(){
-                wx.navigateTo({ url: '/pages/my-coupon/main?type=1' });
+            goCoupon() {
+                wx.navigateTo({
+                    url: '/pages/my-coupon/main?type=1'
+                });
             }
         },
         computed: {},

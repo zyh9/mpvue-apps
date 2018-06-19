@@ -54,10 +54,6 @@
               data: {
                 Mobile: this.authTel,
                 BizType: 1
-              },
-              headers: {
-                appid: '1',
-                token: wx.getStorageSync('loginInfo').Token || ''
               }
             }).then(res => {
               this.msg(res.Msg)
@@ -97,10 +93,6 @@
               Loction: `${result[0]},${result[1]}`,
               CityName: QQmap.city,
               wxUserInfo: JSON.stringify(userInfo)
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || ''
             }
           }).then(res => {
             if (res.State == 1) {

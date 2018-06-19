@@ -124,11 +124,6 @@
                         OrderState: 0,
                         PageSize: 10,
                         PageIndex: this.page
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     wx.hideLoading()
@@ -208,11 +203,6 @@
                         url: '/api/Customer/Order/OrderRePay',
                         data: {
                             OrderId: item.OrderId,
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || '',
-                            qrcode: this.$store.state.mutations.qrcode || ''
                         }
                     })
                     .then(res => {
@@ -247,11 +237,6 @@
                     url: '/api/Customer/Order/CancelOrder',
                     data: {
                         OrderId: item.OrderId
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     setTimeout(() => {
@@ -270,11 +255,6 @@
                     url: '/api/Customer/Order/FinishOrder',
                     data: {
                         OrderId: item.OrderId
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     console.log(res)

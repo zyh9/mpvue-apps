@@ -65,7 +65,7 @@
             this.quest = true;
             this.nomore = false;
             this.nearbyrList = [];
-            if (wx.getStorageSync('QQmap')) {
+            if (wx.getStorageSync('loginInfo')) {
                 this.mapInfo = wx.getStorageSync('QQmap')
                 this.nearbyShop()
             } else {
@@ -154,10 +154,6 @@
                             Distance: 5000,
                             PageSize: 10,
                             PageIndex: this.page
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     })
                     .then(res => {

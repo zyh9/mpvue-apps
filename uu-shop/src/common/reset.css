@@ -363,6 +363,16 @@ input::-webkit-input-placeholder {
   transform: translateY(5rpx);
   margin-right: 10rpx;
 }
+.icon_discount_text {
+  width: 28rpx;
+  height: 28rpx;
+  background-image: url('../../static/discount-text.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: translateY(5rpx);
+  margin-right: 10rpx;
+}
 .icon_coupon {
   width: 28rpx ;
   height: 28rpx ;

@@ -11,9 +11,9 @@
                 <i class="icon icon_share share" @click="share"></i>
             </div>
             <!-- <div class="store_text">
-                                                                                                                                                            <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
-                                                                                                                                                            <p class="time">{{time}}</p>
-                                                                                                                                                        </div> -->
+                                                                                                                                                                <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
+                                                                                                                                                                <p class="time">{{time}}</p>
+                                                                                                                                                            </div> -->
             <ul class="store_info">
                 <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
             </ul>
@@ -136,15 +136,15 @@
                         <p>满200元减</p>
                         <div class="money"><span class="number">5</span><span>元</span></div>
                     </li>
-                     <li>
+                    <li>
                         <p>满200元减</p>
                         <div class="money"><span class="number">5</span><span>元</span></div>
                     </li>
-                     <li>
+                    <li>
                         <p>满200元减</p>
                         <div class="money"><span class="number">5</span><span>元</span></div>
                     </li>
-                     <li>
+                    <li>
                         <p>满200元减</p>
                         <div class="money"><span class="number">5</span><span>元</span></div>
                     </li>
@@ -168,7 +168,7 @@
                         <span v-if='v.SpecName'>{{v.SpecName}}</span>
                     </div>
                     <div class="right set-flex set-between">
-                        <p class="shop_list_price">¥{{v.sumPrice}}</p>
+                        <p class="shop_list_price"><i class="icon_discount_text" v-if="v.GoodsType==-1"></i>¥{{v.sumPrice}}</p>
                         <div class="count">
                             <i class="icon icon_lower" @click="lower($event)" :data-info="v" v-if="v.num>0"></i>
                             <span v-if="v.num>0">{{v.num}}</span>
@@ -196,11 +196,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                <cover-view class="shareCover" >
-                                                                                                                                                                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                </cover-view>
-                                                                                                                                                                                                                </canvas>
+                                                                                                                                                                                                                    <cover-view class="shareCover" >
+                                                                                                                                                                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                    </cover-view>
+                                                                                                                                                                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -268,7 +268,7 @@
                 block: false,
                 Logo: 'https://otherfiles-ali.uupt.com/Stunner/logo-C-R.png?x-oss-process=image/resize,w_100/format,jpg',
                 minShopLogo: '',
-                couponActive:false
+                couponActive: false
             }
         },
         onShareAppMessage(res) {
@@ -286,6 +286,7 @@
         },
         onLoad(options) {
             this.scene = options.scene;
+            wx.setStorageSync('scene', this.scene);
             this.ShopId = this.$root.$mp.query.ShopId;
             this.currentTab = 0;
             this.block = false;
@@ -384,10 +385,6 @@
             sceneInfo() {
                 this.util.post({
                     url: '/api/Customer/Browse/GetSceneInfo',
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || ''
-                    },
                     data: {
                         Scene: this.scene || ''
                     }
@@ -464,11 +461,6 @@
                     data: {
                         //分享二维码获取  商品详情获取 this.ShopId || wx.getStorageSync('ShopId')
                         shopId: this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 })
             },
@@ -478,11 +470,6 @@
                     url: '/api/Customer/Browse/GetShopAllGoods',
                     data: {
                         shopId: this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 })
             },
@@ -519,11 +506,6 @@
                             GoodType: id,
                             PageSize: 10,
                             PageIndex: select.page
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || '',
-                            qrcode: this.$store.state.mutations.qrcode || ''
                         }
                     })
                     .then(res => {
@@ -615,11 +597,6 @@
                         CodeType: 2,
                         CodeValue: String(wx.getStorageSync('shopInfo').ShopId) || '',
                         RequestType: 2
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     this.QrCodeUrl = res.Body.QrCodeUrl;
@@ -815,7 +792,7 @@
                 }
             },
             add(e) {
-                console.log(e.target.dataset.info)
+                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
@@ -1192,8 +1169,10 @@
                     })
                 }
             },
-            goCoupon(){
-                wx.navigateTo({ url: '/pages/my-coupon/main?type=2' });
+            goCoupon() {
+                wx.navigateTo({
+                    url: '/pages/my-coupon/main?type=2'
+                });
             }
         },
         computed: {
@@ -1841,7 +1820,7 @@
                     flex-direction: column;
                     justify-content: center;
                     height: 77rpx;
-                    max-width: 260rpx;
+                    max-width: 280rpx;
                     .shop_list_name {
                         color: #1d1d1d;
                         font-size: 28rpx;
@@ -1862,7 +1841,7 @@
                     }
                 }
                 .right {
-                    width: 260rpx;
+                    width: 300rpx;
                     align-items: center;
                 }
                 .shop_list_price {
@@ -1893,7 +1872,7 @@
     .cartListSum_active {
         transform: translateY(0%);
     }
-    .couponList{
+    .couponList {
         width: 100%;
         transform: translateY(100%);
         transition: transform 0.4s ease;
@@ -1902,11 +1881,11 @@
         left: 0;
         bottom: 0;
         background: #fff;
-        .top{
+        .top {
             margin: 0 36rpx 8rpx;
             position: relative;
-            padding:40rpx 0; 
-            &:after{
+            padding: 40rpx 0;
+            &:after {
                 content: '';
                 display: block;
                 width: 100%;
@@ -1914,41 +1893,41 @@
                 border-top: 1px solid #ebebeb;
                 position: absolute;
                 bottom: 0;
-                left:0;
+                left: 0;
                 transform: scaleY(.5);
                 transform-origin: 0 0;
             }
-            h2.title{
+            h2.title {
                 font-size: 36rpx;
-                color:#1a1a1a;
+                color: #1a1a1a;
                 text-align: center;
                 font-weight: 900;
                 line-height: 36rpx;
                 margin-bottom: 14rpx;
             }
-            p{
+            p {
                 font-size: 24rpx;
-                color:#666;
+                color: #666;
                 text-align: center;
                 line-height: 24rpx;
             }
         }
-        .coupon{
+        .coupon {
             margin: 0 36rpx;
             padding-bottom: 20rpx;
             max-height: 560rpx;
             overflow-y: scroll;
-            .title{
+            .title {
                 font-size: 30rpx;
                 color: #1a1a1a;
                 padding: 31rpx 0;
                 margin-top: 12rpx;
-                .icon{
+                .icon {
                     margin-right: 10rpx;
                 }
             }
-            ul.list{
-                li{
+            ul.list {
+                li {
                     width: 214rpx;
                     height: 109rpx;
                     background: url('../../../static/couponBg.png') no-repeat center;
@@ -1956,60 +1935,59 @@
                     background: red;
                     margin-bottom: 17rpx;
                     display: inline-block;
-                    &:nth-child(3n-1){
+                    &:nth-child(3n-1) {
                         margin: 0 16rpx 17rpx;
                     }
-                    p{
+                    p {
                         text-align: left;
                         font-size: 18rpx;
                         color: rgba(255, 255, 255, 0.7);
                         padding-left: 12rpx;
                     }
-                    .money{
+                    .money {
                         width: 146rpx;
                         text-align: center;
-                        span{
+                        span {
                             font-size: 24rpx;
                             color: #fff;
-                            &.number{
-                                font-size:65rpx ;
+                            &.number {
+                                font-size: 65rpx;
                             }
                         }
                     }
                 }
             }
-            .tip{
+            .tip {
                 font-size: 24rpx;
                 color: #999;
                 line-height: 36rpx;
             }
-            .text{
+            .text {
                 font-size: 26rpx;
                 color: #ff4d3a;
                 line-height: 36rpx;
                 padding-bottom: 8rpx;
             }
         }
-        .close{
+        .close {
             height: 96rpx;
             line-height: 96rpx;
             background: #fff;
             font-size: 30rpx;
-            color:#1a1a1a;
+            color: #1a1a1a;
             text-align: center;
             position: relative;
-            &:after{
+            &:after {
                 content: '';
                 display: block;
                 width: 100%;
                 height: 0;
                 border-top: 1px solid #ebebeb;
-                position:absolute;
-                top:0;
-                left:0;
+                position: absolute;
+                top: 0;
+                left: 0;
                 transform: scaleY(.5);
                 transform-origin: 0 0;
-               
             }
         }
         &.couponList_active {

@@ -29,19 +29,24 @@
               <p class="spec">{{v.SpecName?v.SpecName:''}}</p>
               <p class="num">X{{v.num}}</p>
             </div>
-            <div class="sum"><span>¥</span>{{v.TotalMoney}}</div>
+            <div class="sum">
+              <p class="price">
+                <i class="icon_discount_text" v-if="v.GoodsType==-1"></i><span>¥</span>{{v.TotalMoney}}
+              </p>
+              <p class="original_price" v-if="v.GoodsType==-1">¥{{v.sumPrice}}</p>
+            </div>
           </li>
           <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                                                      <img :src="v.GoodsMasterPic" alt="">
-                                                                                                                                      <div class="li_info">
-                                                                                                                                        <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                                                        <div class="li_bot">
-                                                                                                                                          <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                                                          <p class="num">X {{v.num}}</p>
-                                                                                                                                          <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
-                                                                                                                                        </div>
-                                                                                                                                      </div>
-                                                                                                                                    </li> -->
+                                                                                                                                                  <img :src="v.GoodsMasterPic" alt="">
+                                                                                                                                                  <div class="li_info">
+                                                                                                                                                    <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
+                                                                                                                                                    <div class="li_bot">
+                                                                                                                                                      <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                                                                                                                                      <p class="num">X {{v.num}}</p>
+                                                                                                                                                      <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                    </div>
+                                                                                                                                                  </div>
+                                                                                                                                                </li> -->
         </ul>
         <div class="consume">
           <p class="consume_l">配送费</p>
@@ -79,9 +84,9 @@
       <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                                                <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                              </div> -->
+                                                                                                                            <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                            <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                          </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -238,7 +243,7 @@
             GoodsNum: item.num,
             SpecId: item.Id,
             OriginalPrice: item.OriginalPrice,
-            SalesPrice: item.SalesPrice
+            SalesPrice: item.SalesPrice,
           })
         })
         this.util.post({
@@ -246,11 +251,6 @@
             data: {
               ShopId: this.shopInfo.ShopId,
               CartOrderGoods: cartData
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || '',
-              qrcode: this.$store.state.mutations.qrcode || ''
             }
           })
           .then(res => {
@@ -259,6 +259,7 @@
               // console.log(this.goodsInfo.GoodsPrice, this.cartListItem)
               this.cartListItem.forEach((e, i) => { //价格计算赋值
                 e.TotalMoney = this.goodsInfo.GoodsPrice[i].TotalMoney;
+                e.sumPrice = Math.round(e.OriginalPrice * 10000) * e.num / 10000;
               })
               if (this.shopInfo.ShopLoc && this.shopInfo.ShopLoc.split(',')[0] && this.selectAddress.AddressLoc) {
                 this.Freight(res.Body.PriceToken)
@@ -309,11 +310,6 @@
               EndAddressNote: this.selectAddress.AddressNote,
               EndAddressUserNote: this.selectAddress.UserNote,
               EndLocation: this.selectAddress.AddressLoc
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || '',
-              qrcode: this.$store.state.mutations.qrcode || ''
             }
           })
           .then(res => {
@@ -343,11 +339,6 @@
               GoodPriceToken: this.GoodPriceToken,
               ExpressPriceToken: this.ExpressPriceToken,
               Remarks: this.noteText
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || '',
-              qrcode: this.$store.state.mutations.qrcode || ''
             }
           })
           .then(res => {
@@ -395,11 +386,6 @@
             url: '/api/Customer/Order/OrderRePay',
             data: {
               OrderId: orderId,
-            },
-            headers: {
-              appid: '1',
-              token: wx.getStorageSync('loginInfo').Token || '',
-              qrcode: this.$store.state.mutations.qrcode || ''
             }
           })
           .then(res => {
@@ -449,11 +435,6 @@
           url: '/api/Customer/Order/OrderDetail',
           data: {
             OrderID: this.$mp.query.orderId
-          },
-          headers: {
-            appid: '1',
-            token: wx.getStorageSync('loginInfo').Token || '',
-            qrcode: this.$store.state.mutations.qrcode || ''
           }
         }).then(res => {
           if (res.State == 1) {
@@ -472,14 +453,16 @@
                 GoodId: item.GoodId,
                 GoodName: item.GoodName,
                 GoodsMasterPic: item.GoodMasterPic + '?x-oss-process=image/resize,w_100/format,jpg',
-                OriginalPrice: item.SinglePrice,
+                OriginalPrice: item.OriginalPrice,
                 num: item.GoodNum,
                 SpecName: item.SpecName,
                 Id: item.SpecId, //规格id
-                SalesPrice: item.SalesPrice,
+                SalesPrice: item.SinglePrice,
+                GoodsType: item.GoodType,
+                sumPrice: Math.round(item.OriginalPrice * 10000) * item.GoodNum / 10000
               })
             })
-            console.log(goodsDetail)
+            console.log(goodsDetail, '再来一单')
             this.cartListItem = goodsDetail;
             let address = res.Body.ReceiveAddress.split('($)');
             this.selectAddress = {
@@ -725,11 +708,33 @@
               }
             }
             .sum {
-              font-size: 28rpx;
-              color: #999;
-              line-height: 28rpx;
-              span {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              .price {
+                font-size: 28rpx;
+                color: #1a1a1a;
+                span {
+                  font-size: 24rpx;
+                }
+              }
+              .original_price {
                 font-size: 24rpx;
+                color: #b2b2b2;
+                margin-left: 12rpx;
+                position: relative;
+                &:after {
+                  content: '';
+                  display: block;
+                  width: 100%;
+                  height: 0;
+                  border-bottom: 1px solid #b2b2b2;
+                  position: absolute;
+                  bottom: 50%;
+                  left: 0;
+                  transform: scale(1, 0.5);
+                  transform-origin: 0 0;
+                }
               }
             }
           }

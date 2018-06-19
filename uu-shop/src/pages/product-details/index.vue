@@ -62,11 +62,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                                                    <cover-view class="shareCover" >
-                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                    </cover-view>
-                                                                </canvas>
+                                                        <cover-view class="shareCover" >
+                                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                        </cover-view>
+                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -133,6 +133,7 @@
         onLoad(options) {
             //options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
             this.scene = options.scene;
+            wx.setStorageSync('scene', this.scene);
             this.block = false;
             wx.showLoading({
                 title: '加载中',
@@ -171,10 +172,6 @@
             sceneInfo() {
                 this.util.post({
                     url: '/api/Customer/Browse/GetSceneInfo',
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || ''
-                    },
                     data: {
                         Scene: this.scene
                     }
@@ -182,8 +179,6 @@
                     this.GoodId = res.Body.GoodId;
                     this.ShopId = res.Body.ShopId;
                     wx.setStorageSync('ShopId', this.ShopId)
-                    //获取商品id，存入状态管理，为之后接口调用
-                    this.$store.dispatch('code', this.GoodId)
                     //获取商品信息
                     this.getGoodsInfo()
                 }).catch(err => {
@@ -209,7 +204,7 @@
                 let {
                     info
                 } = e.target.dataset;
-                console.log(info)
+                // console.log(info)
                 if (info.GoodType == -1) {
                     if (info.GoodSpecs[0].PriceOffRule.DiscountRule == 1) { //每人限一份
                         if (info.GoodSpecs[0].IsBuyed == 0) {
@@ -376,11 +371,6 @@
                         CodeType: 1,
                         CodeValue: this.$store.state.mutations.qrcode || this.$root.$mp.query.GoodId || '', //对应的商品id
                         RequestType: 2
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     this.QrCodeUrl = res.Body.QrCodeUrl;
@@ -509,11 +499,6 @@
                         data: {
                             ShopId: this.$root.$mp.query.ShopId || this.ShopId,
                             GoodId: this.$root.$mp.query.GoodId || this.GoodId
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || '',
-                            qrcode: this.$store.state.mutations.qrcode || ''
                         }
                     })
                     .then(res => {

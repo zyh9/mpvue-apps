@@ -135,10 +135,6 @@
                 CityName: this.address.city || this.address.CityName,
                 CountyName: this.address.district || this.address.CountyName,
                 Type: 1
-              },
-              headers: {
-                appid: '1',
-                token: wx.getStorageSync('loginInfo').Token || ''
               }
             })
             .then(res => {

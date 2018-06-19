@@ -226,11 +226,6 @@
                         url: '/api/Customer/Order/OrderRePay',
                         data: {
                             OrderId: this.orderInfo.OrderID,
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || '',
-                            qrcode: this.$store.state.mutations.qrcode || ''
                         }
                     })
                     .then(res => {
@@ -260,11 +255,6 @@
                     url: '/api/Customer/Order/OrderDetail',
                     data: {
                         OrderID: this.$mp.query.orderId
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     if (res.State == 1) {
@@ -290,11 +280,6 @@
                     url: '/api/Customer/Order/CancelOrder',
                     data: {
                         OrderId: this.$mp.query.orderId
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     this.orderDetails();
@@ -308,11 +293,6 @@
                     url: '/api/Customer/Order/FinishOrder',
                     data: {
                         OrderId: this.$mp.query.orderId
-                    },
-                    headers: {
-                        appid: '1',
-                        token: wx.getStorageSync('loginInfo').Token || '',
-                        qrcode: this.$store.state.mutations.qrcode || ''
                     }
                 }).then(res => {
                     console.log(res)
@@ -329,10 +309,6 @@
                         url: '/api/Customer/Order/OrderStateTrace',
                         data: {
                             OrderID: this.$mp.query.orderId
-                        },
-                        headers: {
-                            appid: '1',
-                            token: wx.getStorageSync('loginInfo').Token || ''
                         }
                     }).then(res => {
                         if (res.State == 1) {
