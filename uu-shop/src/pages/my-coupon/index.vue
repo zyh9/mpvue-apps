@@ -4,7 +4,7 @@
             <div class="title" v-if="couponList.length"><span>可用优惠券{{couponList.length}}张</span></div>
             <ul class="list" v-if="couponList.length">
                 <li v-for="(v,i) in couponList" :key="i">
-                    <div class="coupon"  @click='check(v)'>
+                    <div class="coupon" :class="{shopCoupon:type==1}"  @click='check(v)'>
                         <div class="info">
                             <div class="item">
                                 <div class="money"><span class="num">{{v.Amount}}</span><span>元</span></div>
@@ -13,12 +13,10 @@
                             <div class="detail">
                                 <div class="type">店铺优惠券</div>
                                 <p class="tip">有效期至{{v.ExpireDate}}</p>
-                                <p class="tip">商品费+打包费达到额度</p>
                             </div>
                         </div>
                         <i v-if='isHandler' class="icon icon_check" :class="{icon_checked:couponId==v.CouponID}"></i>
                     </div>
-                    <!-- <div class="shopInfo"  v-if='type==1' @click='goShop(v)'> -->
                     <div class="shopInfo"  v-if='type==1'>
                         <i class="icon icon_shop"></i> 
                         <div class="shopName">{{v.ShopName}}</div>
@@ -38,7 +36,8 @@
                         <div class="detail">
                             <div class="type">店铺优惠券</div>
                             <p class="tip">有效期至{{v.ExpireDate}}</p>
-                            <p class="tip other" :class="{color_text:v.UnavailableReason==2}">{{v.UnavailableReason==1?'商品费+打包费未达到额度':v.UnavailableReason==2?'不可与其他优惠同时使用':'已过期'}}</p>
+                            <p class="tip color_text">不可用原因</p>
+                            <p class="tip other">{{v.UnavailableReason==1?'商品费+打包费未达到额度':v.UnavailableReason==2?'不可与其他优惠同时使用':'已过期'}}</p>
                         </div>
                     </div>
                     </div>
@@ -85,7 +84,7 @@
                     ShopName:'小吃店',
                     ShopLogo:'',
 
-                    CouponID: 1,
+                    CouponID: 2,
                     UnavailableReason:''
 
                     },
@@ -96,13 +95,19 @@
                     Amount:20,
                     MinimumAmount:200,
                     CouponID: 1,
-                    UnavailableReason:2
+                    UnavailableReason:1
                     },{
                     ExpireDate:'2018-08-12',
                     Amount:20,
                     MinimumAmount:200,
                     CouponID: 1,
                     UnavailableReason:2
+                    },{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:3
                     }
                 ],
                 type: ''
@@ -129,12 +134,9 @@
         methods: {
             /* 选择优惠券 */
             check(v) {
-                // if (!this.isHandler) {
-                //     return
-                // }
                 if(this.type==3){
                     /* 选择优惠券 */
-                    this.couponId = v.id;
+                    this.couponId = v.CouponID;
                     setTimeout(_ => {
                         wx.navigateBack({
                             delta: 1
@@ -143,40 +145,58 @@
                 }else if(this.type==1){
                     /* 查看店铺 */
                     wx.navigateTo({
-                        url: `/pages/my-store/main?ShopId=${v.ShopId}&type=1`
+                        url: `/pages/my-store/main?ShopId=${v.ShopID}&type=1`
                     })
                 }
                 
             },
             /* 不使用优惠券 */
             nonuse() {
-                if (!this.isHandler) {
-                    return
-                }
+                this.couponId='';
                 wx.navigateBack({
                     delta: 1
                 });
             },
-            /* 查看店铺 */
-            // goShop(v) {
-            //     wx.navigateTo({
-            //         url: `/pages/my-store/main?ShopId=${v.ShopId}&type=1`
-            //     })
-            // }
-            /* 查看优惠券 */
+            /* 个人中心进入-获取优惠券 */
             getCouponPersonal(){
                 this.util.post({
                     url: '/api/Customer/Coupon/PersonalCenterCoupon',
                     data: {}
                 }).then(res => {
                     this.couponList=res.Body;
+                    this.couponList=[{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:100,
+
+                    ShopID:1770070357492740,
+                    ShopName:'小吃店',
+                    ShopLogo:'',
+
+                    CouponID: 1,
+                    UnavailableReason:''
+                    },
+                    {
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+
+                    ShopID:1770070357492740,
+                    ShopName:'小吃店',
+                    ShopLogo:'',
+
+                    CouponID: 2,
+                    UnavailableReason:''
+
+                    },
+                ];
                    
                 }).catch(err => {
-                    // this.msg(err.Msg)
                     console.log(err)
+                    this.msg(err.Msg)
                 })
             },
-            /* 选择优惠券 */
+            /* 提交订单进入-获取优惠券 */
             getCouponChoose(){
                 this.util.post({
                     url: '/api/Customer/Coupon/ChooseCouponForOrder',
@@ -188,10 +208,58 @@
                 }).then(res => {
                     this.couponList=res.Body.AvailableCoupons;
                     this.nullCouponList=res.Body.UnAvailableCoupons;
+
+                    /* 模拟数据 */
+                    this.couponList=[{
+                        ExpireDate:'2018-08-12',
+                        Amount:20,
+                        MinimumAmount:100,
+
+                        ShopID:1770070357492740,
+                        ShopName:'小吃店',
+                        ShopLogo:'',
+
+                        CouponID: 1,
+                        UnavailableReason:''
+                        },
+                        {
+                        ExpireDate:'2018-08-12',
+                        Amount:20,
+                        MinimumAmount:200,
+
+                        ShopID:1770070357492740,
+                        ShopName:'小吃店',
+                        ShopLogo:'',
+
+                        CouponID: 2,
+                        UnavailableReason:''
+
+                        },
+                    ];
+                    this.nullCouponList= [{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:1
+                    },{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:2
+                    },{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:3
+                    }
+                ];
                    
                 }).catch(err => {
-                    // this.msg(err.Msg)
                     console.log(err)
+                    this.msg(err.Msg)
                 })
             },
         },
@@ -206,9 +274,7 @@
     .myCoupon {
         background: #f3f3f3;
         padding-bottom: 30rpx;
-        .color_text {
-            color: #ff4d3a;
-        }
+        
         .title {
             margin: 0 36rpx;
             height: 100rpx;
@@ -264,12 +330,23 @@
                     &:before {
                         right: -19rpx;
                     }
+                    &.shopCoupon{
+                        height: 196rpx;
+                        &:after,&:before{
+                            top: 83rpx;
+                        }
+                    }
                     .info {
                         display: flex;
                         p.tip {
                             font-size: 20rpx;
                             color: #999;
-                            line-height: 36rpx;
+                            // line-height: 36rpx;
+                            line-height: 22rpx;
+                            margin-top: 12rpx;
+                            &.color_text {
+                                color: #ff4d3a;
+                            }
                             &.other {
                                 position: relative;
                                 padding-left: 15rpx;
@@ -307,10 +384,10 @@
                                 span {
                                     font-size: 28rpx;
                                     font-weight: 700;
+                                    color:#ff4d3a;
                                     &.num {
                                         font-size: 72rpx;
                                     }
-                                    .color_text;
                                 }
                             }
                         }
@@ -322,6 +399,7 @@
                                 font-size: 30rpx;
                                 color: #1a1a1a;
                                 font-weight: 700;
+                                margin-bottom: 20rpx;
                             }
                         }
                     }
@@ -358,9 +436,7 @@
                     }
                     .icon_shop {
                         margin-right: 10rpx;
-                    } // .icon{
-                    //     display: block;
-                    // }
+                    }
                 }
                 &:last-child {
                     margin-bottom: 0;
@@ -375,6 +451,7 @@
                         .detail {
                             .type {
                                 color: #ccc;
+                                margin-bottom: 0;
                             }
                         }
                         .item {

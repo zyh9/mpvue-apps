@@ -37,16 +37,16 @@
             </div>
           </li>
           <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                                                                    <img :src="v.GoodsMasterPic" alt="">
-                                                                                                                                                    <div class="li_info">
-                                                                                                                                                      <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                                                                      <div class="li_bot">
-                                                                                                                                                        <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                                                                        <p class="num">X {{v.num}}</p>
-                                                                                                                                                        <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
-                                                                                                                                                      </div>
-                                                                                                                                                    </div>
-                                                                                                                                                  </li> -->
+                                                                                                                                                          <img :src="v.GoodsMasterPic" alt="">
+                                                                                                                                                          <div class="li_info">
+                                                                                                                                                            <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
+                                                                                                                                                            <div class="li_bot">
+                                                                                                                                                              <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                                                                                                                                              <p class="num">X {{v.num}}</p>
+                                                                                                                                                              <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                            </div>
+                                                                                                                                                          </div>
+                                                                                                                                                        </li> -->
         </ul>
         <div class="consume">
           <p class="consume_l">配送费</p>
@@ -56,6 +56,11 @@
           <p class="consume_l">打包费</p>
           <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'-':goodsInfo.PackageMoney}}</p>
         </div>
+        <!-- <div class="consume other" @click="chooseCoupon">
+            <p class="consume_l">店铺优惠券</p>
+            <p class="consume_r"><span v-if='true'>1张可用</span><span v-else class="on">- &yen; 3</span></p>
+              <i class="icon icon_arrowRight"></i>
+          </div> -->
         <div class="consume_sum">
           <p class="consume_l">小计</p>
           <!-- <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{ExpressPrice==''?'选择地址后计算':goodsInfo.GoodMoney+goodsInfo.PackageMoney+ExpressPrice}}</p> -->
@@ -84,9 +89,9 @@
       <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                                                              <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                              <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                            </div> -->
+                                                                                                                                    <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                    <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                  </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -370,10 +375,16 @@
                       wx.redirectTo({
                         url: '/pages/order-details/main?orderId=' + res.Body.OrderId
                       });
-                    }, 300)
+                    }, 800)
                   },
                   'fail': err => {
                     this.msg('您已取消支付')
+                    setTimeout(_ => {
+                      /* 取消支付跳转订单列表 */
+                      wx.redirectTo({
+                        url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                      });
+                    }, 800)
                   }
                 })
               }
@@ -409,13 +420,20 @@
                   wx.removeStorageSync('note');
                   wx.removeStorageSync('selectAddress');
                   setTimeout(_ => {
+                    /* 支付成功跳转订单列表 */
                     wx.redirectTo({
-                      url: '/pages/order-details/main?orderId=' + orderId
+                      url: '/pages/order-details/main?orderId=' + res.Body.OrderId
                     });
-                  }, 300)
+                  }, 800)
                 },
                 'fail': res => {
                   this.msg('您已取消支付')
+                  setTimeout(_ => {
+                    /* 取消支付跳转订单列表 */
+                    wx.redirectTo({
+                      url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                    });
+                  }, 800)
                 }
               })
             }
@@ -521,6 +539,15 @@
             delta: 1,
           })
         }
+      },
+      /* 选择优惠券 */
+      chooseCoupon() {
+        if (this.$root.$mp.query.orderId) {
+          wx.setStorageSync('againOrder', this.cartListItem)
+        }
+        wx.navigateTo({
+          url: '/pages/my-coupon/main?type=3'
+        });
       }
     },
     components: {},
@@ -771,6 +798,27 @@
             color: #999;
             span {
               font-size: 24rpx;
+            }
+          }
+          &.other {
+            .consume_r {
+              flex: 1;
+              text-align: right;
+              span {
+                display: inline-block;
+                padding: 8rpx 15rpx;
+                background: #ff4d3a;
+                font-size: 22rpx;
+                line-height: 22rpx;
+                color: #fff;
+                border-radius: 4rpx;
+                margin-right: 15rpx;
+                &.on {
+                  font-size: 28rpx;
+                  color: #ff4d3a;
+                  background: transparent;
+                }
+              }
             }
           }
         }

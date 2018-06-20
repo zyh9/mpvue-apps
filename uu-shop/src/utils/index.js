@@ -9,12 +9,12 @@ const QQMap = new QQMapWX({
 // const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
-const baseUrl = 'http://192.168.6.100:60004';
+const baseUrl = 'http://192.168.6.12:60003';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    v: '1.0.6',
+    v: '1.0.8',
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''

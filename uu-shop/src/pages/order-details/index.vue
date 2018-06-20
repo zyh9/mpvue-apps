@@ -1,5 +1,5 @@
 <template>
-    <div class="order_details" v-if="block">
+    <div class="order_details" v-if="block" :class="{hidden:isTracking}">
         <div class="order_details_top">
             <h3 class="title" @click="tracking">{{orderInfo.stateText}}<i v-if='orderInfo.State>3||orderInfo.State<0' class="icon icon_arrowRight"></i></h3>
             <p class='tip' v-if='orderInfo.State>3||orderInfo.State<0' @click='tracking'>订单状态跟踪</p>
@@ -69,7 +69,7 @@
                     <i class="icon icon_shop_tel icon_info"></i>
                     <p>商家电话</p>
                 </div>
-                <div class="shop_wx" @click="copyInfo(orderInfo.ShopWechat)">
+                <div class="shop_wx" @click="copyInfo(orderInfo.ShopWechat,1)">
                     <i class="icon icon_shop_wx icon_info"></i>
                     <p>商家微信</p>
                 </div>
@@ -137,6 +137,7 @@
                 isTracking: false,
                 trackingList: [],
                 block: false,
+                timer: null,
             }
         },
         onLoad() {
@@ -147,6 +148,8 @@
             })
         },
         onReady() {
+            clearInterval(this.timer)
+            this.timer = null;
             this.isTracking = false;
             this.orderDetails()
         },
@@ -202,17 +205,34 @@
                     phoneNumber: tel
                 })
             },
-            copyInfo(info) {
-                console.log(info)
-                wx.setClipboardData({
-                    data: `${info}`,
-                    success: res => {
-                        this.msg("复制成功")
-                    },
-                    fail: err => {
-                        this.msg("复制失败")
+            copyInfo(info, num) {
+                if (num) {
+                    console.log('微信')
+                    if (info == '') {
+                        this.msg('商家未提供微信联系方式')
+                    } else {
+                        wx.setClipboardData({
+                            data: `${info}`,
+                            success: res => {
+                                this.msg("复制成功")
+                            },
+                            fail: err => {
+                                this.msg("复制失败")
+                            }
+                        })
                     }
-                })
+                } else {
+                    console.log('非微信')
+                    wx.setClipboardData({
+                        data: `${info}`,
+                        success: res => {
+                            this.msg("复制成功")
+                        },
+                        fail: err => {
+                            this.msg("复制失败")
+                        }
+                    })
+                }
             },
             openShop() {
                 wx.navigateTo({
@@ -257,15 +277,11 @@
                         OrderID: this.$mp.query.orderId
                     }
                 }).then(res => {
-                    if (res.State == 1) {
-                        wx.hideLoading();
-                        this.block = true;
-                        this.orderInfo = Object.assign({}, res.Body, {
-                            stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState)
-                        })
-                    } else {
-                        console.log(res.Msg)
-                    }
+                    wx.hideLoading();
+                    this.block = true;
+                    this.orderInfo = Object.assign({}, res.Body, {
+                        stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState)
+                    })
                 }).catch(err => {
                     this.msg(err.Msg)
                 })
@@ -341,6 +357,19 @@
             orderAdress: function() {
                 return this.orderInfo.ReceiveAddress ? this.orderInfo.ReceiveAddress.split('($)').join(' ') : '';
             }
+        },
+        watch: {
+            block: function(newVal, oldVal) {
+                if (newVal) {
+                    this.timer = setInterval(_ => {
+                        this.orderDetails();
+                    }, 7000)
+                }
+            }
+        },
+        onUnload() {
+            clearInterval(this.timer)
+            this.timer = null;
         }
     }
 </script>
@@ -582,7 +611,7 @@
                     font-size: 28rpx;
                     white-space: nowrap;
                     color: #999;
-                    span{
+                    span {
                         font-size: 24rpx;
                     }
                 }
@@ -829,5 +858,8 @@
         background: #ff4d3a;
         padding: 10rpx 16rpx;
         border-radius: 4rpx;
+    }
+    .hidden {
+        overflow: hidden !important;
     }
 </style>

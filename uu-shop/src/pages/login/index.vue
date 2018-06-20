@@ -27,7 +27,7 @@
         isSend: true,
       }
     },
-    onShow() { //页面渲染就会触发
+    onReady() {
       clearInterval(this.countdownTimer)
       this.countdown = null;
       this.countdownInfo = '获取验证码';
@@ -154,9 +154,10 @@
         this.authVal = newVal.replace(/[^\d]/g, '');
       },
     },
-    beforeDestroy() { //清除定时器
+    onUnload() {
       clearInterval(this.countdownTimer)
-    },
+      this.countdownTimer = null;
+    }
   }
 </script>
 
@@ -165,7 +166,7 @@
     height: 100%;
     overflow-x: hidden;
     position: relative;
-    .login{
+    .login {
       margin: 20rpx 36rpx;
       font-size: 46rpx;
       font-weight: 700;

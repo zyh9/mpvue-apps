@@ -259,7 +259,11 @@
                 }).then(res => {
                     console.log(res)
                     this.msg('您已确认收货')
-                    this.orderInfo();
+                    setTimeout(_ => {
+                        this.page = 1;
+                        this.nomore = false;
+                        this.orderInfo(this.page);
+                    }, 800)
                 }).catch(err => {
                     this.msg(err.Msg)
                 })

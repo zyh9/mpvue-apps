@@ -6,14 +6,15 @@
                 <div class="shop_right_details">
                     <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'暂无店铺简介'}}</p>
                     <p>{{time}}</p>
-                    <!-- <div class="option" @click='couponActive=true'><i class="icon_set"></i><span>满500减50</span><i class="icon_right_img"></i></div> -->
+                    <div class="option" v-if="shopInfoList.PaotuiPriceRule"><i class="icon_set"></i><span>{{shopInfoList.PaotuiPriceRule}}</span></div>
+                    <!-- <div class="option" @click='couponActive=true'><i class="icon_set"></i><i class="icon_right_img"></i></div> -->
                 </div>
                 <!-- <i class="icon icon_share share" @click="share"></i> -->
             </div>
             <!-- <div class="store_text">
-                                                                                                                                                                                                <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
-                                                                                                                                                                                                <p class="time">{{time}}</p>
-                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                        <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
+                                                                                                                                                                                                        <p class="time">{{time}}</p>
+                                                                                                                                                                                                    </div> -->
             <ul class="store_info">
                 <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
             </ul>
@@ -36,13 +37,13 @@
                                         <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img fade_in" lazy-load="true">
                                         <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
                                         <div class="li_info">
-                                            <p class="shop_name">{{v.GoodName}}</p>
+                                            <p class="shop_name">{{v.GoodName}}<span v-if="v.GoodsType==-1">{{v.SpecName}}</span></p>
                                             <p class="discount" v-if="v.GoodsType==-1">{{v.PriceOffNote}}</p>
                                             <div class="discount_shop" v-if="v.GoodsType==-1">
                                                 <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
                                                 <p class="original_price">¥{{v.OriginalPrice}}</p>
                                             </div>
-                                            <p class="price" v-else><span>¥</span>{{v.SalesPrice}}</p>
+                                            <p class="price" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
                                         </div>
                                     </div>
                                     <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
@@ -111,9 +112,9 @@
                         <p>我的地址</p>
                     </div>
                     <!-- <div class="options" @click="goCoupon">
-                                                        <i class="icon icon_offer"></i>
-                                                        <p>我的优惠券</p>
-                                                    </div> -->
+                                <i class="icon icon_offer"></i>
+                                <p>我的优惠券</p>
+                            </div> -->
                 </div>
             </swiper-item>
         </swiper>
@@ -141,7 +142,7 @@
             <div class="coupon">
                 <div class="title"><i class="icon icon_coupon"></i>优惠券</div>
                 <ul class="list">
-                    <li v-for='(v,i) in couponList' :key='i'>
+                    <li v-for='(v,i) in couponList' :key='i' :class="'couponStatus'+v.Status" @click='receiveCoupon(v)'>
                         <p>满{{v.MinimumAmount}}元减</p>
                         <div class="money"><span class="number">{{v.Amount}}</span><span>元</span></div>
                     </li>
@@ -193,11 +194,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                                                    <cover-view class="shareCover" >
-                                                                                                                                                                                                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                                                    </cover-view>
-                                                                                                                                                                                                                                                    </canvas>
+                                                                                                                                                                                                                                                            <cover-view class="shareCover" >
+                                                                                                                                                                                                                                                            <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                                                            <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                                                            </cover-view>
+                                                                                                                                                                                                                                                            </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -266,18 +267,23 @@
                 Logo: 'https://otherfiles-ali.uupt.com/Stunner/logo-C-R.png?x-oss-process=image/resize,w_100/format,jpg',
                 minShopLogo: '',
                 couponActive: false,
-                couponList:[
+                couponList: [{
+                        ID: 1,
+                        Status: 0, //0:正常领取 ；1：已领取；2：已抢光
+                        MinimumAmount: 57,
+                        Amount: 5
+                    },
                     {
-                        MinimumAmount:57,
-                        Amount:5
+                        ID: 1,
+                        Status: 1, //0:正常领取 ；1：已领取；2：已抢光
+                        MinimumAmount: 57,
+                        Amount: 5
                     },
-                     {
-                        MinimumAmount:57,
-                        Amount:5
-                    },
-                     {
-                        MinimumAmount:57,
-                        Amount:5
+                    {
+                        ID: 1,
+                        Status: 2, //0:正常领取 ；1：已领取；2：已抢光
+                        MinimumAmount: 57,
+                        Amount: 5
                     },
                 ]
             }
@@ -286,6 +292,7 @@
             return {
                 title: this.shopInfoList.ShopName,
                 path: `pages/my-store/main?ShopId = ${this.ShopId}`,
+                imageUrl: this.shopInfoList.Logo,
                 success: res => {
                     this.maskActive = false;
                 },
@@ -334,7 +341,7 @@
                         wx.switchTab({
                             url: '/pages/nearby-shop/main'
                         })
-                    }, 400)
+                    }, 1000)
                 })
             } else {
                 console.log('走分享')
@@ -386,6 +393,10 @@
                         }
                     })
                 })
+                //清空列表数量
+                this.allShopInfoList.forEach(e => {
+                    e.sum = 0;
+                })
             }
             //当前店铺购物车的列表不为空走缓存，反之过滤设置缓存（主要针对购物车无商品且缓存中仍存在商品数量为零的情况）
             this.cartListItem.length ? this.cache() : (cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId))
@@ -393,6 +404,8 @@
             wx.setStorageSync('cartListSum', cartListSum);
             //缓存length不存在，直接清除
             !cartListSum.length && wx.removeStorageSync('cartListSum');
+            // this.couponList=[];
+            // this.getCoupon()
         },
         methods: {
             //二维码信息获取
@@ -419,7 +432,7 @@
                 let shopInfo = await this.shopInfo()
                 shopInfo.Body.Logo = shopInfo.Body.Logo;
                 wx.setNavigationBarTitle({
-                    title: shopInfo.Body.ShopName
+                    title: shopInfo.Body.ShopName ? shopInfo.Body.ShopName : '店铺详情'
                 })
                 this.shopInfoList = shopInfo.Body;
                 // console.log(this.shopInfoList.ShopTemplateId, '1 餐饮 2 电商')
@@ -537,6 +550,7 @@
                             } else {
                                 e.num = 0;
                                 e.sumPrice = 0;
+                                e.SpecName = e.GoodsSpec[0].SpecName=='默认'?'':` - ${e.GoodsSpec[0].SpecName}`;
                             }
                             e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
@@ -744,21 +758,25 @@
                 })
             },
             copyWx() {
-                wx.setClipboardData({
-                    data: this.shopInfoList.ShopWechat,
-                    success: res => {
-                        this.msg("复制成功")
-                    },
-                    fail: err => {
-                        this.msg("复制失败")
-                    }
-                })
+                if (this.shopInfoList.ShopWechat == "") {
+                    this.msg('商家未提供微信联系方式')
+                } else {
+                    wx.setClipboardData({
+                        data: this.shopInfoList.ShopWechat,
+                        success: res => {
+                            this.msg("复制成功")
+                        },
+                        fail: err => {
+                            this.msg("复制失败")
+                        }
+                    })
+                }
             },
             lower(e) {
-                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
+                // console.log(info)
                 if (info.MultiSpec == 0) {
                     if (info.GoodsType == -1) { //折扣商品
                         if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
@@ -807,10 +825,10 @@
                 }
             },
             add(e) {
-                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
+                // console.log(info)
                 if (info.MultiSpec == 0) {
                     if (info.GoodsType == -1) { //折扣商品
                         if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
@@ -1163,7 +1181,7 @@
                         wx.navigateTo({
                             url: '/pages/login/main'
                         })
-                    }, 200)
+                    }, 1000)
                 } else {
                     wx.navigateTo({
                         url: '/pages/my-address/main?type=2'
@@ -1177,7 +1195,7 @@
                         wx.navigateTo({
                             url: '/pages/login/main'
                         })
-                    }, 200)
+                    }, 1000)
                 } else {
                     wx.navigateTo({
                         url: '/pages/my-order/main'
@@ -1190,37 +1208,55 @@
                 });
             },
             /* 获取优惠券列表 */
-            getCoupon(){
+            getCoupon() {
                 this.util.post({
                     url: '/api/Customer/Coupon/ShopIndexCouponList',
                     data: {
-                        ShopID:this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
+                        ShopID: this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
                     }
                 }).then(res => {
-                    this.couponList=res.Body;
-                   
+                    this.couponList = res.Body;
+                    /* 模拟数据 */
+                    this.couponList = [{
+                            ID: 1,
+                            Status: 0, //0:正常领取 ；1：已领取；2：已抢光
+                            MinimumAmount: 57,
+                            Amount: 5
+                        },
+                        {
+                            ID: 1,
+                            Status: 1, //0:正常领取 ；1：已领取；2：已抢光
+                            MinimumAmount: 57,
+                            Amount: 5
+                        },
+                        {
+                            ID: 1,
+                            Status: 2, //0:正常领取 ；1：已领取；2：已抢光
+                            MinimumAmount: 57,
+                            Amount: 5
+                        },
+                    ]
                 }).catch(err => {
                     // this.msg(err.Msg)
                     console.log(err)
                 })
             },
             /* 领取优惠券 */
-            receiveCoupon(v){
-                this.util.post({
-                    url: '/api/Customer/Coupon/ShopIndexCouponList',
-                    data: {
-                        CouponID:v.CouponID,
-                    }
-                }).then(res => {
-                   
-                   
-                }).catch(err => {
-                    
-                    console.log(err)
-                })
+            receiveCoupon(v) {
+                if (v.Status == 0) {
+                    this.util.post({
+                        url: '/api/Customer/Coupon/ShopIndexCouponList',
+                        data: {
+                            CouponID: v.ID,
+                        }
+                    }).then(res => {
+                        this.msg('领取成功')
+                    }).catch(err => {
+                        console.log(err)
+                        this.msg(err.Msg)
+                    })
+                }
             }
-
-
         },
         computed: {
             //购物车商品总价
@@ -1621,8 +1657,7 @@
             height: 160rpx;
             padding: 16rpx 36rpx;
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            justify-content: flex-start; // align-items: center;
             .shop_img {
                 width: 160rpx;
                 height: 160rpx;
@@ -1984,10 +2019,18 @@
                 li {
                     width: 214rpx;
                     height: 109rpx;
-                    background: url('../../../static/couponBg.png') no-repeat center;
+                    background-image: url('../../../static/couponBg.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
                     background-size: 100%;
                     margin-bottom: 17rpx;
                     display: inline-block;
+                    &.couponStatus1 {
+                        background-image: url('../../../static/couponBg1.png');
+                    }
+                    &.couponStatus2 {
+                        background-image: url('../../../static/couponBg2.png');
+                    }
                     &:nth-child(3n-1) {
                         margin: 0 16rpx 17rpx;
                     }
@@ -2334,6 +2377,7 @@
                 margin-right: 20rpx;
                 height: 62rpx;
                 span {
+                    white-space: nowrap;
                     color: #ed533d;
                     font-size: 24rpx;
                     margin-right: 10rpx;

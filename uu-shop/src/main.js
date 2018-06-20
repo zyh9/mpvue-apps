@@ -66,7 +66,6 @@ export default {
       //文字初始颜色
       color: '#b2b2b2',
       list: [
-
         //平台店铺
         {
           //图标选中状态

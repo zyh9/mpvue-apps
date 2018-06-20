@@ -317,6 +317,7 @@
                     bottom: 0;
                     transform: scaleY(0.5);
                     transform-origin: 0 0;
+                    z-index: 10;
                 }
             }
         }
