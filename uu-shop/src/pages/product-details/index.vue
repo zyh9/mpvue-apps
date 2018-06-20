@@ -531,8 +531,10 @@
                                 })
                                 res.Body.MultiSpec = 1;
                                 res.Body.OriginalPrice = res.Body.GoodSpecs[0].OriginalPrice;
+                                res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
                             }
                             this.goodsInfo = res.Body;
+                            console.log(this.goodsInfo)
                         }
                     }).catch(err => {
                         wx.hideLoading();

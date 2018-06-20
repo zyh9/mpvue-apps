@@ -7,39 +7,38 @@
                     <div class="coupon"  @click='check(v)'>
                         <div class="info">
                             <div class="item">
-                                <div class="money"><span class="num">50</span><span>元</span></div>
-                                <p class="tip">满200可用</p>
+                                <div class="money"><span class="num">{{v.Amount}}</span><span>元</span></div>
+                                <p class="tip">满{{v.MinimumAmount}}可用</p>
                             </div>
                             <div class="detail">
                                 <div class="type">店铺优惠券</div>
-                                <p class="tip">有效期至2018/08/12</p>
+                                <p class="tip">有效期至{{v.ExpireDate}}</p>
                                 <p class="tip">商品费+打包费达到额度</p>
                             </div>
                         </div>
-                        <i v-if='isHandler' class="icon icon_check" :class="{icon_checked:couponId==v.id}"></i>
+                        <i v-if='isHandler' class="icon icon_check" :class="{icon_checked:couponId==v.CouponID}"></i>
                     </div>
                     <!-- <div class="shopInfo"  v-if='type==1' @click='goShop(v)'> -->
                     <div class="shopInfo"  v-if='type==1'>
                         <i class="icon icon_shop"></i> 
-                        <div class="shopName">汉堡王望京汉堡王望京汉堡王望京</div>
+                        <div class="shopName">{{v.ShopName}}</div>
                         <i class="icon icon_arrowRight"></i>
                     </div>
                 </li>
             </ul>
-            <div class="title" v-if='nullCouponList.length'><span>不可用优惠券3张</span></div>
+            <div class="title" v-if='nullCouponList.length'><span>不可用优惠券{{nullCouponList.length}}张</span></div>
             <ul class="list nullList" v-if='nullCouponList.length'>
                 <li v-for="(v,i) in nullCouponList" :key="i">
                     <div class="coupon">
                     <div class="info">
                         <div class="item">
-                            <div class="money"><span class="num">{{v.money}}</span><span>元</span></div>
-                            <p class="tip">满200可用</p>
+                            <div class="money"><span class="num">{{v.Amount}}</span><span>元</span></div>
+                            <p class="tip">满{{v.MinimumAmount}}可用</p>
                         </div>
                         <div class="detail">
                             <div class="type">店铺优惠券</div>
-                            <p class="tip">有效期至2018/08/12</p>
-                            <p class="tip color_text">不可与其他优惠同时使用</p>
-                            <p class="tip other">如折扣商品满减配送费</p>
+                            <p class="tip">有效期至{{v.ExpireDate}}</p>
+                            <p class="tip other" :class="{color_text:v.UnavailableReason==2}">{{v.UnavailableReason==1?'商品费+打包费未达到额度':v.UnavailableReason==2?'不可与其他优惠同时使用':'已过期'}}</p>
                         </div>
                     </div>
                     </div>
@@ -66,28 +65,44 @@
                 couponId: '',
                 /* 可用优惠券列表 */
                 couponList: [{
-                        id: 1,
-                        ShopId: 1770070357492740
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:100,
+
+                    ShopID:1770070357492740,
+                    ShopName:'小吃店',
+                    ShopLogo:'',
+
+                    CouponID: 1,
+                    UnavailableReason:''
                     },
                     {
-                        id: 2,
-                        ShopId: 1770070357492740
-                    },
-                    {
-                        id: 3,
-                        ShopId: 1770070357492740
-                    },
-                    {
-                        id: 4,
-                        ShopId: 1770070357492740
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+
+                    ShopID:1770070357492740,
+                    ShopName:'小吃店',
+                    ShopLogo:'',
+
+                    CouponID: 1,
+                    UnavailableReason:''
+
                     },
                 ],
                 /* 不可用优惠券列表 */
                 nullCouponList: [{
-                        money: 13,
-                    },
-                    {
-                        money: 13,
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:2
+                    },{
+                    ExpireDate:'2018-08-12',
+                    Amount:20,
+                    MinimumAmount:200,
+                    CouponID: 1,
+                    UnavailableReason:2
                     }
                 ],
                 type: ''
@@ -98,6 +113,13 @@
             /* 1:我的优惠券，全部展示,显示店铺名； 2：店铺优惠券；3：下单选择,选择优惠券 */
             this.type = this.$root.$mp.query.type;
             this.isHandler = this.type == 3 ? true : false;
+            this.couponList=[];
+            this.nullCouponList=[];
+            if(this.type==3){
+                this.getCouponChoose();
+            }else{
+                this.getCouponPersonal();
+            }  
         },
         onPullDownRefresh() { //下拉刷新
             setTimeout(function(){
@@ -141,6 +163,37 @@
             //         url: `/pages/my-store/main?ShopId=${v.ShopId}&type=1`
             //     })
             // }
+            /* 查看优惠券 */
+            getCouponPersonal(){
+                this.util.post({
+                    url: '/api/Customer/Coupon/PersonalCenterCoupon',
+                    data: {}
+                }).then(res => {
+                    this.couponList=res.Body;
+                   
+                }).catch(err => {
+                    // this.msg(err.Msg)
+                    console.log(err)
+                })
+            },
+            /* 选择优惠券 */
+            getCouponChoose(){
+                this.util.post({
+                    url: '/api/Customer/Coupon/ChooseCouponForOrder',
+                    data: {
+                        ShopID:'',
+                        OrderPrice:'',/* 订单总价 */
+                        IsOrderHasAcivity:'',/* 订单中是否包含活动 */
+                    }
+                }).then(res => {
+                    this.couponList=res.Body.AvailableCoupons;
+                    this.nullCouponList=res.Body.UnAvailableCoupons;
+                   
+                }).catch(err => {
+                    // this.msg(err.Msg)
+                    console.log(err)
+                })
+            },
         },
         components: {}
     }
@@ -338,6 +391,12 @@
         .noData {
             background: #fff;
             overflow: hidden;
+            position: absolute;
+            top: 0;
+            left:  0;
+            width: 100%;
+            height: 100%;
+            
             img {
                 width: 200rpx;
                 height: 200rpx;

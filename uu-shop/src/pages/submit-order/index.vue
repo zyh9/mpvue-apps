@@ -37,16 +37,16 @@
             </div>
           </li>
           <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                                                                  <img :src="v.GoodsMasterPic" alt="">
-                                                                                                                                                  <div class="li_info">
-                                                                                                                                                    <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                                                                    <div class="li_bot">
-                                                                                                                                                      <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                                                                      <p class="num">X {{v.num}}</p>
-                                                                                                                                                      <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                    <img :src="v.GoodsMasterPic" alt="">
+                                                                                                                                                    <div class="li_info">
+                                                                                                                                                      <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
+                                                                                                                                                      <div class="li_bot">
+                                                                                                                                                        <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                                                                                                                                        <p class="num">X {{v.num}}</p>
+                                                                                                                                                        <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                      </div>
                                                                                                                                                     </div>
-                                                                                                                                                  </div>
-                                                                                                                                                </li> -->
+                                                                                                                                                  </li> -->
         </ul>
         <div class="consume">
           <p class="consume_l">配送费</p>
@@ -84,9 +84,9 @@
       <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                                                            <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                            <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                          </div> -->
+                                                                                                                              <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                              <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                            </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -309,7 +309,9 @@
               EndAddressTitle: this.selectAddress.AddressTitle,
               EndAddressNote: this.selectAddress.AddressNote,
               EndAddressUserNote: this.selectAddress.UserNote,
-              EndLocation: this.selectAddress.AddressLoc
+              EndLocation: this.selectAddress.AddressLoc,
+              ReceiveName: this.selectAddress.LinkMan,
+              ReceiveMobile: this.selectAddress.LinkManMobile
             }
           })
           .then(res => {

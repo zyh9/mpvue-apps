@@ -21,15 +21,14 @@
             <i class="icon icon_userAddress"></i>
             <p>我的地址</p>
         </div>
-        <div class="options" @click="goCoupon">
+        <!-- <div class="options" @click="goCoupon">
             <i class="icon icon_offer"></i>
             <p>我的优惠券</p>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
-    // import login from '../../components/Login';
     export default {
         data() {
             return {

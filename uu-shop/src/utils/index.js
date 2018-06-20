@@ -153,15 +153,12 @@ const wxLogin = _ => {
     })
   })
 }
+
 const userLogin = async code => {
   return await post({
     url: '/api/Customer/Login/WxJsCodeLogin',
     data: {
       jsCode: code,
-    },
-    headers: {
-      appid: '1',
-      qrcode: ''
     }
   })
 }

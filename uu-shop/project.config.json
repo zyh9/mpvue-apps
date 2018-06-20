@@ -38,10 +38,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 1,
 					"name": "张兆迪",
 					"pathName": "pages/my-store/main",
-					"query": "ShopId=1781414413927430&type=1"
+					"query": "ShopId=1789482826007559"
 				},
 				{
 					"id": 2,
