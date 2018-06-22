@@ -802,6 +802,7 @@
 
 	//获取第三方平台自定义的数据字段
 	let config = wx.getExtConfigSync();
+	
 	config.appId && (wx.setStorageSync('uAppId', config.appId));
 
 	!config.shopId && console.log('未获取到shopId');
