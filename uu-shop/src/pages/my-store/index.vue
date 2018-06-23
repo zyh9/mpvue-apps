@@ -4,17 +4,20 @@
             <div class="store_banner">
                 <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
                 <div class="shop_right_details">
-                    <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'暂无店铺简介'}}</p>
+                    <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'欢迎光临本店，我们不定期会推出活动和优惠！'}}</p>
                     <p>{{time}}</p>
                     <div class="option" v-if="shopInfoList.PaotuiPriceRule"><i class="icon_set"></i><span>{{shopInfoList.PaotuiPriceRule}}</span></div>
+                    <div class="option" v-if="!shopInfoList.PaotuiPriceRule">
+                        <p>店主正在赶来的路上，关注店铺优惠马上就来！</p>
+                    </div>
                     <!-- <div class="option" @click='couponActive=true'><i class="icon_set"></i><i class="icon_right_img"></i></div> -->
                 </div>
                 <!-- <i class="icon icon_share share" @click="share"></i> -->
             </div>
             <!-- <div class="store_text">
-                                                                                                                                                                                                        <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
-                                                                                                                                                                                                        <p class="time">{{time}}</p>
-                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
+                                                                                                                                                                                                                <p class="time">{{time}}</p>
+                                                                                                                                                                                                            </div> -->
             <ul class="store_info">
                 <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
             </ul>
@@ -43,7 +46,7 @@
                                                 <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
                                                 <p class="original_price">¥{{v.OriginalPrice}}</p>
                                             </div>
-                                            <p class="price" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
+                                            <p class="price_init" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
                                         </div>
                                     </div>
                                     <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
@@ -112,9 +115,9 @@
                         <p>我的地址</p>
                     </div>
                     <!-- <div class="options" @click="goCoupon">
-                                <i class="icon icon_offer"></i>
-                                <p>我的优惠券</p>
-                            </div> -->
+                                        <i class="icon icon_offer"></i>
+                                        <p>我的优惠券</p>
+                                    </div> -->
                 </div>
             </swiper-item>
         </swiper>
@@ -194,11 +197,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                                                            <cover-view class="shareCover" >
-                                                                                                                                                                                                                                                            <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                                                            <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                                                            </cover-view>
-                                                                                                                                                                                                                                                            </canvas>
+                                                                                                                                                                                                                                                                    <cover-view class="shareCover" >
+                                                                                                                                                                                                                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                                                                    </cover-view>
+                                                                                                                                                                                                                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -550,7 +553,7 @@
                             } else {
                                 e.num = 0;
                                 e.sumPrice = 0;
-                                e.SpecName = e.GoodsSpec[0].SpecName=='默认'?'':` - ${e.GoodsSpec[0].SpecName}`;
+                                e.SpecName = e.GoodsSpec[0].SpecName == '默认' ? '' : ` - ${e.GoodsSpec[0].SpecName}`;
                             }
                             e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
@@ -1458,14 +1461,14 @@
                         position: absolute;
                         right: 15rpx;
                         top: 20rpx;
-                        width: 26rpx;
-                        height: 26rpx;
-                        line-height: 26rpx;
+                        width: 30rpx;
+                        height: 30rpx;
+                        line-height: 30rpx;
                         text-align: center;
                         background-image: linear-gradient(-22deg, #f21b30 0%, #ff693b 99%), linear-gradient( #ff2929, #ff2929); //   box-shadow: 2rpx 2rpx 8rpx 0rpx rgba(177, 5, 5, 0.7);
                         padding: 3rpx;
                         border-radius: 50%;
-                        font-size: 14rpx;
+                        font-size: 16rpx;
                         color: #fff;
                     }
                 }
@@ -1537,15 +1540,15 @@
                             .discount {
                                 position: absolute;
                                 left: 0;
-                                top: 45rpx;
+                                top: 48rpx;
                                 font-size: 22rpx;
                                 color: #999;
                             }
-                            .price {
+                            .price_init {
                                 color: #ff4d3a;
                                 line-height: 60rpx;
                                 font-size: 36rpx;
-                                transform: translateY(18%);
+                                transform: translateY(20rpx);
                                 font-weight: 700;
                                 span {
                                     font-size: 24rpx;
@@ -1554,6 +1557,17 @@
                             .discount_shop {
                                 display: flex;
                                 align-items: center;
+                                transform: translateY(10rpx);
+                                .price {
+                                    color: #ff4d3a;
+                                    line-height: 60rpx;
+                                    font-size: 36rpx;
+                                    transform: translateY(18%);
+                                    font-weight: 700;
+                                    span {
+                                        font-size: 24rpx;
+                                    }
+                                }
                                 .original_price {
                                     font-size: 22rpx;
                                     color: #ccc;
@@ -1654,13 +1668,14 @@
         .store_banner {
             background: #383838;
             position: relative;
-            height: 160rpx;
-            padding: 16rpx 36rpx;
+            height: 168rpx;
+            padding: 24rpx;
+            box-sizing: border-box;
             display: flex;
             justify-content: flex-start; // align-items: center;
             .shop_img {
-                width: 160rpx;
-                height: 160rpx;
+                width: 120rpx;
+                height: 120rpx;
                 border-radius: 10rpx;
                 margin-right: 20rpx;
             }
@@ -1740,23 +1755,23 @@
                 flex-flow: 1;
                 width: 100%;
                 text-align: center;
-                height: 70rpx;
+                height: 80rpx;
                 span {
-                    line-height: 70rpx;
-                    color: #4d4d4d;
+                    line-height: 80rpx;
+                    color: #999;
                     font-size: 28rpx;
                     position: relative;
                     z-index: -1;
                     box-sizing: border-box;
                     display: inline-block;
                     height: 100%;
-                    font-weight: 700;
                 }
             }
             .li_select {
                 span {
                     color: #1d1d1d;
                     border-bottom: 5rpx solid #ff4d3a;
+                    font-weight: 700;
                 }
             }
             &:after {
@@ -1937,6 +1952,12 @@
                     color: #666;
                     font-size: 28rpx;
                     transform: translateY(10%);
+                    position: relative;
+                    i {
+                        position: absolute;
+                        left: -32rpx;
+                        top: 4rpx;
+                    }
                 }
                 .count {
                     display: flex;

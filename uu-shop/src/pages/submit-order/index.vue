@@ -37,16 +37,16 @@
             </div>
           </li>
           <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                                                                          <img :src="v.GoodsMasterPic" alt="">
-                                                                                                                                                          <div class="li_info">
-                                                                                                                                                            <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                                                                            <div class="li_bot">
-                                                                                                                                                              <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                                                                              <p class="num">X {{v.num}}</p>
-                                                                                                                                                              <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                            <img :src="v.GoodsMasterPic" alt="">
+                                                                                                                                                            <div class="li_info">
+                                                                                                                                                              <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
+                                                                                                                                                              <div class="li_bot">
+                                                                                                                                                                <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
+                                                                                                                                                                <p class="num">X {{v.num}}</p>
+                                                                                                                                                                <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
+                                                                                                                                                              </div>
                                                                                                                                                             </div>
-                                                                                                                                                          </div>
-                                                                                                                                                        </li> -->
+                                                                                                                                                          </li> -->
         </ul>
         <div class="consume">
           <p class="consume_l">配送费</p>
@@ -57,10 +57,10 @@
           <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'-':goodsInfo.PackageMoney}}</p>
         </div>
         <!-- <div class="consume other" @click="chooseCoupon">
-            <p class="consume_l">店铺优惠券</p>
-            <p class="consume_r"><span v-if='true'>1张可用</span><span v-else class="on">- &yen; 3</span></p>
-              <i class="icon icon_arrowRight"></i>
-          </div> -->
+              <p class="consume_l">店铺优惠券</p>
+              <p class="consume_r"><span v-if='true'>1张可用</span><span v-else class="on">- &yen; 3</span></p>
+                <i class="icon icon_arrowRight"></i>
+            </div> -->
         <div class="consume_sum">
           <p class="consume_l">小计</p>
           <!-- <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{ExpressPrice==''?'选择地址后计算':goodsInfo.GoodMoney+goodsInfo.PackageMoney+ExpressPrice}}</p> -->
@@ -89,9 +89,9 @@
       <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                    <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                    <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                  </div> -->
+                                                                                                                                      <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                      <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                    </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -379,6 +379,15 @@
                   },
                   'fail': err => {
                     this.msg('您已取消支付')
+                    let cartListSum = wx.getStorageSync('cartListSum') || [];
+                    cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                    console.log(cartListSum)
+                    // 再设置缓存数据
+                    wx.setStorageSync('cartListSum', cartListSum);
+                    //缓存length不存在，直接清除
+                    !cartListSum.length && wx.removeStorageSync('cartListSum');
+                    wx.removeStorageSync('note');
+                    wx.removeStorageSync('selectAddress');
                     setTimeout(_ => {
                       /* 取消支付跳转订单列表 */
                       wx.redirectTo({
@@ -428,6 +437,15 @@
                 },
                 'fail': res => {
                   this.msg('您已取消支付')
+                  let cartListSum = wx.getStorageSync('cartListSum') || [];
+                  cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                  console.log(cartListSum)
+                  // 再设置缓存数据
+                  wx.setStorageSync('cartListSum', cartListSum);
+                  //缓存length不存在，直接清除
+                  !cartListSum.length && wx.removeStorageSync('cartListSum');
+                  wx.removeStorageSync('note');
+                  wx.removeStorageSync('selectAddress');
                   setTimeout(_ => {
                     /* 取消支付跳转订单列表 */
                     wx.redirectTo({
