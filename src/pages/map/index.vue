@@ -1,6 +1,6 @@
 <template>
     <div class="map_info">
-        <map id="myMap" class="qq_map" :longitude="pos.longitude" :latitude="pos.latitude" scale="14" show-location="true" @regionchange="regionchange" @begin="changeBegin" @end="changeEnd" :controls="controls" @controltap="controlList"></map>
+        <map id="myMap" class="qq_map" :longitude="longitude" :latitude="latitude" scale="14" show-location="true" @regionchange="regionchange" @begin="changeBegin" @end="changeEnd" :controls="controls" @controltap="controlList"></map>
         <p class="adress_tips" v-if="addressOnoff">{{addressInfo}}</p>
     </div>
 </template>
@@ -10,14 +10,9 @@
     const QQMap = new QQMapWX({
         key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
     })
-    import BMapWX from '../../utils/bmap-wx.js';
-    const BMap = new BMapWX({
-        ak: 'dZjnRr2t8nBpGswyCB731AFD'
-    })
     export default {
         data() {
             return {
-                pos: [],
                 mapCtx: {},
                 controls: [{
                         //控价id
@@ -54,9 +49,11 @@
                 winHeight: 0,
                 addressOnoff: false,
                 addressInfo: '正在获取您的位置...',
+                longitude: 0,
+                latitude: 0,
             }
         },
-        onLoad() {
+        onReady() {
             this.mapCtx = wx.createMapContext('myMap')
         },
         mounted() {
@@ -64,10 +61,9 @@
             wx.getLocation({
                 type: 'wgs84',
                 success: res => {
-                    // console.log(res)
-                    this.pos = res;
-                    // this.QQcityInfo(res)
-                    // this.BDcityInfo()
+                    //设置当前位置
+                    this.latitude = res.latitude;
+                    this.longitude = res.longitude;
                 },
                 fail: err => {}
             })
@@ -84,53 +80,43 @@
             })
         },
         methods: {
-            QQcityInfo(res) {
-                QQMap.reverseGeocoder({
-                    location: {
-                        latitude: res.latitude,
-                        longitude: res.longitude
-                    },
-                    success: res => {
-                        // console.log(res)
-                        //后续可请求附近跑男接口
-                        let {
-                            recommend
-                        } = res.result.formatted_addresses;
-                        this.addressOnoff = true;
-                        this.addressInfo = recommend;
-                        console.log(this.addressInfo)
-                    },
-                    fail: err => {
-                        console.log(err)
-                    }
-                })
-            },
-            BDcityInfo() {
-                BMap.regeocoding({
-                    success: res => {
-                        console.log(res)
-                    },
-                    fail: err => {
-                        console.log(err)
-                    }
-                })
-            },
             //视野发生变化时触发
             changeEnd(e) {
                 console.log('窗口变化')
-                if (e.mp.type == 'end') {
-                    //获取移动视野时的经纬度
-                    this.mapCtx.getCenterLocation({
-                        success: res => {
-                            // console.log(res)
-                            //调用逆解析
-                            this.QQcityInfo(res)
-                        },
-                        fail: err => {
-                            console.log(err)
-                        }
-                    })
-                }
+                this.location()
+            },
+            location() {
+                //获取移动视野时的经纬度
+                this.mapCtx.getCenterLocation({
+                    success: res => {
+                        //设置移动之后位置
+                        this.latitude = res.latitude;
+                        this.longitude = res.longitude;
+                        // console.log(res)
+                        //调用逆解析
+                        QQMap.reverseGeocoder({
+                            location: {
+                                latitude: res.latitude,
+                                longitude: res.longitude
+                            },
+                            success: result => {
+                                // console.log(result)
+                                let {
+                                    recommend
+                                } = result.result.formatted_addresses;
+                                this.addressOnoff = true;
+                                this.addressInfo = recommend;
+                                console.log(this.addressInfo)
+                            },
+                            fail: err => {
+                                console.log(err)
+                            }
+                        })
+                    },
+                    fail: err => {
+                        console.log(err)
+                    }
+                })
             },
             //移动到当前定位点
             controlList(e) {
@@ -147,7 +133,7 @@
 
 <style lang="less">
     .map_info {
-        height: 100%; // position: relative;
+        height: 100%;
         .qq_map {
             width: 100%;
             height: 100%;
