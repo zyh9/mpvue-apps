@@ -109,7 +109,6 @@
                         this.shopList.push(...res.Body.Shops);
                         if (this.shopList.length == 0) this.tips = true;
                     }).catch(err => {
-                        console.log(err, 0)
                         this.msg(err.Msg)
                     })
                 } else this.msg('您还没有输入内容哦')

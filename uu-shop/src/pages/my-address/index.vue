@@ -13,7 +13,7 @@
                             <p class="local_address">{{v.textInfo}}</p>
                         </div>
                     </div>
-                    <i class="icon  icon_edit" @click='goEdit(v)'></i>
+                    <div class="edit_box" @click='goEdit(v)'><i class="icon  icon_edit"></i></div>
                     <div class="list_item_del" @click='delAddress(v)' :style="{right:-delBtnWidth+'px',width:delBtnWidth+'px'}" :data-item="v">删除</div>
                 </li>
             </ul>
@@ -134,20 +134,6 @@
                 }
             },
             goEdit(item) {
-                // wx.setStorageSync('address', {
-                //     AddressNote: item.AddressNote,
-                //     name: item.AddressTitle.split(' ')[1],
-                //     location: {
-                //         lat: item.AddressLoc.split(',')[1],
-                //         lng: item.AddressLoc.split(',')[0]
-                //     },
-                //     title: item.AddressTitle.split(' ')[0],
-                //     UserNote: item.UserNote,
-                //     LinkMan: item.LinkMan,
-                //     LinkManMobile: item.LinkManMobile,
-                //     CityName: item.CityName,
-                //     CountyName: item.CountyName
-                // })
                 wx.setStorageSync('address', {
                     AddressNote: item.AddressNote,
                     name: item.AddressNote,
@@ -264,14 +250,6 @@
                                         })
                                     }, 200)
                                 }
-                                //     this.checkId = item.Id;
-                                // setTimeout(_ => {
-                                //     item.AddressTitle = item.AddressTitle.split(' ').join('($)');
-                                //     wx.setStorageSync('selectAddress', item)
-                                //     wx.navigateBack({
-                                //         delta: 1
-                                //     })
-                                // }, 200)
                             }).catch(err => {
                                 this.msg(err.Msg)
                             })
@@ -295,7 +273,7 @@
 <style lang="less">
     .my_address {
         position: relative;
-        height: 100%; // padding: 0 36rpx;
+        height: 100%;
         background: #fff;
         .main {
             padding: 0 0 110rpx 36rpx;
@@ -306,8 +284,8 @@
             overflow-x: hidden;
             overflow-y: scroll;
             li {
-                width: 100%; // border-bottom: 1rpx solid #e6e6e6;
-                transition: margin-left 0.6s ease; // height: 160rpx;
+                width: 100%;
+                transition: margin-left 0.6s ease;
                 padding: 20rpx 0;
                 display: flex;
                 align-items: center;
@@ -330,8 +308,10 @@
                         display: none;
                     }
                 }
-                .icon_edit {
+                .edit_box {
                     margin-right: 36rpx;
+                    padding: 12rpx;
+                    line-height: 1;
                 }
                 .address_item_left {
                     display: flex;

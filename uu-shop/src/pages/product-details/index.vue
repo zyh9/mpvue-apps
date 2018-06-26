@@ -182,7 +182,6 @@
                     //获取商品信息
                     this.getGoodsInfo()
                 }).catch(err => {
-                    console.log(222)
                     this.msg(err.Msg)
                 })
             },
@@ -578,7 +577,7 @@
             width: 678rpx;
             height: 678rpx;
             position: relative;
-            border-radius: 36rpx; // box-shadow: 0 0 28rpx rgba(190, 189, 189, 0.9);
+            border-radius: 36rpx;
             .shop_img {
                 width: 100%;
                 height: 100%;
@@ -821,11 +820,7 @@
             }
             .main {
                 border-radius: 10rpx;
-                background: #fff; // height: 100%;
-                // width: 100%;
-                // height: 522px;
-                // border-radius: 10rpx;
-                // overflow: hidden;
+                background: #fff;
                 width: 339px;
                 height: 522px;
                 overflow: hidden;

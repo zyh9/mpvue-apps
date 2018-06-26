@@ -6,15 +6,18 @@ const QQMap = new QQMapWX({
 })
 
 //线上地址
-// const baseUrl = 'https://stunnercustomer.uupt.com';
+const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
-const baseUrl = 'http://192.168.6.12:60003';
+// const baseUrl = 'http://192.168.6.100:60004';
+// const baseUrl = 'http://192.168.6.12:60003';
+// 孙红军
+// const baseUrl = 'http://192.168.6.89:8085';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    v: '1.0.8',
+    v: '1.1.0',
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''
@@ -185,5 +188,23 @@ const openTime = str => {
     return [`${a}:${b}-${c}:${d}`];
   }
 }
+///格式化时间  date时间对象  fmt时间格式 如yyyy/MM/dd hh:mm:ss
+const FmtTime=(date, fmt)=>{
+    var o = {
+        "M+": date.getMonth() + 1, //月份   
+        "d+": date.getDate(), //日   
+        "h+": date.getHours(), //小时   
+        "m+": date.getMinutes(), //分   
+        "s+": date.getSeconds(), //秒   
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+        "S": date.getMilliseconds() //毫秒   
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
 
-export default { get, post, openTime, qqMapInfo };
+export default { get, post, openTime, qqMapInfo,FmtTime };

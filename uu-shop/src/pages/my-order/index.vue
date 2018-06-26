@@ -4,7 +4,6 @@
             <h3 class="title">我的订单</h3>
             <p class="label">全部</p>
         </div>
-        <!-- <scroll-view scroll-y="true" :style="{height: winHeight+'px'}" lower-threshold="20" @scrolltolower="scrollHandler" v-if="tips"> -->
         <ul class="my_order_list">
             <li class="order_item" v-for="(item,index) in newOrder" :key="index">
                 <div class="lis_top" @click='goShop(item)'>
@@ -43,7 +42,6 @@
             </li>
             <div class="no_more" v-if="nomore">没有更多</div>
         </ul>
-        <!-- </scroll-view> -->
     </div>
 </template>
 
@@ -152,6 +150,7 @@
                         this.newOrder.push(...res.Body)
                     }
                 }).catch(err => {
+                    wx.hideLoading();
                     // this.msg(err.Msg)
                     console.log(err)
                 })
@@ -295,7 +294,7 @@
         background: #ebebeb;
     }
     .my_order {
-        background: #fff; // overflow-x: hidden;
+        background: #fff;
         .my_order_select {
             background: #fff;
             position: absolute;

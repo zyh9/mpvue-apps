@@ -4,8 +4,6 @@
             <h3 class="title" @click="tracking">{{orderInfo.stateText}}<i v-if='orderInfo.State>3||orderInfo.State<0' class="icon icon_arrowRight"></i></h3>
             <p class='tip' v-if='orderInfo.State>3||orderInfo.State<0' @click='tracking'>订单状态跟踪</p>
             <ul class="lis_bottom_btn">
-                <!-- 再来一单暂去掉 -->
-                <!-- <li class='btn_other' @click='againOrder' v-if='(orderInfo.State>=2&&orderInfo.State<=4)||orderInfo.State==10'>再来一单</li> -->
                 <li v-if='orderInfo.State==0||orderInfo.State==1||(orderInfo.State==2&&orderInfo.CancelApplyState==0)' @click="cancelOrder">取消订单</li>
                 <li @click='againOrder' v-if='orderInfo.State>=2||orderInfo.State<0'>再来一单</li>
                 <li class="btn_other" v-if="orderInfo.State==4" @click="okOrder">确认收货</li>
@@ -54,11 +52,15 @@
             </ul>
             <div class="consume">
                 <p class="consume_l">配送费</p>
-                <p class="consume_r"><span>¥</span>{{orderInfo.PaotuiMoney}}</p>
+                <p class="consume_r"><i v-if="orderInfo.PaotuiMoneyOff">已减{{orderInfo.PaotuiMoneyOff}}元</i><span>¥</span>{{orderInfo.PaotuiMoney}}</p>
             </div>
             <div class="consume">
                 <p class="consume_l">打包费</p>
                 <p class="consume_r"><span>¥</span>{{orderInfo.PackageMoney}}</p>
+            </div>
+            <div class="consume">
+                <p class="consume_l">店铺优惠券</p>
+                <p class="consume_r color_text">-<span>¥</span>{{orderInfo.CouponAmountMoney}}</p>
             </div>
             <div class="consume_sum">
                 <p class="consume_l">小计</p>
@@ -89,7 +91,7 @@
             </div>
             <div class="options">
                 <p>配送方式</p>
-                <p>{{orderInfo.ExpressType==1?'UU专送 立即配送':'快递配送'}}</p>
+                <p>{{orderInfo.ExpressType== 2 ? '快递配送' : '跑腿配送'}}</p>
             </div>
             <div class="options other">
                 <p>收货地址</p>
@@ -241,7 +243,6 @@
             },
             /* 再次生成订单信息 */
             OrderRePay() {
-                const that = this;
                 this.util.post({
                         url: '/api/Customer/Order/OrderRePay',
                         data: {
@@ -256,13 +257,12 @@
                                 'package': res.Body.package,
                                 'signType': 'MD5',
                                 'paySign': res.Body.paySign,
-                                'success': function(payres) {
-                                    //  wx.redirectTo({
-                                    //     url: '/pages/order-details/main?orderId='+res.Body.OrderId
-                                    // });
-                                    that.orderDetails()
+                                'success': payres => {
+                                    this.orderDetails()
                                 },
-                                'fail': function(res) {}
+                                'fail': err => {
+                                    this.msg('您已取消支付')
+                                }
                             })
                         }
                     }).catch(err => {
@@ -613,6 +613,19 @@
                     color: #999;
                     span {
                         font-size: 24rpx;
+                        display: inline-block;
+                    }
+                    &.color_text {
+                        color: #ff4d3a;
+                        span {
+                            color: #ff4d3a;
+                        }
+                    }
+                    i {
+                        font-size: 24rpx;
+                        color: #ff4d3a;
+                        display: inline-block;
+                        margin-right: 16rpx;
                     }
                 }
             }

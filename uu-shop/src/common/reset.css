@@ -377,11 +377,6 @@ input::-webkit-input-placeholder {
   height: 28rpx ;
   background-image: url('../../static/icon_coupon.png');
 }
-.icon_subtraction {
-  width: 28rpx;
-  height: 28rpx;
-  background-image: url('../../static/icon_subtraction.png');
-}
 .icon_shop {
   width: 22rpx ;
   height: 22rpx;

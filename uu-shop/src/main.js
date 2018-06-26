@@ -42,9 +42,7 @@ export default {
       '^pages/nearby-shop/main',
       'pages/search-shop/main',
       'pages/wx-auth/main',
-      'pages/pay/main',
       'pages/my-coupon/main',
-      
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

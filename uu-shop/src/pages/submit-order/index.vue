@@ -6,14 +6,13 @@
           <p class="options_top">订单配送至</p>
           <div class="options_bot">
             <p v-if="addressInfo==false">请选择收货地址</p>
-            <!-- <span v-if="addressInfo">{{addressInfo}}</span> -->
             <p v-if="addressInfo">{{addressInfo}}</p>
             <i class="icon icon_right options_img"></i>
           </div>
           <span class="linkUser" v-if="addressInfo">{{selectAddress.LinkMan}}{{selectAddress.LinkManMobile}}</span>
         </div>
         <div class="options">
-          <p>{{PaotuiMemo}}</p>
+          <p>{{ExpressType}}</p>
         </div>
       </div>
       <div class="con_order_info">
@@ -36,35 +35,29 @@
               <p class="original_price" v-if="v.GoodsType==-1">¥{{v.sumPrice}}</p>
             </div>
           </li>
-          <!-- <li v-for="(v,i) in cartListItem" :key="i" class="con_list_item">
-                                                                                                                                                            <img :src="v.GoodsMasterPic" alt="">
-                                                                                                                                                            <div class="li_info">
-                                                                                                                                                              <p>{{v.GoodName}} <span class="spec_name">{{v.SpecName?v.SpecName:''}}</span></p>
-                                                                                                                                                              <div class="li_bot">
-                                                                                                                                                                <p class="price"><span>¥</span>{{v.OriginalPrice}}</p>
-                                                                                                                                                                <p class="num">X {{v.num}}</p>
-                                                                                                                                                                <p class="sum"><span>¥</span>{{v.OriginalPrice*100*v.num/100}}</p>
-                                                                                                                                                              </div>
-                                                                                                                                                            </div>
-                                                                                                                                                          </li> -->
         </ul>
         <div class="consume">
-          <p class="consume_l">配送费</p>
-          <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'-':ExpressPrice}}</p>
+          <p class="consume_l">打包费</p>
+          <p class="consume_r"><span v-if="goodsInfo.PackageMoney!==''">¥</span>{{goodsInfo.PackageMoney===''?'-':goodsInfo.PackageMoney}}</p>
         </div>
         <div class="consume">
-          <p class="consume_l">打包费</p>
-          <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'-':goodsInfo.PackageMoney}}</p>
+          <p class="consume_l">配送费</p>
+          <p class="consume_r"><i v-if="ExpressPriceOff">已减{{ExpressPriceOff}}元</i><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'-':ExpressPrice}}</p>
         </div>
-        <!-- <div class="consume other" @click="chooseCoupon">
-              <p class="consume_l">店铺优惠券</p>
-              <p class="consume_r"><span v-if='true'>1张可用</span><span v-else class="on">- &yen; 3</span></p>
-                <i class="icon icon_arrowRight"></i>
-            </div> -->
+        <div class="consume other" @click="chooseCoupon">
+          <p class="consume_l">店铺优惠券</p>
+          <!-- goodsInfo.CouponID:没有匹配的优惠券、不使用优惠券都返回 0 ；nonuseCoupon默认0，匹配到优惠券也为0，选择不使用优惠券：变为-1-->
+          <p class="consume_r">
+            <span class="circle" v-if='goodsInfo.CouponID==0&&nonuseCoupon==0'>暂无可用优惠券</span>
+            <span class="circle" v-if='nonuseCoupon==-1'>不使用优惠券</span>
+            <span v-if="goodsInfo.CouponAmount" class="on">- ¥ {{goodsInfo.CouponAmount}}</span>
+          </p>
+          <!-- <i class="icon icon_arrowRight" v-if='goodsInfo.CouponID!=0||nonuseCoupon!=0'></i> -->
+          <i class="icon icon_arrowRight"></i>
+        </div>
         <div class="consume_sum">
           <p class="consume_l">小计</p>
-          <!-- <p class="consume_r"><span v-if="GoodPriceToken!=''">¥</span>{{ExpressPrice==''?'选择地址后计算':goodsInfo.GoodMoney+goodsInfo.PackageMoney+ExpressPrice}}</p> -->
-          <p class="consume_r" v-if="GoodPriceToken!=''"><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
+          <p class="consume_r" v-if="GoodPriceToken!=''"><i v-if="reliefSum">已节省{{reliefSum}}元</i><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
           <p class="select_num" v-if="GoodPriceToken==''">选择地址后计算</p>
         </div>
       </div>
@@ -81,17 +74,15 @@
       </div>
     </div>
     <div class="submit_bottom">
-      <!-- <p>{{ExpressPrice==''?'选择地址后计算':'¥'+(goodsInfo.GoodMoney+goodsInfo.PackageMoney+ExpressPrice)}}</p> -->
       <p><span v-if="GoodPriceToken!=''">¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
       <form @submit="formSubmit" report-submit>
-        <button formType="submit" class="pay" :class="{pay_ok:addressBlock}" plain="true">提交订单</button>
+        <button formType="submit" class="pay" :class="{pay_ok:infoOver}" plain="true">提交订单</button>
       </form>
-      <!-- <div class="pay" @click='createOrder'>提交订单</div> -->
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                      <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                      <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                    </div> -->
+                                                                                                                                                                                <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                              </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -153,7 +144,7 @@
         GoodPriceToken: '',
         /* 运费token，计算运费接口返回 */
         ExpressPriceToken: '',
-        PaotuiMemo: '配送方式+配送时长',
+        ExpressType: '配送方式+配送时长',
         totalMoney: 0,
         packageId: '', //payid
         formId: '',
@@ -161,6 +152,16 @@
         orderMsg: '',
         orderMask: false,
         block: false,
+        /* 0：无可用优惠券；-1：不使用优惠券 */
+        nonuseCoupon: 0,
+        //配送费优惠
+        ExpressPriceOff: 0,
+        //共节省金额
+        reliefSum: 0,
+        //提交订单状态
+        infoOver: false,
+        IsOrderHasAcivity: '',
+        IsAcivityAllowCoupon: ''
       }
     },
     onLoad() {
@@ -171,18 +172,33 @@
       })
     },
     onReady() {
-      this.PaotuiMemo = '配送方式+配送时长';
+      this.ExpressType = '配送方式+配送时长';
       this.GoodPriceToken = '';
       this.noteText = '';
       wx.removeStorageSync('note');
     },
     onShow() {
+      this.infoOver = false;
+      this.IsOrderHasAcivity = this.IsAcivityAllowCoupon = '';
+      /* 选择优惠券返回 */
+      if (wx.getStorageSync('couponInfo').couponId) {
+        this.goodsInfo.CouponID = wx.getStorageSync('couponInfo').couponId;
+        this.nonuseCoupon = wx.getStorageSync('couponInfo').couponId;
+        wx.removeStorageSync('couponInfo')
+      } else {
+        this.goodsInfo.CouponID = 0;
+        this.nonuseCoupon = 0;
+      }
       this.orderMask = false;
       if (this.$mp.query.orderId) {
         this.cartListItem = wx.getStorageSync('againOrder') || [];
         console.log('再来')
+        this.block = true;
+        wx.hideLoading();
         this.againOrderInfo();
       } else {
+        this.block = true;
+        wx.hideLoading();
         console.log('正常')
         // 先获取缓存数据
         let cartListSum = wx.getStorageSync('cartListSum') || [];
@@ -200,8 +216,6 @@
       }
       this.noteText = wx.getStorageSync('note') || '';
       this.selectAddress = wx.getStorageSync('selectAddress') || {};
-      this.block = true;
-      wx.hideLoading();
     },
     methods: {
       copyInfo(id) {
@@ -223,6 +237,11 @@
         if (this.$root.$mp.query.orderId) {
           wx.setStorageSync('againOrder', this.cartListItem)
         }
+        let totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000)) / 10000;
+        wx.setStorageSync('couponInfo', {
+          couponId: this.goodsInfo.CouponID,
+          totalMoney: totalMoney
+        });
         let addressId = this.selectAddress.Id ? this.selectAddress.Id : '';
         wx.navigateTo({
           url: '/pages/my-address/main?type=1&addressId=' + addressId
@@ -254,18 +273,22 @@
         this.util.post({
             url: '/api/Customer/Order/ComputeGoodsPrice',
             data: {
+              CouponId: this.goodsInfo.CouponID,
               ShopId: this.shopInfo.ShopId,
               CartOrderGoods: cartData
             }
           })
           .then(res => {
             if (res.State == 1) {
+              // console.log(this.goodsInfo)
               this.goodsInfo = res.Body;
               // console.log(this.goodsInfo.GoodsPrice, this.cartListItem)
               this.cartListItem.forEach((e, i) => { //价格计算赋值
                 e.TotalMoney = this.goodsInfo.GoodsPrice[i].TotalMoney;
                 e.sumPrice = Math.round(e.OriginalPrice * 10000) * e.num / 10000;
               })
+              this.IsOrderHasAcivity = this.goodsInfo.IsOrderHasAcivity;
+              this.IsAcivityAllowCoupon = this.goodsInfo.IsAcivityAllowCoupon;
               if (this.shopInfo.ShopLoc && this.shopInfo.ShopLoc.split(',')[0] && this.selectAddress.AddressLoc) {
                 this.Freight(res.Body.PriceToken)
               }
@@ -299,7 +322,7 @@
               !cartListSum.length && wx.removeStorageSync('cartListSum');
             }
           }).catch(err => {
-            // this.msg(err.Msg)
+            this.msg(err.Msg)
           })
       },
       //运费计算
@@ -320,14 +343,16 @@
             }
           })
           .then(res => {
-            wx.hideToast()
             if (res.State == 1) {
               this.ExpressPrice = res.Body.ExpressPrice;
               this.GoodPriceToken = res.Body.PriceToken;
               this.ExpressPriceToken = res.Body.ExpressPriceToken;
-              this.PaotuiMemo = res.Body.PaotuiMemo;
-              this.totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000)) / 10000;
-              // console.log(this.totalMoney)
+              this.ExpressType = res.Body.ExpressType == 2 ? '快递配送' : '跑腿配送';
+              this.totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000) - Math.round(this.goodsInfo.CouponAmount * 10000)) / 10000;
+              this.ExpressPriceOff = res.Body.ExpressPriceOff;
+              this.reliefSum = (Math.round(this.goodsInfo.GoodPriceOffMoney * 10000) + Math.round(this.goodsInfo.CouponAmount * 10000) + Math.round(res.Body.ExpressPriceOff * 10000)) / 10000;
+              // console.log(this.reliefSum);
+              this.infoOver = true;
             }
           }).catch(err => {
             this.msg(err.Msg)
@@ -338,6 +363,10 @@
         if (!this.addressInfo) {
           this.msg('请选择收货地址');
           return
+        }
+        if (this.infoOver == false) {
+          this.msg('网络拥挤，请稍后重试')
+          return;
         }
         this.util.post({
             url: '/api/Customer/Order/CreateOrder',
@@ -370,6 +399,7 @@
                     !cartListSum.length && wx.removeStorageSync('cartListSum');
                     wx.removeStorageSync('note');
                     wx.removeStorageSync('selectAddress');
+                    wx.removeStorageSync('couponInfo');
                     setTimeout(_ => {
                       /* 支付成功跳转订单列表 */
                       wx.redirectTo({
@@ -464,6 +494,11 @@
           wx.setStorageSync('againOrder', this.cartListItem)
         }
         wx.setStorageSync('selectAddress', this.selectAddress);
+        let totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000)) / 10000;
+        wx.setStorageSync('couponInfo', {
+          couponId: this.goodsInfo.CouponID,
+          totalMoney: totalMoney
+        });
         wx.navigateTo({
           url: '/pages/add-note/main'
         })
@@ -563,9 +598,17 @@
         if (this.$root.$mp.query.orderId) {
           wx.setStorageSync('againOrder', this.cartListItem)
         }
+        /* 未计算价格 或 没有匹配到优惠券*/
+        let check = this.goodsInfo.CouponID == 0 && this.nonuseCoupon == 0 ? 2 : 1;
+        // console.log(this.IsOrderHasAcivity,this.IsAcivityAllowCoupon)
         wx.navigateTo({
-          url: '/pages/my-coupon/main?type=3'
-        });
+          url: `/pages/my-coupon/main?type=3&checked=${check}&isActive=${this.IsOrderHasAcivity}&isCoupon=${this.IsAcivityAllowCoupon}`
+        })
+        let totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000)) / 10000;
+        wx.setStorageSync('couponInfo', {
+          couponId: this.goodsInfo.CouponID,
+          totalMoney: totalMoney
+        })
       }
     },
     components: {},
@@ -586,9 +629,6 @@
       addressInfo: function() {
         return this.selectAddress.AddressTitle ? `${this.selectAddress.AddressTitle} ${this.selectAddress.AddressNote}`.split('($)').join(' ') : false
       },
-      addressBlock: function() {
-        return this.addressInfo ? true : false;
-      }
     }
   }
 </script>
@@ -732,7 +772,7 @@
               .name {
                 font-size: 28rpx;
                 color: #1d1d1d;
-                line-height: 30rpx;
+                line-height: 32rpx;
                 width: 426rpx;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -815,7 +855,14 @@
             white-space: nowrap;
             color: #999;
             span {
+              display: inline-block;
               font-size: 24rpx;
+            }
+            i {
+              display: inline-block;
+              font-size: 24rpx;
+              color: #ff4d3a;
+              margin-right: 16rpx;
             }
           }
           &.other {
@@ -824,18 +871,22 @@
               text-align: right;
               span {
                 display: inline-block;
-                padding: 8rpx 15rpx;
-                background: #ff4d3a;
-                font-size: 22rpx;
-                line-height: 22rpx;
-                color: #fff;
-                border-radius: 4rpx;
+                font-size: 28rpx;
+                color: #b2b2b2;
+                background: transparent;
                 margin-right: 15rpx;
                 &.on {
-                  font-size: 28rpx;
+                  font-size: 26rpx;
                   color: #ff4d3a;
                   background: transparent;
+                  margin-right: 0;
                 }
+              }
+              .circle {
+                margin-right: 0;
+                font-size: 24rpx;
+                color: #b2b2b2;
+                padding: 0 6rpx;
               }
             }
           }
@@ -869,7 +920,14 @@
             white-space: nowrap;
             color: #1d1d1d;
             span {
+              display: inline-block;
               font-size: 26rpx;
+            }
+            i {
+              font-size: 24rpx;
+              color: #b2b2b2;
+              display: inline-block;
+              margin-right: 16rpx;
             }
           }
           .select_num {
