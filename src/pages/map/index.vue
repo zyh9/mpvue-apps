@@ -15,7 +15,7 @@
             return {
                 mapCtx: {},
                 controls: [{
-                        //控价id
+                        //控件id
                         id: 1,
                         //图标路径
                         iconPath: require('../../../static/myAddr.png'),
@@ -30,7 +30,7 @@
                         clickable: true
                     },
                     {
-                        //控价id
+                        //控件id
                         id: 2,
                         //图标路径
                         iconPath: require('../../../static/circlel.png'),
