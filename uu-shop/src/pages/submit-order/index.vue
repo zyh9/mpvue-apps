@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                              </div> -->
+                                                                                                                                                                                  <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                  <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -109,7 +109,7 @@
     </div>
     <div class="shop_update_mask" v-if="orderMask">
       <div class="update_con">
-        <h3>提示</h3>
+        <i class="icon_commodity"></i>
         <p>{{orderMsg}}</p>
         <div class="btn" @click="backStore">返回购物车</div>
       </div>
@@ -588,6 +588,7 @@
             url: `/pages/my-store/main?ShopId=${this.shopInfo.ShopId}&type=1`
           })
         } else {
+          this.$store.dispatch('backIndex', true)
           wx.navigateBack({
             delta: 1,
           })
@@ -1066,13 +1067,6 @@
         align-items: center;
         padding: 66rpx 36rpx 36rpx;
         border-radius: 8rpx;
-        h3 {
-          font-size: 36rpx;
-          font-weight: 700;
-          color: #333;
-          margin-bottom: 53rpx;
-          line-height: 1;
-        }
         p {
           width: 58%;
           color: #b2b2b2;
@@ -1084,7 +1078,7 @@
           margin-top: 64rpx;
           height: 74rpx;
           border: 30rpx;
-          background: #ff4d3a;
+          background: #1a1a1a;
           color: #fff;
           border-radius: 8rpx;
           text-align: center;

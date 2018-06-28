@@ -43,6 +43,8 @@ export default {
       'pages/search-shop/main',
       'pages/wx-auth/main',
       'pages/my-coupon/main',
+      //地图
+      'pages/map/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light

@@ -36,12 +36,30 @@
     },
     methods: {
       getInfo(res) {
-        let {
-          userInfo
-        } = res.target;
-        wx.setStorageSync('userInfo', JSON.stringify(userInfo))
-        //提交验证码
-        this.commitSms(userInfo)
+        if (res.target.userInfo) {
+          wx.setStorageSync('userInfo', JSON.stringify(res.target.userInfo))
+          //提交验证码
+          this.commitSms(res.target.userInfo)
+        } else {
+          this.model()
+        }
+      },
+      model() {
+        wx.showModal({
+          title: '提示',
+          content: '需要您重新授权',
+          success: res => {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '/pages/wx-auth/main'
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+              this.model();
+            }
+          }
+        })
       },
       //发送验证码
       sendSms() {

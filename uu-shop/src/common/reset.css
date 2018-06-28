@@ -294,6 +294,18 @@ input::-webkit-input-placeholder {
 .icon_express {
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/expressLogo.png');
 }
+.icon_dada {
+  background-image: url('../../static/dada-img.png');
+}
+.icon_commodity {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 120rpx;
+  height: 120rpx;
+  background-image: url('../../static/commodity.png');
+}
 .icon_receipt {
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/receipt.png');
 }

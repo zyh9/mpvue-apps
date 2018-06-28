@@ -1,8 +1,11 @@
 <template>
     <div class="order_details" v-if="block" :class="{hidden:isTracking}">
+        <div class="map_details" v-if="mapErr&&mapBlock&&orderInfo.State>=4&&orderInfo.State<10&&orderInfo.ExpressType!= 2" :style="{height:winHeight+'px'}">
+            <map id="myMap" :longitude="longitude" :latitude="latitude" scale="15" :markers="markers" include-points=""></map>
+        </div>
         <div class="order_details_top">
             <h3 class="title" @click="tracking">{{orderInfo.stateText}}<i v-if='orderInfo.State>3||orderInfo.State<0' class="icon icon_arrowRight"></i></h3>
-            <p class='tip' v-if='orderInfo.State>3||orderInfo.State<0' @click='tracking'>订单状态跟踪</p>
+            <p class='tip' v-if='orderInfo.State>=4&&orderInfo.State<10'>{{tips}}</p>
             <ul class="lis_bottom_btn">
                 <li v-if='orderInfo.State==0||orderInfo.State==1||(orderInfo.State==2&&orderInfo.CancelApplyState==0)' @click="cancelOrder">取消订单</li>
                 <li @click='againOrder' v-if='orderInfo.State>=2||orderInfo.State<0'>再来一单</li>
@@ -11,7 +14,7 @@
                 <li class="btn_other" v-if='orderInfo.State==0' @click='OrderRePay'>继续支付</li>
             </ul>
             <!-- 跑腿配送 -->
-            <div class="uu_man_info" @click='tel(orderInfo.PaotuiInfo.DriverMobile)' v-if='orderInfo.PaotuiInfo!=null&&orderInfo.ExpressType==1&&(orderInfo.State==4||orderInfo.State==10)'>
+            <div class="uu_man_info" @click='tel(orderInfo.PaotuiInfo.DriverMobile)' v-if='orderInfo.PaotuiInfo!=null&&orderInfo.ExpressType==1&&(orderInfo.State==4||orderInfo.State==5||orderInfo.State==10)'>
                 <div class="info_left">
                     <img :src="orderInfo.PaotuiInfo.DriverPhoto?orderInfo.PaotuiInfo.DriverPhoto:'https://otherfiles-ali.uupt.com/Stunner/FE/C/man.png'" alt="" class="left_icon">
                     <div class="info_text">
@@ -22,7 +25,7 @@
                 <i class="icon  icon_tel"></i>
             </div>
             <!-- 快递配送 -->
-            <div class="uu_man_info" v-if='orderInfo.ExpressInfo!=null&&orderInfo.ExpressType==2&&(orderInfo.State==4||orderInfo.State==10)'>
+            <div class="uu_man_info" v-if='orderInfo.ExpressInfo!=null&&orderInfo.ExpressType==2&&(orderInfo.State==4||orderInfo.State==5||orderInfo.State==10)'>
                 <div class="info_left">
                     <i class="icon icon_express left_icon"></i>
                     <div class="info_text">
@@ -31,6 +34,21 @@
                     </div>
                     <span class="copy_info" @click='copyInfo(orderInfo.ExpressInfo.OrderId)'>复制</span>
                 </div>
+            </div>
+            <!-- 达达配送 -->
+            <div class="uu_man_info" @click='tel(orderInfo.PaotuiInfo.DriverMobile)' v-if='orderInfo.PaotuiInfo!=null&&orderInfo.ExpressType==3&&(orderInfo.State==4||orderInfo.State==5||orderInfo.State==10)'>
+                <div class="info_left">
+                    <i class="icon icon_dada left_icon"></i>
+                    <div class="info_text">
+                        <p class="company">达达跑腿</p>
+                        <p class="uu_man_name">{{orderInfo.PaotuiInfo.DriverName}}为您服务</p>
+                    </div>
+                </div>
+                <i class="icon  icon_tel"></i>
+            </div>
+            <div class="line_box" @click="moveMap" v-if="mapErr&&orderInfo.State>=4&&orderInfo.State<10&&orderInfo.ExpressType!= 2">
+                <i></i>
+                <i></i>
             </div>
         </div>
         <div class="order_details_con">
@@ -58,7 +76,7 @@
                 <p class="consume_l">打包费</p>
                 <p class="consume_r"><span>¥</span>{{orderInfo.PackageMoney}}</p>
             </div>
-            <div class="consume">
+            <div class="consume" v-if="orderInfo.CouponAmountMoney>0">
                 <p class="consume_l">店铺优惠券</p>
                 <p class="consume_r color_text">-<span>¥</span>{{orderInfo.CouponAmountMoney}}</p>
             </div>
@@ -114,7 +132,7 @@
                 <p>{{orderInfo.OrderCreateTime}}</p>
             </div>
         </div>
-        <div class="mask" v-if='isTracking||isLay' @click='isTracking=false,isLay=false'></div>
+        <div class="mask" v-if='isTracking' @click='closeMask'></div>
         <div class="orderTracking" v-if='isTracking'>
             <h2 class="title">订单状态跟踪</h2>
             <div class="main">
@@ -125,13 +143,14 @@
                     </li>
                 </ul>
             </div>
-            <div class="close" @click='isTracking=false'>关闭</div>
+            <div class="close" @click='closeMask'>关闭</div>
         </div>
         <!-- <span class="go_index" @click="goIndex">回到首页</span> -->
     </div>
 </template>
 
 <script>
+    import gcoord from 'gcoord';
     export default {
         data() {
             return {
@@ -140,6 +159,18 @@
                 trackingList: [],
                 block: false,
                 timer: null,
+                markers: [],
+                winHeight: 0,
+                scrollTop: 0,
+                mapBlockHeight: 0,
+                mapBlock: true,
+                latitude: 0,
+                longitude: 0,
+                shopMap: '',
+                userMap: '',
+                manMap: '',
+                tips: '',
+                mapErr: true,
             }
         },
         onLoad() {
@@ -150,14 +181,23 @@
             })
         },
         onReady() {
-            clearInterval(this.timer)
+            clearInterval(this.timer);
             this.timer = null;
+            this.winHeight = this.mapBlockHeight = 0;
+            this.mapBlock = true;
+            this.mapErr = true;
             this.isTracking = false;
+            this.tips = '';
             this.orderDetails()
+        },
+        onPageScroll(e) {
+            // console.log(e.scrollTop)
+            this.scrollTop = e.scrollTop;
         },
         methods: {
             /* 订单状态文字 */
-            orderLabels(state, CancelApplyState) {
+            orderLabels(state, CancelApplyState, ExpressType) {
+                // console.log(ExpressType)
                 let text = '';
                 switch (state) {
                     case 0:
@@ -188,7 +228,10 @@
                         text = '正在配货';
                         break;
                     case 4:
-                        text = '配送中';
+                        text = ExpressType == 2 ? '已发货' : '跑男已接单';
+                        break;
+                    case 5:
+                        text = '跑男已取货';
                         break;
                     case 10:
                         text = '已完成';
@@ -197,6 +240,11 @@
                     case -2:
                     case -3:
                     case -4:
+                    case -5:
+                    case -6:
+                    case -7:
+                    case -8:
+                    case -9:
                         text = '已取消';
                         break;
                 }
@@ -269,6 +317,99 @@
                         this.msg(err.Msg)
                     })
             },
+            async requireImg(ExpressType, State) {
+                this.shopMap = await this.util.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/mapicon/shop-map.png');
+                this.userMap = await this.util.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/mapicon/user-map.png');
+                this.manMap = await this.util.downImg(ExpressType == 1 ? 'https://otherfiles-ali.uupt.com/Stunner/FE/C/mapicon/uupt-map.png' : 'https://otherfiles-ali.uupt.com/Stunner/FE/C/mapicon/dada-map.png');
+                // this.orderInfo.ShopLoc 店铺坐标
+                // this.orderInfo.PaotuiInfo.DriverLastLoc 跑实时坐标
+                // this.orderInfo.ReceiverLoc 收货人坐标
+                let ShopLoc = this.trans({
+                    latitude: this.orderInfo.ShopLoc.split(',')[1],
+                    longitude: this.orderInfo.ShopLoc.split(',')[0],
+                });
+                let DriverLastLoc;
+                if (ExpressType == 1) {
+                    console.log('跑腿订单');
+                    if (this.orderInfo.PaotuiInfo.DriverLastLoc) {
+                        DriverLastLoc = this.trans({
+                            latitude: this.orderInfo.PaotuiInfo.DriverLastLoc.split(',')[1],
+                            longitude: this.orderInfo.PaotuiInfo.DriverLastLoc.split(',')[0],
+                        })
+                    } else {
+                        this.mapErr = false;
+                    }
+                } else {
+                    console.log('达达订单');
+                    if (this.orderInfo.PaotuiInfo.DriverLastLoc) {
+                        DriverLastLoc = this.gdMap({
+                            latitude: this.orderInfo.PaotuiInfo.DriverLastLoc.split(',')[1],
+                            longitude: this.orderInfo.PaotuiInfo.DriverLastLoc.split(',')[0],
+                        })
+                    } else {
+                        this.mapErr = false;
+                    }
+                }
+                let ReceiverLoc = this.trans({
+                    latitude: this.orderInfo.ReceiverLoc.split(',')[1],
+                    longitude: this.orderInfo.ReceiverLoc.split(',')[0],
+                });
+                // console.log(ShopLoc, DriverLastLoc, ReceiverLoc)
+                this.markers = [{
+                    iconPath: this.shopMap,
+                    id: 0,
+                    latitude: ShopLoc.latitude,
+                    longitude: ShopLoc.longitude,
+                    width: 30,
+                    height: 36
+                }, {
+                    iconPath: this.manMap,
+                    id: 1,
+                    latitude: DriverLastLoc.latitude,
+                    longitude: DriverLastLoc.longitude,
+                    width: 40,
+                    height: 50
+                }, {
+                    iconPath: this.userMap,
+                    id: 2,
+                    latitude: ReceiverLoc.latitude,
+                    longitude: ReceiverLoc.longitude,
+                    width: 30,
+                    height: 36
+                }];
+                this.latitude = DriverLastLoc.latitude;
+                this.longitude = DriverLastLoc.longitude;
+                if (State == 4 || State == 5) {
+                    this.util.QQMap.calculateDistance({
+                        mode: 'driving',
+                        from: `${DriverLastLoc.latitude},${DriverLastLoc.longitude}`,
+                        to: State == 4 ? `${ShopLoc.latitude},${ShopLoc.longitude}` : `${ReceiverLoc.latitude},${ReceiverLoc.longitude}`,
+                        success: res => {
+                            this.tips = State == 4 ? `跑男距店${res.result.elements[0].distance}m` : `跑男距您${res.result.elements[0].distance}m`;
+                        },
+                        fail: err => {
+                            this.msg('订单距离计算失败')
+                        }
+                    })
+                } else if (State == 10) {
+                    this.tips = '感谢光临，很高兴为您服务';
+                }
+                if (this.mapBlock) {
+                    setTimeout(_ => {
+                        let query = wx.createSelectorQuery();
+                        query.select('.order_details_top').boundingClientRect()
+                        query.exec(res => {
+                            let height = res[0].height;
+                            wx.getSystemInfo({
+                                success: res => {
+                                    // console.log(res)
+                                    this.winHeight = this.mapBlockHeight = res.windowHeight - height;
+                                }
+                            })
+                        })
+                    }, 200)
+                }
+            },
             //订单详情
             orderDetails() {
                 this.util.post({
@@ -280,9 +421,30 @@
                     wx.hideLoading();
                     this.block = true;
                     this.orderInfo = Object.assign({}, res.Body, {
-                        stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState)
+                        stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState, res.Body.ExpressType)
                     })
+                    //地图所需信息
+                    if (this.orderInfo.State >= 4 && this.orderInfo.State < 10 && this.orderInfo.ExpressType != 2) {
+                        // console.log(this.util.downImg)
+                        this.requireImg(this.orderInfo.ExpressType, this.orderInfo.State).catch(err => {
+                            this.msg('地图信息获取失败')
+                        })
+                    }
+                    //订单跟踪信息
+                    if (this.orderInfo.State > 3 || this.orderInfo.State < 0) {
+                        this.orderTracking()
+                    }
+                    //订单超时取消 => 跳转至订单列表页
+                    if (this.orderInfo.State == -1 || this.orderInfo.State == -9) {
+                        setTimeout(_ => {
+                            /* 支付成功跳转订单列表 */
+                            wx.redirectTo({
+                                url: '/pages/my-order/main'
+                            })
+                        }, 800)
+                    }
                 }).catch(err => {
+                    wx.hideLoading();
                     this.msg(err.Msg)
                 })
             },
@@ -320,19 +482,18 @@
             },
             /* 订单跟踪 */
             orderTracking() {
-                this.isTracking = true,
-                    this.util.post({
-                        url: '/api/Customer/Order/OrderStateTrace',
-                        data: {
-                            OrderID: this.$mp.query.orderId
-                        }
-                    }).then(res => {
-                        if (res.State == 1) {
-                            this.trackingList = res.Body;
-                        }
-                    }).catch(err => {
-                        this.msg(err.Msg)
-                    })
+                this.util.post({
+                    url: '/api/Customer/Order/OrderStateTrace',
+                    data: {
+                        OrderID: this.$mp.query.orderId
+                    }
+                }).then(res => {
+                    if (res.State == 1) {
+                        this.trackingList = res.Body;
+                    }
+                }).catch(err => {
+                    this.msg(err.Msg)
+                })
             },
             /* 再来一单 */
             againOrder() {
@@ -342,14 +503,69 @@
             },
             tracking() {
                 if (this.orderInfo.State > 3 || this.orderInfo.State < 0) {
+                    this.winHeight = 0;
+                    this.mapBlock = false;
                     this.isTracking = true;
-                    this.orderTracking()
+                }
+            },
+            closeMask() {
+                this.isTracking = false;
+                // if (this.orderInfo.State >= 4 && this.orderInfo.State < 10 && this.orderInfo.ExpressType != 2) {
+                //     console.log('关闭')
+                //     this.mapBlock = true;
+                //     this.winHeight = this.mapBlockHeight;
+                //     console.log(this.mapBlock, this.winHeight)
+                // }
+            },
+            moveMap() {
+                if (this.mapBlock && this.winHeight > 0) {
+                    this.winHeight = 0;
+                    this.mapBlock = false;
+                } else {
+                    this.mapBlock = true;
+                    this.winHeight = this.mapBlockHeight;
                 }
             },
             goIndex() {
                 wx.switchTab({
                     url: '/pages/nearby-shop/main'
                 })
+            },
+            trans(pos) {
+                // console.log(pos)
+                let {
+                    latitude,
+                    longitude
+                } = pos;
+                var result = gcoord.transform(
+                    [latitude, longitude], // 经纬度坐标
+                    gcoord.BD09, // 当前坐标系
+                    gcoord.WGS84, // 目标坐标系
+                );
+                let location = {
+                    latitude: String(result[0]),
+                    longitude: String(result[1])
+                }
+                // console.log(location)
+                return location;
+            },
+            gdMap(pos) {
+                // console.log(pos)
+                let {
+                    latitude,
+                    longitude
+                } = pos;
+                var result = gcoord.transform(
+                    [latitude, longitude], // 经纬度坐标
+                    gcoord.GCJ02, // 当前坐标系
+                    gcoord.WGS84, // 目标坐标系
+                );
+                let location = {
+                    latitude: String(result[0]),
+                    longitude: String(result[1])
+                }
+                // console.log(location)
+                return location;
             }
         },
         components: {},
@@ -365,6 +581,10 @@
                         this.orderDetails();
                     }, 7000)
                 }
+            },
+            scrollTop: function(newVal, oldVal) {
+                newVal > this.winHeight && (this.mapBlock = false, this.winHeight = 0);
+                // console.log(newVal, this.mapBlock)
             }
         },
         onUnload() {
@@ -391,36 +611,45 @@
         }
     }
     .order_details {
-        height: 100%;
         background: #ebebeb;
-        overflow-x: hidden;
         position: relative;
+        .map_details {
+            height: 820rpx;
+            transition: all 0.2s ease;
+            map {
+                height: 100%;
+                width: 100%;
+            }
+        }
         .order_details_top {
             margin-bottom: 20rpx;
             background: #fff;
+            overflow: hidden;
+            position: relative;
             .title {
                 font-size: 36rpx;
                 color: #000;
                 font-weight: 700;
-                height: 80rpx;
-                line-height: 80rpx;
+                height: 60rpx;
+                line-height: 60rpx;
                 padding: 0 35rpx;
                 text-align: center;
-                padding-top: 66rpx;
+                margin-top: 46rpx;
+                margin-bottom: 4rpx;
                 .icon {
                     margin-right: -25rpx;
                 }
             }
             .tip {
                 text-align: center;
-                font-size: 28rpx;
-                color: #666666;
+                font-size: 22rpx;
+                color: #adadad;
                 line-height: 30rpx;
-                margin: 10rpx auto 15rpx;
+                margin-bottom: 6rpx;
             }
             .uu_man_info {
                 display: flex;
-                padding: 35rpx 0;
+                padding: 20rpx 0;
                 margin: 0 35rpx;
                 align-items: center;
                 justify-content: space-between;
@@ -478,7 +707,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 20rpx 120rpx 36rpx;
+                padding: 20rpx 120rpx 30rpx;
                 margin: 0 35rpx;
                 li {
                     width: 184rpx;
@@ -494,6 +723,21 @@
                         background: #ff4d3a;
                         color: #fff;
                     }
+                }
+            }
+            .line_box {
+                position: absolute;
+                left: 50%;
+                top: 4rpx;
+                transform: translateX(-50%);
+                padding: 16rpx;
+                z-index: 2;
+                i {
+                    width: 46rpx;
+                    height: 3rpx;
+                    border-radius: 1.5rpx;
+                    background: #e4e4e4;
+                    margin-bottom: 6rpx;
                 }
             }
         }
@@ -874,5 +1118,6 @@
     }
     .hidden {
         overflow: hidden !important;
+        height: 100%;
     }
 </style>

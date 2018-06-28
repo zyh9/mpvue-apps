@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                                                                                                                                        <cover-view class="shareCover" >
-                                                                                                                                                                                                                                                                                                                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                                                                                                                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                                                                                                                                        </cover-view>
-                                                                                                                                                                                                                                                                                                                                        </canvas>
+                                                                                                                                                                                                                                                                                                                                                        <cover-view class="shareCover" >
+                                                                                                                                                                                                                                                                                                                                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                                                                                                                                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                                                                                                                                                        </cover-view>
+                                                                                                                                                                                                                                                                                                                                                        </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -362,6 +362,13 @@
             }
         },
         onShow() { //页面渲染就会触发
+            console.log(this.$store.state.mutations.backIndex ? '存在不可结算商品' : '正常进入店铺')
+            if (this.$store.state.mutations.backIndex) {
+                this.shopInfoSum().catch(err => {
+                    wx.hideLoading();
+                    this.msg(err.Msg)
+                })
+            }
             this.couponActive = false;
             this.cartActive = false;
             this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
@@ -487,6 +494,7 @@
                 })
                 wx.hideLoading()
                 this.block = true;
+                this.$store.dispatch('backIndex', false)
                 // console.log(this.shopPageIndex)
                 //获取分类以及分页
                 this.allShopInfoList.length && this.shopPageInfo(this.allShopInfoList[0].ID);
