@@ -24,11 +24,7 @@
                             <p class="address">{{item.ShopAddress}}</p>
                             <div class="option" v-if="item.PaotuiPriceOff"><i class="icon_set"></i><span class="coupon_text">{{item.PaotuiPriceOff}}</span></div>
                             <div class="option" v-if="item.Coupons"><i class="icon icon_coupon"></i><span class="coupon_text">{{item.Coupons}}</span></div>
-<<<<<<< HEAD
                             <div class="option" v-if="!item.PaotuiPriceOff&&!item.Coupons"><span class="no_coupon_text">{{item.NoPerMessage}}</span></div>
-=======
-                            <div class="option" v-if="!item.PaotuiPriceOff&&!item.Coupons"><span class="no_coupon_text">店主正在赶来的路上，关注店铺优惠马上就来！</span></div>
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
                         </div>
                     </div>
                 </div>

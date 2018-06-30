@@ -328,13 +328,10 @@
                     latitude: this.orderInfo.ShopLoc.split(',')[1],
                     longitude: this.orderInfo.ShopLoc.split(',')[0],
                 });
-<<<<<<< HEAD
                 let ReceiverLoc = this.trans({
                     latitude: this.orderInfo.ReceiverLoc.split(',')[1],
                     longitude: this.orderInfo.ReceiverLoc.split(',')[0],
                 });
-=======
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
                 let DriverLastLoc;
                 if (ExpressType == 1) {
                     console.log('跑腿订单');
@@ -357,7 +354,6 @@
                         this.mapErr = false;
                     }
                 }
-<<<<<<< HEAD
                 // console.log(ShopLoc, DriverLastLoc, ReceiverLoc)
                 //跑男坐标存在
                 if (this.orderInfo.PaotuiInfo.DriverLastLoc) {
@@ -432,68 +428,6 @@
                 s = Math.round(s * 10000) / 10000;
                 return s * 10
             },
-=======
-                let ReceiverLoc = this.trans({
-                    latitude: this.orderInfo.ReceiverLoc.split(',')[1],
-                    longitude: this.orderInfo.ReceiverLoc.split(',')[0],
-                });
-                // console.log(ShopLoc, DriverLastLoc, ReceiverLoc)
-                this.markers = [{
-                    iconPath: this.shopMap,
-                    id: 0,
-                    latitude: ShopLoc.latitude,
-                    longitude: ShopLoc.longitude,
-                    width: 30,
-                    height: 36
-                }, {
-                    iconPath: this.manMap,
-                    id: 1,
-                    latitude: DriverLastLoc.latitude,
-                    longitude: DriverLastLoc.longitude,
-                    width: 40,
-                    height: 50
-                }, {
-                    iconPath: this.userMap,
-                    id: 2,
-                    latitude: ReceiverLoc.latitude,
-                    longitude: ReceiverLoc.longitude,
-                    width: 30,
-                    height: 36
-                }];
-                this.latitude = DriverLastLoc.latitude;
-                this.longitude = DriverLastLoc.longitude;
-                if (State == 4 || State == 5) {
-                    this.util.QQMap.calculateDistance({
-                        mode: 'driving',
-                        from: `${DriverLastLoc.latitude},${DriverLastLoc.longitude}`,
-                        to: State == 4 ? `${ShopLoc.latitude},${ShopLoc.longitude}` : `${ReceiverLoc.latitude},${ReceiverLoc.longitude}`,
-                        success: res => {
-                            this.tips = State == 4 ? `跑男距店${res.result.elements[0].distance}m` : `跑男距您${res.result.elements[0].distance}m`;
-                        },
-                        fail: err => {
-                            this.msg('订单距离计算失败')
-                        }
-                    })
-                } else if (State == 10) {
-                    this.tips = '感谢光临，很高兴为您服务';
-                }
-                if (this.mapBlock) {
-                    setTimeout(_ => {
-                        let query = wx.createSelectorQuery();
-                        query.select('.order_details_top').boundingClientRect()
-                        query.exec(res => {
-                            let height = res[0].height;
-                            wx.getSystemInfo({
-                                success: res => {
-                                    // console.log(res)
-                                    this.winHeight = this.mapBlockHeight = res.windowHeight - height;
-                                }
-                            })
-                        })
-                    }, 200)
-                }
-            },
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
             //订单详情
             orderDetails() {
                 this.util.post({
@@ -526,14 +460,11 @@
                                 url: '/pages/my-order/main'
                             })
                         }, 800)
-<<<<<<< HEAD
                     }
                     if (this.orderInfo.State == 10) {
                         this.tips = '感谢光临，很高兴为您服务';
                         this.timer = null;
                         clearInterval(this.timer);
-=======
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
                     }
                 }).catch(err => {
                     wx.hideLoading();

@@ -8,11 +8,7 @@ const QQMap = new QQMapWX({
 //线上地址
 const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
-<<<<<<< HEAD
 // const baseUrl = 'http://192.168.6.180:8060';
-=======
-const baseUrl = 'http://192.168.6.180:8060';
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
 // const baseUrl = 'http://192.168.6.100:60004';
 // const baseUrl = 'http://192.168.6.12:60003';
 // 孙红军
@@ -21,11 +17,7 @@ const baseUrl = 'http://192.168.6.180:8060';
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-<<<<<<< HEAD
     v: '1.1.2',
-=======
-    v: '1.1.1',
->>>>>>> 29699e5ccc1692844edddb24111469d70a07a737
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''
