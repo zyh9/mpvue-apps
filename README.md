@@ -20,9 +20,11 @@
 
 [百度 微信小程序 SDK](https://github.com/baidumapapi/wxapp-jsapi)
 
-### 距离计算
+[高德 微信小程序 SDK](http://lbs.amap.com/api/wx/summary)
 
-> 此距离计算是直线距离的计算，目前我只是用作附近地址的距离计算
+> 高德 微信小程序 key：801939221fec22a5fd38c25dfd8b2e97
+
+### 距离计算
 
 ```javascript
 	distance(lat1, lng1, lat2, lng2) {
@@ -124,175 +126,179 @@
 ```javascript
 	import QQMapWX from './qqmap-wx-jssdk.js';
 	const QQMap = new QQMapWX({
-	  key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
+		key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
 	})
-	
-	//请求地址
+
+	//数据请求地址
 	const baseUrl = 'http://192.168.6.66:6001';
-	
+
 	const commonHeader = _ => {
-	  //headers每次必传数据存放位置
-	  return {
-	    // appid: 'wxbf3133166adc4375'
-	  }
+		//headers每次必传数据存放位置
+		return {
+			// appid: 'wxbf3133166adc4375'
+		}
 	}
-	
+
 	//get数据请求
 	const get = (opt = {}) => {
-	  let time = new Date().getTime();
-	  const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
-	  opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
-	  return new Promise((resolve, reject) => {
-	    let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
-	    wx.request({
-	      url: baseUrl + address,
-	      header: editHeaders,
-	      method: "GET",
-	      success: res => {
-	        setTimeout(_ => {
-	          resolve(res.data)
-	        }, 0)
-	      },
-	      fail: err => {
-	        reject(err);
-	      }
-	    })
-	  })
+		let time = new Date().getTime();
+		const str = Object.entries(opt.params).map(e => `${e[0]}=${e[1]}`).join("&").replace(/\s/g, '');
+		let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
+		opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
+		return new Promise((resolve, reject) => {
+			let address = str ? `${opt.url}?${str}&t=${time}` : `${url}?t=${time}`;
+			wx.request({
+				url: baseUrl + address,
+				header: editHeaders,
+				method: "GET",
+				success: res => {
+					setTimeout(_ => {
+						resolve(res.data)
+					}, 0)
+				},
+				fail: err => {
+					reject(err);
+				}
+			})
+		})
 	}
-	
+
 	//post数据请求
 	const post = (opt = {}) => {
-	  let time = new Date().getTime();
-	  let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
-	  opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
-	  return new Promise((resolve, reject) => {
-	    wx.request({
-	      url: `${baseUrl}${opt.url}?t=${time}`,
-	      data: opt.data || {},
-	      header: editHeaders,
-	      method: "POST",
-	      success: res => {
-	        setTimeout(_ => {
-	          if (res.data.State == 1) {
-	            //返回正常的数据
-	            resolve(res.data)
-	          } else if (res.data.State == -10) {
-	            //针对token失效问题
-	            //调用wxLogin接口
-	            wxLogin()
-	            resolve(res.data)
-	          } else {
-	            //抛出异常
-	            reject(res.data)
-	          }
-	        }, 0)
-	      },
-	      fail: err => {
-	        reject(err)
-	      }
-	    })
-	  })
+		let time = new Date().getTime();
+		let editHeaders = Object.assign({}, { 'content-type': 'application/json' }, commonHeader())
+		opt.headers && (editHeaders = Object.assign({}, editHeaders, opt.headers))
+		return new Promise((resolve, reject) => {
+			wx.request({
+				url: `${baseUrl}${opt.url}?t=${time}`,
+				data: opt.data || {},
+				header: editHeaders,
+				method: "POST",
+				success: res => {
+					setTimeout(_ => {
+						if (res.data.State == 1) {
+							//返回正常的数据
+							resolve(res.data)
+						} else if (res.data.State == -10) {
+							//针对token失效问题
+							//调用wxLogin接口
+							wxLogin()
+							resolve(res.data)
+						} else if (res.data.State == -1010) {
+							//跑腿地址同步
+							resolve(res.data)
+						} else {
+							//抛出异常
+							reject(res.data)
+						}
+					}, 0)
+				},
+				fail: err => {
+					reject(err)
+				}
+			})
+		})
 	}
-	
+
 	//地理位置获取
 	const qqMapInfo = _ => {
-	  return new Promise((resolve, reject) => {
-	    wx.getLocation({
-	      type: 'wgs84',
-	      success: res => {
-	        QQMap.reverseGeocoder({
-	          location: {
-	            latitude: res.latitude,
-	            longitude: res.longitude
-	          },
-	          success: ok => {
-	            //城市 经纬度
-	            let pos = {
-	              city: ok.result.address_component.city,
-	              latitude: res.latitude,
-	              longitude: res.longitude
-	            }
-	            wx.setStorageSync('QQmap', pos)
-	            //调用wxLogin接口
-	            wxLogin().then(res => {
-	              resolve(res)
-	            }).catch(err => {
-	              reject(err)
-	            })
-	          },
-	          fail: err => {
-	            reject(err)
-	          }
-	        })
-	      },
-	      fail: err => {
-	        console.log(err)
-	      }
-	    })
-	  })
+		return new Promise((resolve, reject) => {
+			wx.getLocation({
+				type: 'wgs84',
+				success: res => {
+					QQMap.reverseGeocoder({
+						location: {
+							latitude: res.latitude,
+							longitude: res.longitude
+						},
+						success: ok => {
+							//城市 经纬度
+							let pos = {
+								city: ok.result.address_component.city,
+								latitude: res.latitude,
+								longitude: res.longitude
+							}
+							wx.setStorageSync('QQmap', pos)
+							//调用wxLogin接口
+							wxLogin().then(res => {
+								resolve(res)
+							}).catch(err => {
+								reject(err)
+							})
+						},
+						fail: err => {
+							reject(err)
+						}
+					})
+				},
+				fail: err => {
+					console.log(err)
+				}
+			})
+		})
 	}
-	
+
 	//全局wxLogin token获取
 	const wxLogin = _ => {
-	  // 调用登录接口
-	  return new Promise((resolve, reject) => {
-	    wx.login({
-	      success: res => {
-	        userLogin(res.code).then(res => {
-	          if (res.State == 1) {
-	            resolve(res)
-	            wx.setStorageSync('loginInfo', res.Body)
-	          } else if (res.State == -10) {
-	            wxLogin()
-	          }
-	        }).catch(err => {
-	          reject(err)
-	        })
-	      },
-	      fail: err => {
-	        console.log(err)
-	      }
-	    })
-	  })
+		// 调用登录接口
+		return new Promise((resolve, reject) => {
+			wx.login({
+				success: res => {
+					userLogin(res.code).then(res => {
+						if (res.State == 1) {
+							resolve(res)
+							wx.setStorageSync('loginInfo', res.Body)
+						} else if (res.State == -10) {
+							wxLogin()
+						}
+					}).catch(err => {
+						reject(err)
+					})
+				},
+				fail: err => {
+					console.log(err)
+				}
+			})
+		})
 	}
 	const userLogin = async code => {
-	  return await post({
-	    url: '/api/Customer/Login/WxJsCodeLogin',
-	    data: {
-	      jsCode: code,
-	    },
-	    headers: {
-	      appid: '1',
-	      qrcode: ''
-	    }
-	  })
+		return await post({
+			url: '/api/Customer/Login/WxJsCodeLogin',
+			data: {
+				jsCode: code,
+			},
+			headers: {
+				appid: '1',
+				qrcode: ''
+			}
+		})
 	}
-	
+
 	// 营业时间格式化 示例：'0-140,180-300' => ['00:00-02:20','03:00-05:00']
 	// 返回一个数组，使用的时候直接String转化为字符串，做相应操作
 	const openTime = str => {
-	  const two = n => {
-	    return n < 10 ? '0' + n : '' + n;
-	  }
-	  if (str.indexOf(',') > -1) {
-	    return str.split(',').map(e => {
-	      let a = two(Math.floor(e.split('-')[0] / 60))
-	      let b = two(Math.floor(e.split('-')[0] % 60))
-	      let c = two(Math.floor(e.split('-')[1] / 60))
-	      let d = two(Math.floor(e.split('-')[1] % 60))
-	      return e = `${a}:${b}-${c}:${d}`;
-	    })
-	  } else {
-	    let a = two(Math.floor(str.split('-')[0] / 60))
-	    let b = two(Math.floor(str.split('-')[0] % 60))
-	    let c = two(Math.floor(str.split('-')[1] / 60))
-	    let d = two(Math.floor(str.split('-')[1] % 60))
-	    return [`${a}:${b}-${c}:${d}`];
-	  }
+		const two = n => {
+			return n < 10 ? '0' + n : '' + n;
+		}
+		if (str.indexOf(',') > -1) {
+			return str.split(',').map(e => {
+				let a = two(Math.floor(e.split('-')[0] / 60))
+				let b = two(Math.floor(e.split('-')[0] % 60))
+				let c = two(Math.floor(e.split('-')[1] / 60))
+				let d = two(Math.floor(e.split('-')[1] % 60))
+				return e = `${a}:${b}-${c}:${d}`;
+			})
+		} else {
+			let a = two(Math.floor(str.split('-')[0] / 60))
+			let b = two(Math.floor(str.split('-')[0] % 60))
+			let c = two(Math.floor(str.split('-')[1] / 60))
+			let d = two(Math.floor(str.split('-')[1] % 60))
+			return [`${a}:${b}-${c}:${d}`];
+		}
 	}
-	
+
 	export default { get, post, openTime, qqMapInfo };
+
 ```
 
 ```javascript
@@ -412,33 +418,6 @@
 		state,
 		mutations,
 		getters
-	}
-```
-
-### 营业时间的数据封装
-
-```javascript
-	// 营业时间格式化 示例：'0-140,180-300' => ['00:00-02:20','03:00-05:00']
-	// 返回一个数组，使用的时候直接String转化为字符串，做相应操作
-	const openTime = str => {
-	  const two = n => {
-	    return n < 10 ? '0' + n : '' + n;
-	  }
-	  if (str.indexOf(',') > -1) {
-	    return str.split(',').map(e => {
-	      let a = two(Math.floor(e.split('-')[0] / 60))
-	      let b = two(Math.floor(e.split('-')[0] % 60))
-	      let c = two(Math.floor(e.split('-')[1] / 60))
-	      let d = two(Math.floor(e.split('-')[1] % 60))
-	      return e = `${a}:${b}-${c}:${d}`;
-	    })
-	  } else {
-	    let a = two(Math.floor(str.split('-')[0] / 60))
-	    let b = two(Math.floor(str.split('-')[0] % 60))
-	    let c = two(Math.floor(str.split('-')[1] / 60))
-	    let d = two(Math.floor(str.split('-')[1] % 60))
-	    return [`${a}:${b}-${c}:${d}`];
-	  }
 	}
 ```
 
@@ -606,7 +585,7 @@
 
 ### 关于canvas请求网络图片绘制
 
-		canvas图片的绘制可以调用以下方法先获取本地图片路径，再进行canvas绘制
+		网络图片的绘制在真机实测的时候是不会显示的，可以调用以下方法先获取本地图片路径，再进行canvas绘制
 		
 		wx.downloadFile(OBJECT)  ||  wx.getImageInfo(OBJECT)
 		
@@ -614,170 +593,43 @@
 		
 		再使用async/await来获取所有的图片本地地址，用catch来抛出图片地址获取异常的情况
 
-```javascript
-	downImg(url) {
-		return new Promise((resolve, reject) => {
-		    wx.downloadFile({
-		        url: url,
-		        success: res => {
-		            resolve(res.tempFilePath)
-		        },
-		        fail: err => {
-		            reject(err)
-		        }
-		    })
-		})
-	}
-```
-
 > 优化图片请求方式，采用异步加载
 
 ```javascript
 	Promise.all([this.downImg(this.QrCodeUrl),
-		this.downImg(this.Logo),
-		this.downImg(this.shopInfoList.Logo)
+			this.downImg(this.Logo),
+			this.downImg(this.shopInfoList.Logo),
+			this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png')
 	]).then(res=>{
-		console.log(res,111)
+			console.log(res,111)
 	}).catch(err=>{
-		console.log(err,222)
+			console.log(err,222)
 	})
 ```
 
-### 关于v-html
-
-		mpvue官方文档指出：不支持v-html（貌似现在已经支持了）
-		
-		但使用v-html在小程序会编译为<rich-view></rich-view>
-		
-		rich-view支持class样式修改，不能根据标签名设置样式
-		
-		可以使用正则，替换标签，添加类名
-
-> 例如：
+### 三方模板店铺页
 
 ```javascript
-	<div v-html='rules'></div>
-	
-	
-	this.rules=this.rules.replace(/<dl>/g,'<dl class="dl">')
-	.replace(/<dt>/g,'<dt class="dt">')
-	.replace(/<dd>/g,'<dd class="dd">')
-```
-
-### 购物车缓存设置（初稿）
-
-> 针对多家店铺的购物车设置，以数组形式存储，每项包含店铺id以及购物车列表
-
-```javascript
-	saveData(info, ShopId) {
-	    console.log(info, ShopId)
-	    // 先获取缓存数据
-	    let cartListSum = wx.getStorageSync('cartListSum') || [];
-	    if (cartListSum.length) {
-	      //先获取到店铺的id
-	      let cartItem = cartListSum.filter(e => e.ShopId == ShopId)
-	      if (cartItem.length) {
-	        // console.log('有此店铺')
-	        // console.log(cartItem[0].cartList, '过滤')
-	        if (info.MultiSpec == 0) { //无规格商品
-	          // console.log(info, '无规格')
-	          //返回info在列表的索引
-	          let n = cartItem[0].cartList.findIndex(e => e.GoodId == info.GoodId)
-	          // console.log(n, '存在索引')
-	          //数据存在就赋值，不存在就push
-	          if (n >= 0) {
-	            // console.log('找到了')
-	            cartItem[0].cartList.forEach(e => {
-	              if (e.GoodId == info.GoodId) {
-	                e.num = info.num;
-	              }
-	            })
-	          } else {
-	            // console.log(cartItem[0].cartList, '没找到')
-	            cartItem[0].cartList.push(info)
-	          }
-	        } else { //有规格商品
-	          // console.log(info, '有规格')
-	          //返回info在列表的索引
-	          let n = cartItem[0].cartList.findIndex(e => e.Id == info.Id)
-	          // console.log(n, '存在索引')
-	          if (n >= 0) {
-	            // console.log('找到了')
-	            cartItem[0].cartList.forEach(e => {
-	              if (e.Id == info.Id) {
-	                e.num = info.num;
-	              }
-	            })
-	          } else {
-	            // console.log(cartItem[0].cartList, '没找到')
-	            cartItem[0].cartList.push(info)
-	          }
-	        }
-	        //针对num等于0的数据仍保留做清空处理
-	        this.cartListItem = cartItem[0].cartList.filter(e => e.num != 0)
-	        // console.log(this.cartListItem)
-	        //走设置
-	        cartListSum.forEach(e => {
-	          if (e.ShopId == ShopId) {
-	            e.cartList = this.cartListItem;
-	          }
-	        })
-	        //针对商品列表为空的店铺做清空处理
-	        cartListSum = cartListSum.filter(e => e.cartList.length > 0);
-	        // 再设置缓存数据
-	        wx.setStorageSync('cartListSum', cartListSum);
-	        //缓存length不存在，直接清除
-	        !cartListSum.length && wx.removeStorageSync('cartListSum');
-	      } else {
-	        // console.log('查无此店铺')
-	        cartListSum.push({
-	          ShopId: ShopId,
-	          cartList: [{
-	            ...info
-	          }]
-	        })
-	        wx.setStorageSync('cartListSum', cartListSum);
-	        let cartItemInit = cartListSum.filter(e => e.ShopId == ShopId);
-	        this.cartListItem = cartItemInit[0].cartList.filter(e => e.num != 0);
-	      }
-	    } else {
-	      //没有缓存，添加店铺id以及第一条数据
-	      cartListSum.push({
-	        ShopId: ShopId,
-	        cartList: [{
-	          ...info
-	        }]
-	      })
-	      wx.setStorageSync('cartListSum', cartListSum);
-	      let cartItemInit = cartListSum.filter(e => e.ShopId == ShopId);
-	      this.cartListItem = cartItemInit[0].cartList.filter(e => e.num != 0);
-	    }
+	onLoad(options) {
+		this.scene = options.scene;
+		wx.setStorageSync('scene', this.scene);
+		this.ShopId = this.$mp.query.ShopId || wx.getStorageSync('uShopId') || '1770169616466949';
 	}
-```
 
-### js的小数点乘法问题（针对价格计算）
-
-		为了让js执行的更准确，在以后的js小数计算中直接将值扩大10000倍，再除以10000，就可以解决问题
-		
-		必要的时候还是需要加上Math.round（四舍五入）来计算
-
-```javascript
-	count: function() {
-	    let n = 0;
-	    this.cartListItem.forEach(e => {
-	        if (e.num > 0) {
-	            //javascript(js)的小数点乘法除法问题
-	            n += Math.round(e.OriginalPrice * 10000) * e.num;
-	        }
-	    })
-	    return this.cartListItem.length ? n / 10000 : 0;
+	const commonHeader = _ => {
+		//headers每次必传数据存放位置
+		return {
+			appid: wx.getStorageSync('uAppId') || '1',
+			token: wx.getStorageSync('loginInfo').Token || '',
+			qrcode: wx.setStorageSync('scene', this.scene) || ''
+		}
 	}
-```
 
-> 小例子
+	//获取第三方平台自定义的数据字段
+	let config = wx.getExtConfigSync();
+	config.appId && (wx.setStorageSync('uAppId', config.appId));
 
-```javascript
-	请问4.77*10000等于多少？？？
-	
-	结果是47699.99999999999  什么鬼？
+	!config.shopId && console.log('未获取到shopId');
+
+	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
 ```

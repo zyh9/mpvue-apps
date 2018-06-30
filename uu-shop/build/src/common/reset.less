@@ -1,0 +1,412 @@
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+input,
+button,
+dl,
+dt,
+dd,
+ul,
+li,
+ol,
+form,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+  /*禁止文字缩放*/
+  -webkit-text-size-adjust: 100%;
+  /*选中文字设置*/
+  -webkit-user-select: none;
+}
+body {
+  color: #333;
+  line-height: 1.5;
+  background: #ffffff;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+/*清除点击阴影*/
+a,
+input,
+button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /*-webkit-tap-highlight-color: transparent*/
+}
+/*消除圆角按钮（针对ios系统）*/
+input,
+button {
+  -webkit-appearance: none;
+  border-radius: 0;
+  border: 0;
+  outline: none;
+  background-color: transparent;
+}
+ul,
+li,
+ol {
+  list-style: none;
+}
+img {
+  display: block;
+  border: 0;
+}
+a {
+  color: #333;
+  text-decoration: none;
+}
+textarea,
+input {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+textarea::-webkit-input-placeholder,
+input::-webkit-input-placeholder {
+  color: #ccc;
+}
+/*弹性盒模型*/
+.set-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.set-grow {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.set-align {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.set-ver {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.set-center {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.set-between {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.set-around {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+.set-start {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.set-end {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+[v-cloak] {
+  display: none;
+}
+.icon{
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    width: 40rpx;
+    height: 40rpx;
+}
+.icon_recName{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_recUser.png');
+}
+.icon_recTel{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_recTel.png');
+}
+.icon_recAddress{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_recAddress.png')
+}
+.icon_arrowRight{
+    width: 25rpx;
+    height: 25rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_arrowRight.png')
+}
+.icon_arrowDown{
+    width: 20rpx;
+    height: 20rpx;
+    background-image:url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_arrowDown.png');
+}
+.icon_search{
+    width: 30rpx;
+    height:30rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_search.png');
+}
+.icon_sear{
+    width: 42rpx;
+    height:42rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_sear.png');
+}
+.icon_search_2{
+    width: 30rpx;
+    height:30rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/search.png');
+}
+.pageTitle{
+    font-size:46rpx ;
+    color:#000;
+    line-height: 120rpx;
+    font-weight: 900;
+}
+.icon_nearby{
+    width: 35rpx;
+    height: 35rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_nearby.png');
+}
+.icon_nearbyOn{
+    width: 35rpx;
+    height: 35rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_nearbyOn.png');
+}
+.icon_check{
+    width: 46rpx;
+    height: 46rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_check.png');
+}
+.icon_checked{
+    width: 46rpx;
+    height: 46rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_checked.png');  
+}
+.icon_edit{
+    width: 30rpx;
+    height: 30rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_edit.png');
+}
+.icon_addAddress{
+    width: 30rpx;
+    height: 30rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_add.png');
+}
+.icon_synchro{
+    width: 30rpx;
+    height: 30rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_synchro.png');
+}
+.icon_userTel{
+    width: 41rpx;
+    height: 41rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_userTel.png');
+}
+.icon_userOrder{
+    width: 41rpx;
+    height: 41rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_userOrder.png');
+}
+.icon_userAddress{
+    width: 41rpx;
+    height: 41rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_userAddress.png');
+}
+.icon_offer{
+    width: 41rpx;
+    height: 41rpx;
+    background-image: url('../../static/icon-offer.png');
+}
+.icon_lower{
+    width: 58rpx;
+    height: 58rpx;
+    // background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/lower.png');
+    background-image: url('../../static/lower.png');
+}
+.icon_add{
+    width: 58rpx;
+    height: 58rpx;
+    // background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/add.png');
+    background-image: url('../../static/add.png');
+}
+.icon_close{
+    width: 42rpx;
+    height: 42rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png');
+}
+.icon_goodsShare{
+    width: 70rpx;
+    height: 70rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_goodsShare.png');
+}
+.icon_clear{
+    width: 40rpx;
+    height: 40rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_clear.png');
+}
+.icon_del{
+    width: 36rpx;
+    height: 36rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_del.png');
+}
+.icon_index{
+    width: 36rpx;
+    height: 36rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_index.png');
+}
+.icon_share{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/share.png');
+}
+.icon_shop_tel{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/shop-tel.png');
+}
+.icon_shop_wx{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/shop-wx.png');
+}
+.icon_cart{
+    // background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/cart.png');
+    background-image: url('../../static/cart.png');
+}
+.icon_active{
+    // background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/cart-active.png');
+    background-image: url('../../static/cart-active.png');
+}
+.icon_share_qr{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareQR.png');
+}
+.icon_share_wx{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareWX.png');
+}
+.icon_save{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png');
+}
+.icon_right{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/right.png');
+}
+.icon_express{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/expressLogo.png');
+}
+.icon_dada{
+    background-image: url('../../static/dada-img.png');
+}
+.icon_commodity{
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    width: 120rpx;
+    height: 120rpx;
+    background-image: url('../../static/commodity.png');
+}
+.icon_receipt{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/receipt.png');
+}
+.icon_head{
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/defaultHead.png');
+}
+.icon_close_no_bg{
+    width: 32rpx;
+    height: 32rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/close.png');
+}
+.icon_shopAddress{
+    width: 22rpx;
+    height: 28rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_shopAddress.png');
+}
+.icon_shopArrow{
+    width: 13rpx;
+    height: 25rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_shopArrow.png');
+}
+.banner{
+    margin: 0 36rpx;
+    height: 260rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/index-banner.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.index_btn{
+    background-size: 100% 100%;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/open-shop.png');
+}
+.icon_tel{
+    width: 46rpx;
+    height: 46rpx;
+    background-size: 100% 100%;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_tel.png');
+}
+.no_shop_bg{
+    width: 180rpx;
+    height: 180rpx;
+    background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/no_shop.png');
+    background-size: 100% 100%;
+}
+.icon_set{
+    width: 28rpx;
+    height: 28rpx;
+    background-image: url('../../static/option.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.icon_right_img{
+    width: 9rpx;
+    height: 18rpx;
+    background-image: url('../../static/white-right.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.icon_discount{
+    width: 28rpx;
+    height: 28rpx;
+    background-image: url('../../static/discount.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    transform: translateY(5rpx);
+    margin-right: 10rpx;
+}
+.icon_discount_text{
+    width: 28rpx;
+    height: 28rpx;
+    background-image: url('../../static/discount-text.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    transform: translateY(5rpx);
+    margin-right: 10rpx;
+}
+.icon_coupon{
+    width:28rpx ;
+    height:28rpx ;
+    background-image: url('../../static/icon_coupon.png');
+}
+.icon_shop{
+    width:22rpx ;
+    height: 22rpx;
+    background-image: url('../../static/icon_shop.png');
+}
+.double_arrow {
+    width: 20rpx ;
+    height: 20rpx;
+    background-image: url('../../static/double-arrow.png');
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+.fade_in {
+    animation: fadeIn 0.6s forwards;
+}
