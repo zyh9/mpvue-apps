@@ -48,14 +48,10 @@
       this.userInfo = wx.getStorageSync('userInfo');
       this.address = wx.getStorageSync('address') || {};
       this.note = this.address.UserNote;
-      //   this.address.AddressNote && (this.note = this.address.AddressNote)
       this.title = this.$root.$mp.query.type == 1 ? '新增地址' : '修改地址';
       // wx.setNavigationBarTitle({
       //   title: this.title//页面标题
       // })
-    },
-    mounted() {
-      // console.log(gcoord, '00000');
     },
     methods: {
       //检测手机号

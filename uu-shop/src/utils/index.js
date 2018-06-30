@@ -6,15 +6,18 @@ const QQMap = new QQMapWX({
 })
 
 //线上地址
-// const baseUrl = 'https://stunnercustomer.uupt.com';
+const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
-const baseUrl = 'http://192.168.6.100:60004';
+// const baseUrl = 'http://192.168.6.100:60004';
+// const baseUrl = 'http://192.168.6.12:60003';
+// 孙红军
+// const baseUrl = 'http://192.168.6.89:8085';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    v: '1.0.6',
+    v: '1.1.2',
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''
@@ -103,6 +106,9 @@ const qqMapInfo = _ => {
               latitude: res.latitude,
               longitude: res.longitude
             }
+            if (wx.getStorageSync('QQmap')) {
+              wx.removeStorageSync('QQmap');
+            }
             wx.setStorageSync('QQmap', pos)
             //调用wxLogin接口
             wxLogin().then(res => {
@@ -117,7 +123,9 @@ const qqMapInfo = _ => {
         })
       },
       fail: err => {
+        wx.hideLoading();
         reject('error')
+        model();
       }
     })
   })
@@ -136,8 +144,11 @@ const wxLogin = _ => {
         userLogin(res.code).then(res => {
           if (res.State == 1) {
             wx.hideLoading()
-            resolve(res)
+            if (wx.getStorageSync('loginInfo')) {
+              wx.removeStorageSync('loginInfo');
+            }
             wx.setStorageSync('loginInfo', res.Body)
+            resolve(res)
           } else if (res.State == -10) {
             wxLogin()
           }
@@ -185,5 +196,97 @@ const openTime = str => {
     return [`${a}:${b}-${c}:${d}`];
   }
 }
+///格式化时间  date时间对象  fmt时间格式 如yyyy/MM/dd hh:mm:ss
+const FmtTime = (date, fmt) => {
+  var o = {
+    "M+": date.getMonth() + 1, //月份   
+    "d+": date.getDate(), //日   
+    "h+": date.getHours(), //小时   
+    "m+": date.getMinutes(), //分   
+    "s+": date.getSeconds(), //秒   
+    "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+    "S": date.getMilliseconds() //毫秒   
+  };
+  if (/(y+)/.test(fmt))
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
+}
 
-export default { get, post, openTime, qqMapInfo };
+//获取地理位置信息
+const getLoc = _ => {
+  return new Promise((resolve, reject) => {
+    wx.getLocation({
+      type: 'wgs84',
+      success: res => {
+        QQMap.reverseGeocoder({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude
+          },
+          success: ok => {
+            //城市 经纬度
+            let pos = {
+              city: ok.result.address_component.city,
+              latitude: res.latitude,
+              longitude: res.longitude
+            }
+            if (wx.getStorageSync('QQmap')) {
+              wx.removeStorageSync('QQmap');
+            }
+            wx.setStorageSync('QQmap', pos)
+            resolve(wx.getStorageSync('QQmap'))
+          },
+          fail: err => {
+            reject(err)
+          }
+        })
+      },
+      fail: err => {
+        reject('error')
+      }
+    })
+  })
+}
+
+//获取线上图片生成本地临时路径
+const downImg = val => {
+  return new Promise((resolve, reject) => {
+    if (val.indexOf('wxfile://') == -1) {
+      wx.downloadFile({
+        url: val,
+        success: res => {
+          resolve(res.tempFilePath)
+        },
+        fail: err => {
+          reject(err)
+        }
+      })
+    } else {
+      resolve(val)
+    }
+  })
+}
+
+//全局模态框
+const model = _ => {
+  wx.showModal({
+    title: '提示',
+    content: '配送需要您的地理位置',
+    success: res => {
+      if (res.confirm) {
+        console.log('用户点击确定')
+        wx.redirectTo({
+          url: '/pages/wx-auth/main'
+        })
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+        model();
+      }
+    }
+  })
+}
+
+export default { get, post, openTime, qqMapInfo, FmtTime, getLoc, downImg, QQMap };

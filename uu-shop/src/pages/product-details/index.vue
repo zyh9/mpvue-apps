@@ -6,13 +6,13 @@
                 <i class="icon icon_goodsShare" @click="share"></i>
             </div>
             <div class="info">
-                <div class="name">{{goodsInfo.GoodName}}</div>
+                <div class="name">{{goodsInfo.GoodName}}<span v-if="goodsInfo.GoodType==-1">{{goodsInfo.SpecName}}</span></div>
                 <div class="price_sum set-flex set-between">
                     <div class="discount_shop" v-if="goodsInfo.GoodType==-1">
                         <p class="shop_price">¥<span>{{goodsInfo.SalesPrice}}</span></p>
                         <p class="original_price">¥{{goodsInfo.OriginalPrice}}</p>
                     </div>
-                    <p class="shop_price" v-else>¥<span>{{goodsInfo.SalesPrice}}</span></p>
+                    <p class="shop_price" v-else>¥<span>{{goodsInfo.SalesPrice?goodsInfo.SalesPrice:goodsInfo.OriginalPrice}}</span></p>
                     <div class="count" v-if="goodsInfo.State==1&&!isRule">
                         <i class="icon icon_lower" @click="lower" v-if="goodsInfo.num>0" :data-info="goodsInfo"></i>
                         <span v-if="goodsInfo.num>0">{{goodsInfo.num}}</span>
@@ -62,11 +62,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                                                        <cover-view class="shareCover" >
-                                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                        </cover-view>
-                                                                    </canvas>
+                                                                        <cover-view class="shareCover" >
+                                                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                        </cover-view>
+                                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -182,7 +182,6 @@
                     //获取商品信息
                     this.getGoodsInfo()
                 }).catch(err => {
-                    console.log(222)
                     this.msg(err.Msg)
                 })
             },
@@ -505,6 +504,9 @@
                         if (res.State == 1) {
                             wx.hideLoading();
                             this.block = true;
+                            wx.setNavigationBarTitle({
+                                title: res.Body.GoodName ? res.Body.GoodName : '商品详情'
+                            })
                             if (res.Body.GoodSpecs.length == 1) {
                                 res.Body.num = this.$root.$mp.query.num ? this.$root.$mp.query.num : 0;
                                 //无规格设置
@@ -513,6 +515,7 @@
                                 res.Body.OriginalPrice = res.Body.GoodSpecs[0].OriginalPrice;
                                 res.Body.IsBuyed = res.Body.GoodSpecs[0].IsBuyed;
                                 res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
+                                res.Body.SpecName = res.Body.GoodSpecs[0].SpecName == '默认' ? '' : ` - ${res.Body.GoodSpecs[0].SpecName}`;
                             } else {
                                 res.Body.GoodSpecs.forEach(item => {
                                     item.num = 0;
@@ -574,7 +577,7 @@
             width: 678rpx;
             height: 678rpx;
             position: relative;
-            border-radius: 36rpx; // box-shadow: 0 0 28rpx rgba(190, 189, 189, 0.9);
+            border-radius: 36rpx;
             .shop_img {
                 width: 100%;
                 height: 100%;
@@ -817,11 +820,7 @@
             }
             .main {
                 border-radius: 10rpx;
-                background: #fff; // height: 100%;
-                // width: 100%;
-                // height: 522px;
-                // border-radius: 10rpx;
-                // overflow: hidden;
+                background: #fff;
                 width: 339px;
                 height: 522px;
                 overflow: hidden;

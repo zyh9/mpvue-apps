@@ -22,12 +22,15 @@
                                 <span class="distance">{{item.Distance}}km</span>
                             </div>
                             <p class="address">{{item.ShopAddress}}</p>
+                            <div class="option" v-if="item.PaotuiPriceOff"><i class="icon_set"></i><span class="coupon_text">{{item.PaotuiPriceOff}}</span></div>
+                            <div class="option" v-if="item.Coupons"><i class="icon icon_coupon"></i><span class="coupon_text">{{item.Coupons}}</span></div>
+                            <div class="option" v-if="!item.PaotuiPriceOff&&!item.Coupons"><span class="no_coupon_text">{{item.NoPerMessage}}</span></div>
                         </div>
                     </div>
                 </div>
                 <div class="li_mask" v-if="item.OpenState==0"></div>
             </li>
-            <div class="no_more" v-if="nomore">没有更多</div>
+            <div class="no_more" v-if="nomore">附近没有更多店铺了</div>
         </ul>
         <!-- </scroll-view> -->
     </div>
@@ -65,40 +68,25 @@
             this.quest = true;
             this.nomore = false;
             this.nearbyrList = [];
-            if (wx.getStorageSync('loginInfo')) {
+            this.util.qqMapInfo().then(res => {
+                console.log(res)
                 this.mapInfo = wx.getStorageSync('QQmap')
                 this.nearbyShop()
-            } else {
-                // console.log('无位置信息')
-                this.util.qqMapInfo().then(res => {
-                    console.log(res)
-                    this.mapInfo = wx.getStorageSync('QQmap')
-                    this.nearbyShop()
-                }).catch(err => {
-                    console.log(err)
-                })
-            }
+            }).catch(err => {
+                console.log(err)
+            })
         },
-        onShow() {
-            // let query = wx.createSelectorQuery();
-            // query.select('.nearby_top').boundingClientRect()
-            // query.exec(res => {
-            //     let height = res[0].height;
-            //     wx.getSystemInfo({
-            //         success: res => {
-            //             // console.log(res)
-            //             this.winWidth = res.windowWidth;
-            //             //减去上方的高度
-            //             this.winHeight = res.windowHeight - height;
-            //         }
-            //     })
-            // })
-        },
+        onShow() {},
         onPullDownRefresh() { //下拉刷新
             this.page = 1;
             this.nomore = false;
-            // console.log('下拉')
-            this.nearbyShop(this.page)
+            this.util.getLoc().then(res => {
+                this.mapInfo = wx.getStorageSync('QQmap')
+                // console.log('下拉')
+                this.nearbyShop(this.page)
+            }).catch(err => {
+                this.msg('位置信息获取错误，请稍后重试')
+            })
         },
         onReachBottom() { //触底事件
             if (this.quest) {
@@ -106,38 +94,7 @@
                 this.nearbyShop()
             }
         },
-        created() {
-            //实例化API核心类
-            // wx.getLocation({
-            //     type: 'wgs84',
-            //     success: res => {
-            //         this.QQcityInfo(res)
-            //     },
-            //     fail: err => {}
-            // })
-        },
         methods: {
-            //坐标转地址
-            // QQcityInfo(info) {
-            //     // 调用接口
-            //     QQMap.reverseGeocoder({
-            //         location: {
-            //             latitude: info.latitude,
-            //             longitude: info.longitude
-            //         },
-            //         success: res => {
-            //             let pos = {
-            //                 city: res.result.address_component.city,
-            //                 latitude: info.latitude,
-            //                 longitude: info.longitude
-            //             }
-            //             wx.setStorageSync('QQmap', pos)
-            //         },
-            //         fail: err => {
-            //             console.log('位置信息获取失败')
-            //         }
-            //     })
-            // },
             scrollHandler() {
                 if (this.quest) {
                     this.page++;
@@ -150,14 +107,13 @@
                         url: '/api/Customer/Browse/NearbyShops',
                         data: {
                             CityName: this.mapInfo.city,
-                            UserLocalPoint: `${this.mapInfo.longitude},${this.mapInfo.latitude}`,
+                            UserLocalPoint: this.trans(this.mapInfo),
                             Distance: 5000,
                             PageSize: 10,
                             PageIndex: this.page
                         }
                     })
                     .then(res => {
-                        // console.log(res.Body)
                         this.block = true;
                         wx.hideLoading();
                         wx.stopPullDownRefresh()
@@ -184,7 +140,8 @@
                         }
                         // console.log(this.nearbyrList)
                     }).catch(err => {
-                        // this.msg(err.Msg)
+                        wx.hideLoading();
+                        this.msg(err.Msg)
                     })
             },
             openShop(info) {
@@ -201,6 +158,19 @@
                     url: `/pages/search-shop/main`
                 })
             },
+            trans(pos) {
+                let {
+                    latitude,
+                    longitude
+                } = pos;
+                var result = gcoord.transform(
+                    [latitude, longitude], // 经纬度坐标
+                    gcoord.WGS84, // 当前坐标系
+                    gcoord.BD09, //  目标坐标系  
+                );
+                let location = `${result[1]},${result[0]}`;
+                return location;
+            },
         },
         components: {}
     }
@@ -208,8 +178,7 @@
 
 <style lang="less">
     .nearby_shop {
-        // height: 100%;
-        background: #fff; // overflow: hidden;
+        background: #fff;
     }
     .nearby_top {
         padding: 0 36rpx 16rpx;
@@ -234,14 +203,13 @@
             .item_top {
                 padding: 36rpx 0;
                 margin: 0 36rpx;
-                display: flex; // justify-content: space-between;
+                display: flex;
                 align-items: center;
                 overflow: hidden;
                 position: relative;
                 .item_left {
                     display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
+                    justify-content: flex-start; // align-items: center;
                     flex: 1;
                     .item_left_img {
                         width: 120rpx;
@@ -254,10 +222,10 @@
                         flex: 1;
                         max-width: 525rpx;
                         .name {
-                            margin-bottom: 16rpx;
                             width: 100%;
                             display: flex;
                             justify-content: space-between;
+                            transform: translateY(-2rpx);
                             .name_left {
                                 flex: 1;
                                 display: flex;
@@ -287,12 +255,37 @@
                             }
                         }
                         .address {
+                            margin-top: 10rpx;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
                             font-size: 26rpx;
                             color: #999;
                             width: 100%;
+                        }
+                        .option {
+                            height: 40rpx;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            margin-top: 10rpx;
+                            p,
+                            span {
+                                color: #1a1a1a;
+                                font-size: 26rpx;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                line-height: 42rpx;
+                                padding: 0 8rpx;
+                                flex: 1;
+                            }
+                            .coupon_text {
+                                padding-right: 20rpx;
+                            }
+                            .no_coupon_text {
+                                padding: 0;
+                            }
                         }
                     }
                     .distance {
@@ -317,11 +310,24 @@
                     bottom: 0;
                     transform: scaleY(0.5);
                     transform-origin: 0 0;
+                    z-index: 10;
                 }
             }
         }
         .nearby_item:nth-last-of-type(1) {
-            border-bottom: none;
+            &:after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 0;
+                border-bottom: none;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                transform: scaleY(0.5);
+                transform-origin: 0 0;
+                z-index: 10;
+            }
         }
         .li_mask {
             position: absolute;
@@ -334,12 +340,12 @@
         }
     }
     .no_more {
-        height: 60rpx;
+        height: 70rpx;
         width: 100%;
-        line-height: 60rpx;
-        font-size: 26rpx;
+        line-height: 70rpx;
+        font-size: 20rpx;
         color: #999;
         text-align: center;
-        background: #fff;
+        background: #f3f3f3;
     }
 </style>

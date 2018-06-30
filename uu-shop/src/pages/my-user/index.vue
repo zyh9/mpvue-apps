@@ -21,10 +21,10 @@
             <i class="icon icon_userAddress"></i>
             <p>我的地址</p>
         </div>
-        <!-- <div class="options" @click="goCoupon">
+        <div class="options" @click="goCoupon">
             <i class="icon icon_offer"></i>
             <p>我的优惠券</p>
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -85,22 +85,6 @@
                         })
                 }
             },
-            //用户退出
-            userOut() {
-                this.util.post({
-                        url: '/api/Customer/PersonerCenter/Logout',
-                        data: {},
-                    })
-                    .then(res => {
-                        if (res.State == 1) {
-                            console.log(res)
-                            this.msg(res.Msg)
-                            wx.removeStorageSync('loginInfo')
-                        }
-                    }).catch(err => {
-                        this.msg(err.Msg)
-                    })
-            },
             login() {
                 if (!this.userInfo.HeadImg) {
                     wx.navigateTo({
@@ -109,6 +93,10 @@
                 }
             },
             goCoupon() {
+                if (this.isBindPhone) {
+                    this.msg('您还没有登录哦')
+                    return;
+                }
                 wx.navigateTo({
                     url: '/pages/my-coupon/main?type=1'
                 });
@@ -128,7 +116,7 @@
         .user_info {
             width: 670rpx;
             height: 230rpx;
-            background: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/myUserCard.png') no-repeat top left;
+            background: url('../../../static/myUserCard.png') no-repeat top left;
             background-size: 100%;
             margin-bottom: 40rpx;
             .head {

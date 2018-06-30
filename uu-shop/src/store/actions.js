@@ -1,8 +1,8 @@
 import {types} from './types.js'
 // console.log(types)
 const actions = {
-    code({commit},val){
-        commit(types.COMMIT_CODE,val)
+    backIndex({commit},val){
+        commit(types.BACK_INDEX,val)
     },
 }
 

@@ -4,7 +4,6 @@
             <h3 class="title">我的订单</h3>
             <p class="label">全部</p>
         </div>
-        <!-- <scroll-view scroll-y="true" :style="{height: winHeight+'px'}" lower-threshold="20" @scrolltolower="scrollHandler" v-if="tips"> -->
         <ul class="my_order_list">
             <li class="order_item" v-for="(item,index) in newOrder" :key="index">
                 <div class="lis_top" @click='goShop(item)'>
@@ -43,7 +42,6 @@
             </li>
             <div class="no_more" v-if="nomore">没有更多</div>
         </ul>
-        <!-- </scroll-view> -->
     </div>
 </template>
 
@@ -152,6 +150,7 @@
                         this.newOrder.push(...res.Body)
                     }
                 }).catch(err => {
+                    wx.hideLoading();
                     // this.msg(err.Msg)
                     console.log(err)
                 })
@@ -172,6 +171,11 @@
                     case -2:
                     case -3:
                     case -4:
+                    case -5:
+                    case -6:
+                    case -7:
+                    case -8:
+                    case -9:
                         text = '已取消';
                         break;
                     case 1:
@@ -188,7 +192,8 @@
                         text = '正在配货';
                         break;
                     case 4:
-                        text = '配送中';
+                    case 5:
+                        text = e.ExpressType==2?'已发货':'配送中';
                         break;
                     case 10:
                         text = '已完成';
@@ -214,12 +219,19 @@
                                 'signType': 'MD5',
                                 'paySign': res.Body.paySign,
                                 'success': payres => {
-                                    wx.navigateTo({
-                                        url: '/pages/order-details/main?orderId=' + item.OrderId
-                                    });
+                                    setTimeout(_ => {
+                                        wx.navigateTo({
+                                            url: '/pages/order-details/main?orderId=' + item.OrderId
+                                        })
+                                    }, 300)
                                 },
                                 'fail': err => {
                                     this.msg('您已取消支付')
+                                    setTimeout(_ => {
+                                        wx.navigateTo({
+                                            url: '/pages/order-details/main?orderId=' + item.OrderId
+                                        })
+                                    }, 300)
                                 }
                             })
                         }
@@ -259,7 +271,11 @@
                 }).then(res => {
                     console.log(res)
                     this.msg('您已确认收货')
-                    this.orderInfo();
+                    setTimeout(_ => {
+                        this.page = 1;
+                        this.nomore = false;
+                        this.orderInfo(this.page);
+                    }, 800)
                 }).catch(err => {
                     this.msg(err.Msg)
                 })
@@ -291,7 +307,7 @@
         background: #ebebeb;
     }
     .my_order {
-        background: #fff; // overflow-x: hidden;
+        background: #fff;
         .my_order_select {
             background: #fff;
             position: absolute;

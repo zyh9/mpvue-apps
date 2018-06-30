@@ -27,7 +27,7 @@
         isSend: true,
       }
     },
-    onShow() { //页面渲染就会触发
+    onReady() {
       clearInterval(this.countdownTimer)
       this.countdown = null;
       this.countdownInfo = '获取验证码';
@@ -36,12 +36,30 @@
     },
     methods: {
       getInfo(res) {
-        let {
-          userInfo
-        } = res.target;
-        wx.setStorageSync('userInfo', JSON.stringify(userInfo))
-        //提交验证码
-        this.commitSms(userInfo)
+        if (res.target.userInfo) {
+          wx.setStorageSync('userInfo', JSON.stringify(res.target.userInfo))
+          //提交验证码
+          this.commitSms(res.target.userInfo)
+        } else {
+          this.model()
+        }
+      },
+      model() {
+        wx.showModal({
+          title: '提示',
+          content: '需要您重新授权',
+          success: res => {
+            if (res.confirm) {
+              console.log('用户点击确定')
+              wx.redirectTo({
+                url: '/pages/wx-auth/main'
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+              this.model();
+            }
+          }
+        })
       },
       //发送验证码
       sendSms() {
@@ -154,9 +172,10 @@
         this.authVal = newVal.replace(/[^\d]/g, '');
       },
     },
-    beforeDestroy() { //清除定时器
+    onUnload() {
       clearInterval(this.countdownTimer)
-    },
+      this.countdownTimer = null;
+    }
   }
 </script>
 
@@ -165,7 +184,7 @@
     height: 100%;
     overflow-x: hidden;
     position: relative;
-    .login{
+    .login {
       margin: 20rpx 36rpx;
       font-size: 46rpx;
       font-weight: 700;

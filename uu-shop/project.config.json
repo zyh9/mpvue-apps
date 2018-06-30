@@ -39,15 +39,27 @@
 				},
 				{
 					"id": 1,
-					"name": "张兆迪",
+					"name": "太阳好圆啊",
 					"pathName": "pages/my-store/main",
-					"query": "ShopId=1789482826007559"
+					"query": "ShopId=1782885742560263"
 				},
 				{
 					"id": 2,
 					"name": "下单选择优惠券",
 					"pathName": "pages/my-coupon/main",
 					"query": "type=3"
+				},
+				{
+					"id": 3,
+					"name": "登录",
+					"pathName": "pages/login/main",
+					"query": ""
+				},
+				{
+					"id": 4,
+					"name": "授权",
+					"pathName": "pages/wx-auth/main",
+					"query": ""
 				}
 			]
 		}

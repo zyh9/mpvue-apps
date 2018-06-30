@@ -4,16 +4,24 @@
             <div class="store_banner">
                 <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
                 <div class="shop_right_details">
-                    <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'暂无店铺简介'}}</p>
+                    <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'欢迎光临本店，我们不定期会推出活动和优惠！'}}</p>
                     <p>{{time}}</p>
-                    <!-- <div class="option" @click='couponActive=true'><i class="icon_set"></i><span>满500减50</span><i class="icon_right_img"></i></div> -->
+                    <div class="option" v-if="!shopInfoList.PaotuiPriceRule&&!CouponText">
+                        <p>店主正在赶来的路上，关注店铺优惠马上就来！</p>
+                    </div>
+                    <div v-else @click='couponActive=true' class="offer_text">
+                        <swiper class="offer_info" vertical="true" autoplay="true" interval="2000" circular="true">
+                            <swiper-item v-if="shopInfoList.PaotuiPriceRule" class="swiper_item">
+                                <div class="option"><i class="icon_set"></i><span class="coupon_text">{{shopInfoList.PaotuiPriceRule}}</span></div>
+                            </swiper-item>
+                            <swiper-item v-if="CouponText" class="swiper_item">
+                                <div class="option"><i class="icon icon_coupon"></i><span class="coupon_text">{{CouponText}}</span></div>
+                            </swiper-item>
+                        </swiper>
+                        <i class="icon_right_img"></i>
+                    </div>
                 </div>
-                <!-- <i class="icon icon_share share" @click="share"></i> -->
             </div>
-            <!-- <div class="store_text">
-                                                                                                                                                                                                <p class="name" @click='goNearShop'>{{shopName}}<i class="icon icon_shopArrow"></i></p>
-                                                                                                                                                                                                <p class="time">{{time}}</p>
-                                                                                                                                                                                            </div> -->
             <ul class="store_info">
                 <li v-for="(v,i) in info" :key="i" :class="{li_select:i==currentTab}" :data-current="i" @click="swichNav"><span>{{v.name}}</span></li>
             </ul>
@@ -36,13 +44,13 @@
                                         <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img fade_in" lazy-load="true">
                                         <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
                                         <div class="li_info">
-                                            <p class="shop_name">{{v.GoodName}}</p>
+                                            <p class="shop_name">{{v.GoodName}}<span v-if="v.GoodsType==-1">{{v.SpecName}}</span></p>
                                             <p class="discount" v-if="v.GoodsType==-1">{{v.PriceOffNote}}</p>
                                             <div class="discount_shop" v-if="v.GoodsType==-1">
                                                 <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
                                                 <p class="original_price">¥{{v.OriginalPrice}}</p>
                                             </div>
-                                            <p class="price" v-else><span>¥</span>{{v.SalesPrice}}</p>
+                                            <p class="price_init" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
                                         </div>
                                     </div>
                                     <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
@@ -110,10 +118,10 @@
                         <i class="icon icon_userAddress"></i>
                         <p>我的地址</p>
                     </div>
-                    <!-- <div class="options" @click="goCoupon">
-                                                        <i class="icon icon_offer"></i>
-                                                        <p>我的优惠券</p>
-                                                    </div> -->
+                    <div class="options" @click="goCoupon">
+                        <i class="icon icon_offer"></i>
+                        <p>我的优惠券</p>
+                    </div>
                 </div>
             </swiper-item>
         </swiper>
@@ -139,17 +147,26 @@
                 <p>赶快领取使用吧</p>
             </div>
             <div class="coupon">
-                <div class="title"><i class="icon icon_coupon"></i>优惠券</div>
-                <ul class="list">
-                    <li v-for='(v,i) in couponList' :key='i'>
-                        <p>满{{v.MinimumAmount}}元减</p>
-                        <div class="money"><span class="number">{{v.Amount}}</span><span>元</span></div>
-                    </li>
-                </ul>
-                <div class="tip">优惠券规则：优惠券使用规则优惠券使用规则优惠券使用规则优惠券使用规则优惠券使用规则</div>
-                <div class="title"><i class="icon icon_subtraction"></i>满减</div>
-                <div class="text">满200减5配送费；满300减10配送费；满500减50配送费</div>
-                <div class="tip">满减规则：优惠券使用规则优惠券使用规则优惠券使用规则优惠券用规则优惠券使用规则</div>
+                <div v-if='couponList.length'>
+                    <div class="title_text">
+                        <i class="icon icon_coupon"></i>
+                        <span>优惠券</span>
+                    </div>
+                    <ul class="list">
+                        <li v-for='(v,i) in couponList' :key='i' :class="'couponStatus'+v.Status" @click='receiveCoupon(v)'>
+                            <p>满{{v.MinimumAmount}}元减</p>
+                            <div class="money"><span class="number">{{v.Amount}}</span><span>元</span></div>
+                        </li>
+                    </ul>
+                    <div class="tip">优惠券规则：商品费与打包费达到满减额度方能使用优惠券，部分优惠券无法与折扣商品共同使用。</div>
+                </div>
+                <div v-if="shopInfoList.PaotuiPriceRule">
+                    <div class="title_text">
+                        <i class="icon icon_set"></i><span>满减</span>
+                    </div>
+                    <div class="text">{{shopInfoList.PaotuiPriceRule}}</div>
+                    <div class="tip">配送费满减规则：商品费与打包费达到满减额度方能使用配送费满减，配送费满减不与其他任何活动冲突，可直接享受。</div>
+                </div>
             </div>
             <div class="close" @click='couponActive=false'>关闭</div>
         </div>
@@ -193,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                                                    <cover-view class="shareCover" >
-                                                                                                                                                                                                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                                                    </cover-view>
-                                                                                                                                                                                                                                                    </canvas>
+                                                                                                                                                                                                                                                                                                                                                                <cover-view class="shareCover" >
+                                                                                                                                                                                                                                                                                                                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                                                                                                                                                                                                                                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                                                                                                                                                                                                                                                                                </cover-view>
+                                                                                                                                                                                                                                                                                                                                                                </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -209,7 +226,6 @@
                 <div class="format_center">
                     <span class="format_info">规格</span>
                     <ul class="format_list">
-                        <!-- <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi,on:v.SpecName.length>4}" @click="formatCheck(i)">{{v.SpecName}}</li> -->
                         <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)">{{v.SpecName}}</li>
                     </ul>
                 </div>
@@ -266,26 +282,16 @@
                 Logo: 'https://otherfiles-ali.uupt.com/Stunner/logo-C-R.png?x-oss-process=image/resize,w_100/format,jpg',
                 minShopLogo: '',
                 couponActive: false,
-                couponList:[
-                    {
-                        MinimumAmount:57,
-                        Amount:5
-                    },
-                     {
-                        MinimumAmount:57,
-                        Amount:5
-                    },
-                     {
-                        MinimumAmount:57,
-                        Amount:5
-                    },
-                ]
+                couponList: [],
+                //优惠券文字
+                CouponText: '',
             }
         },
         onShareAppMessage(res) {
             return {
                 title: this.shopInfoList.ShopName,
-                path: `pages/my-store/main?ShopId = ${this.ShopId}`,
+                path: `pages/my-store/main?ShopId=${this.ShopId}`,
+                imageUrl: this.shopInfoList.Logo,
                 success: res => {
                     this.maskActive = false;
                 },
@@ -299,6 +305,7 @@
             this.scene = options.scene;
             wx.setStorageSync('scene', this.scene);
             this.ShopId = this.$root.$mp.query.ShopId;
+            // console.log(this.ShopId)
             this.currentTab = 0;
             this.block = false;
             wx.showLoading({
@@ -323,18 +330,20 @@
             this.maskActive = false;
             this.formatMask = false;
             this.minShopLogo = '';
+            //优惠券列表
+            this.couponList = [];
             if (this.$root.$mp.query.type == 1 || this.$root.$mp.query.back == 1) {
                 console.log('不走分享')
                 // 获取店铺信息以及商品信息 catch用来捕获异常
                 this.shopInfoSum().catch(err => {
-                    this.msg(err.Msg)
                     console.log(err)
                     wx.hideLoading();
+                    this.msg(err.Msg)
                     setTimeout(_ => {
                         wx.switchTab({
                             url: '/pages/nearby-shop/main'
                         })
-                    }, 400)
+                    }, 1000)
                 })
             } else {
                 console.log('走分享')
@@ -344,8 +353,8 @@
                         this.sceneInfo()
                     } else {
                         this.shopInfoSum().catch(err => {
-                            this.msg(err.Msg)
                             wx.hideLoading();
+                            this.msg(err.Msg)
                         })
                     }
                 }).catch(err => {
@@ -354,6 +363,14 @@
             }
         },
         onShow() { //页面渲染就会触发
+            console.log(this.$store.state.mutations.backIndex ? '存在不可结算商品' : '正常进入店铺')
+            if (this.$store.state.mutations.backIndex) {
+                this.shopInfoSum().catch(err => {
+                    wx.hideLoading();
+                    this.msg(err.Msg)
+                })
+            }
+            this.couponActive = false;
             this.cartActive = false;
             this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
             // 先获取缓存数据
@@ -386,6 +403,10 @@
                         }
                     })
                 })
+                //清空列表数量
+                this.allShopInfoList.forEach(e => {
+                    e.sum = 0;
+                })
             }
             //当前店铺购物车的列表不为空走缓存，反之过滤设置缓存（主要针对购物车无商品且缓存中仍存在商品数量为零的情况）
             this.cartListItem.length ? this.cache() : (cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId))
@@ -408,6 +429,7 @@
                     this.$store.dispatch('code', this.scene)
                     //获取店铺信息以及商品信息 catch用来捕获异常
                     this.shopInfoSum().catch(err => {
+                        wx.hideLoading();
                         this.msg(err.Msg)
                     })
                 }).catch(err => {
@@ -419,7 +441,7 @@
                 let shopInfo = await this.shopInfo()
                 shopInfo.Body.Logo = shopInfo.Body.Logo;
                 wx.setNavigationBarTitle({
-                    title: shopInfo.Body.ShopName
+                    title: shopInfo.Body.ShopName ? shopInfo.Body.ShopName : '店铺详情'
                 })
                 this.shopInfoList = shopInfo.Body;
                 // console.log(this.shopInfoList.ShopTemplateId, '1 餐饮 2 电商')
@@ -432,6 +454,14 @@
                     console.log('店铺未营业')
                     this.cartListItem = [];
                 }
+                // console.log(this.shopInfoList.PaotuiPriceRule)
+                let getCouponSum = await this.getCoupon();
+                let getCouponText = getCouponSum.Body.map(e => {
+                    return `满${e.MinimumAmount}元减${e.Amount}元；`;
+                })
+                this.CouponText = getCouponText.join('').slice(0, -1);
+                // console.log(this.CouponText)
+                this.couponList = getCouponSum.Body;
                 //获取所有商品以及分类
                 let allShopInfo = await this.allShopInfo()
                 //所有商品汇集  针对左侧列表返回商品为空的作清空处理
@@ -465,6 +495,7 @@
                 })
                 wx.hideLoading()
                 this.block = true;
+                this.$store.dispatch('backIndex', false)
                 // console.log(this.shopPageIndex)
                 //获取分类以及分页
                 this.allShopInfoList.length && this.shopPageInfo(this.allShopInfoList[0].ID);
@@ -537,6 +568,7 @@
                             } else {
                                 e.num = 0;
                                 e.sumPrice = 0;
+                                e.SpecName = e.GoodsSpec[0].SpecName == '默认' ? '' : ` - ${e.GoodsSpec[0].SpecName}`;
                             }
                             e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
@@ -576,9 +608,6 @@
                     info
                 } = e.target.dataset;
                 this.formatList = info;
-                // this.formatList.GoodsSpec.forEach(item => {
-                //     item.SpecName = item.SpecName.length > 20 ? item.SpecName.slice(0, 20) : item.SpecName;
-                // })
                 this.formatMask = true;
             },
             //滑动切换
@@ -651,9 +680,8 @@
             async requireImg() {
                 this.QrCodeUrl = await this.downImg(this.QrCodeUrl)
                 this.Logo = await this.downImg(this.Logo)
-                this.minShopLogo = await this.downImg(this.shopInfoList.Logo + '?x-oss-process=image/resize,h_50/rounded-corners,r_10')
-                // this.shopInfoList.Logo = await this.downImg(this.shopInfoList.Logo)
-                this.shareBg = await this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png?x-oss-process=image/resize,w_500/format,jpg')
+                this.minShopLogo = await this.downImg(this.shopInfoList.Logo + '?x-oss-process=image/resize,h_50/rounded-corners,r_10');
+                this.shareBg = await this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png?x-oss-process=image/resize,w_500/format,jpg');
                 this.drawCanvas();
             },
             /* 绘制canvas */
@@ -744,21 +772,25 @@
                 })
             },
             copyWx() {
-                wx.setClipboardData({
-                    data: this.shopInfoList.ShopWechat,
-                    success: res => {
-                        this.msg("复制成功")
-                    },
-                    fail: err => {
-                        this.msg("复制失败")
-                    }
-                })
+                if (this.shopInfoList.ShopWechat == "") {
+                    this.msg('商家未提供微信联系方式')
+                } else {
+                    wx.setClipboardData({
+                        data: this.shopInfoList.ShopWechat,
+                        success: res => {
+                            this.msg("复制成功")
+                        },
+                        fail: err => {
+                            this.msg("复制失败")
+                        }
+                    })
+                }
             },
             lower(e) {
-                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
+                // console.log(info)
                 if (info.MultiSpec == 0) {
                     if (info.GoodsType == -1) { //折扣商品
                         if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
@@ -807,10 +839,10 @@
                 }
             },
             add(e) {
-                // console.log(e.target.dataset.info)
                 let {
                     info
                 } = e.target.dataset;
+                // console.log(info)
                 if (info.MultiSpec == 0) {
                     if (info.GoodsType == -1) { //折扣商品
                         if (info.PriceOffRule.DiscountRule == 1) { //购买规格  每人限一份
@@ -1163,7 +1195,7 @@
                         wx.navigateTo({
                             url: '/pages/login/main'
                         })
-                    }, 200)
+                    }, 1000)
                 } else {
                     wx.navigateTo({
                         url: '/pages/my-address/main?type=2'
@@ -1177,7 +1209,7 @@
                         wx.navigateTo({
                             url: '/pages/login/main'
                         })
-                    }, 200)
+                    }, 1000)
                 } else {
                     wx.navigateTo({
                         url: '/pages/my-order/main'
@@ -1185,42 +1217,67 @@
                 }
             },
             goCoupon() {
-                wx.navigateTo({
-                    url: '/pages/my-coupon/main?type=2'
-                });
+                if (this.isBindPhone) {
+                    this.msg('您还没有登录哦')
+                    setTimeout(_ => {
+                        wx.navigateTo({
+                            url: '/pages/login/main'
+                        })
+                    }, 1000)
+                } else {
+                    let ShopId = String(wx.getStorageSync('shopInfo').ShopId) || '';
+                    wx.navigateTo({
+                        url: '/pages/my-coupon/main?type=2&shopId=' + ShopId
+                    })
+                }
             },
             /* 获取优惠券列表 */
-            getCoupon(){
-                this.util.post({
-                    url: '/api/Customer/Coupon/ShopIndexCouponList',
+            getCoupon() {
+                return this.util.post({
+                    url: '/api/Customer/Browse/ShopIndexCouponList',
                     data: {
-                        ShopID:this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
+                        ShopID: this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
                     }
-                }).then(res => {
-                    this.couponList=res.Body;
-                   
-                }).catch(err => {
-                    // this.msg(err.Msg)
-                    console.log(err)
                 })
             },
             /* 领取优惠券 */
-            receiveCoupon(v){
-                this.util.post({
-                    url: '/api/Customer/Coupon/ShopIndexCouponList',
-                    data: {
-                        CouponID:v.CouponID,
+            receiveCoupon(v) {
+                if (this.isBindPhone) {
+                    this.msg('您还没有登录哦')
+                    setTimeout(_ => {
+                        wx.navigateTo({
+                            url: '/pages/login/main'
+                        })
+                    }, 1000)
+                } else {
+                    // console.log(v)
+                    if (v.Status == 0) {
+                        this.util.post({
+                            url: '/api/Customer/Coupon/GetCoupon',
+                            data: {
+                                CouponID: v.ID,
+                            }
+                        }).then(res => {
+                            this.msg('领取成功')
+                            //更新领取状态
+                            this.util.post({
+                                url: '/api/Customer/Browse/ShopIndexCouponList',
+                                data: {
+                                    ShopID: this.ShopId || String(wx.getStorageSync('shopInfo').ShopId) || wx.getStorageSync('ShopId') || '',
+                                }
+                            }).then(result => {
+                                this.couponList = result.Body;
+                            }).catch(error => {
+                                this.msg(error.Msg)
+                            })
+                        }).catch(err => {
+                            this.msg(err.Msg)
+                        })
+                    } else {
+                        this.msg('您已经领取过了哦')
                     }
-                }).then(res => {
-                   
-                   
-                }).catch(err => {
-                    
-                    console.log(err)
-                })
+                }
             }
-
-
         },
         computed: {
             //购物车商品总价
@@ -1300,9 +1357,7 @@
         flex-direction: column;
     }
     .swiper-box {
-        flex: 1; // .swiper-item {
-        //     padding-top: 20rpx;
-        // }
+        flex: 1;
         .shop_details {
             height: 100%;
             background: #fff;
@@ -1422,14 +1477,14 @@
                         position: absolute;
                         right: 15rpx;
                         top: 20rpx;
-                        width: 26rpx;
-                        height: 26rpx;
-                        line-height: 26rpx;
+                        width: 30rpx;
+                        height: 30rpx;
+                        line-height: 30rpx;
                         text-align: center;
                         background-image: linear-gradient(-22deg, #f21b30 0%, #ff693b 99%), linear-gradient( #ff2929, #ff2929); //   box-shadow: 2rpx 2rpx 8rpx 0rpx rgba(177, 5, 5, 0.7);
                         padding: 3rpx;
                         border-radius: 50%;
-                        font-size: 14rpx;
+                        font-size: 16rpx;
                         color: #fff;
                     }
                 }
@@ -1501,15 +1556,15 @@
                             .discount {
                                 position: absolute;
                                 left: 0;
-                                top: 45rpx;
+                                top: 48rpx;
                                 font-size: 22rpx;
                                 color: #999;
                             }
-                            .price {
+                            .price_init {
                                 color: #ff4d3a;
                                 line-height: 60rpx;
                                 font-size: 36rpx;
-                                transform: translateY(18%);
+                                transform: translateY(20rpx);
                                 font-weight: 700;
                                 span {
                                     font-size: 24rpx;
@@ -1518,6 +1573,17 @@
                             .discount_shop {
                                 display: flex;
                                 align-items: center;
+                                transform: translateY(10rpx);
+                                .price {
+                                    color: #ff4d3a;
+                                    line-height: 60rpx;
+                                    font-size: 36rpx;
+                                    transform: translateY(18%);
+                                    font-weight: 700;
+                                    span {
+                                        font-size: 24rpx;
+                                    }
+                                }
                                 .original_price {
                                     font-size: 22rpx;
                                     color: #ccc;
@@ -1618,21 +1684,36 @@
         .store_banner {
             background: #383838;
             position: relative;
-            height: 160rpx;
-            padding: 16rpx 36rpx;
+            height: 168rpx;
+            padding: 24rpx;
+            box-sizing: border-box;
             display: flex;
             justify-content: flex-start;
-            align-items: center;
             .shop_img {
-                width: 160rpx;
-                height: 160rpx;
+                width: 120rpx;
+                height: 120rpx;
                 border-radius: 10rpx;
                 margin-right: 20rpx;
             }
             .shop_right_details {
                 flex: 1;
                 overflow: hidden;
+                .offer_text {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    overflow: hidden;
+                }
+                .offer_info {
+                    flex: 1;
+                    height: 46rpx;
+                    overflow: hidden;
+                }
+                .swiper_item {
+                    height: 46rpx !important;
+                }
                 .option {
+                    height: 46rpx;
                     display: flex;
                     justify-content: flex-start;
                     align-items: center;
@@ -1645,10 +1726,11 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                     line-height: 42rpx;
-                }
-                span {
                     padding: 0 8rpx;
                     flex: 1;
+                }
+                .coupon_text {
+                    padding-right: 20rpx;
                 }
             }
             .share {
@@ -1705,23 +1787,23 @@
                 flex-flow: 1;
                 width: 100%;
                 text-align: center;
-                height: 70rpx;
+                height: 80rpx;
                 span {
-                    line-height: 70rpx;
-                    color: #4d4d4d;
+                    line-height: 80rpx;
+                    color: #999;
                     font-size: 28rpx;
                     position: relative;
                     z-index: -1;
                     box-sizing: border-box;
                     display: inline-block;
                     height: 100%;
-                    font-weight: 700;
                 }
             }
             .li_select {
                 span {
                     color: #1d1d1d;
                     border-bottom: 5rpx solid #ff4d3a;
+                    font-weight: 700;
                 }
             }
             &:after {
@@ -1902,6 +1984,12 @@
                     color: #666;
                     font-size: 28rpx;
                     transform: translateY(10%);
+                    position: relative;
+                    i {
+                        position: absolute;
+                        left: -32rpx;
+                        top: 4rpx;
+                    }
                 }
                 .count {
                     display: flex;
@@ -1968,26 +2056,49 @@
         }
         .coupon {
             margin: 0 36rpx;
-            padding-bottom: 20rpx;
+            padding-bottom: 40rpx;
             max-height: 560rpx;
             overflow-y: scroll;
             .title {
                 font-size: 30rpx;
                 color: #1a1a1a;
-                padding: 31rpx 0;
+                padding: 30rpx 0;
                 margin-top: 12rpx;
                 .icon {
                     margin-right: 10rpx;
+                }
+            }
+            .title_text {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 30rpx 0 16rpx;
+                span {
+                    color: #1a1a1a;
+                    font-size: 30rpx;
+                }
+                .icon {
+                    margin-right: 10rpx;
+                    width: 32rpx;
+                    height: 32rpx;
                 }
             }
             ul.list {
                 li {
                     width: 214rpx;
                     height: 109rpx;
-                    background: url('../../../static/couponBg.png') no-repeat center;
+                    background-image: url('../../../static/couponBg.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
                     background-size: 100%;
                     margin-bottom: 17rpx;
                     display: inline-block;
+                    &.couponStatus1 {
+                        background-image: url('../../../static/couponBg1.png');
+                    }
+                    &.couponStatus2 {
+                        background-image: url('../../../static/couponBg2.png');
+                    }
                     &:nth-child(3n-1) {
                         margin: 0 16rpx 17rpx;
                     }
@@ -2115,7 +2226,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7); // padding: 10rpx 36rpx 140rpx;
+        background: rgba(0, 0, 0, 0.7);
         padding: 10rpx 36rpx 0;
         box-sizing: border-box;
         z-index: 50;
@@ -2143,11 +2254,7 @@
         }
         .main {
             border-radius: 10rpx;
-            background: #f1f1f1; //   height: 1044rpx;
-            // width: 339px;
-            // height: 522px;
-            // margin: 0 auto;
-            // overflow: hidden;
+            background: #f1f1f1;
             position: relative;
             width: 339px;
             height: 522px;
@@ -2334,6 +2441,7 @@
                 margin-right: 20rpx;
                 height: 62rpx;
                 span {
+                    white-space: nowrap;
                     color: #ed533d;
                     font-size: 24rpx;
                     margin-right: 10rpx;

@@ -42,9 +42,9 @@ export default {
       '^pages/nearby-shop/main',
       'pages/search-shop/main',
       'pages/wx-auth/main',
-      'pages/pay/main',
       'pages/my-coupon/main',
-      
+      //地图
+      'pages/map/main',
     ],
     window: {
       //下拉 loading 的样式，仅支持 dark/light
@@ -66,7 +66,6 @@ export default {
       //文字初始颜色
       color: '#b2b2b2',
       list: [
-
         //平台店铺
         {
           //图标选中状态

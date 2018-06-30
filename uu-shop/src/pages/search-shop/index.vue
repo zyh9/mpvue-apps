@@ -23,6 +23,9 @@
                                     </div>
                                 </div>
                                 <p class="address">{{item.ShopAddress}}</p>
+                                <div class="option" v-if="item.PaotuiPriceOff"><i class="icon_set"></i><span class="coupon_text">{{item.PaotuiPriceOff}}</span></div>
+                                <div class="option" v-if="item.Coupons"><i class="icon icon_coupon"></i><span class="coupon_text">{{item.Coupons}}</span></div>
+                                <div class="option" v-if="!item.PaotuiPriceOff&&!item.Coupons"><span class="no_coupon_text">{{item.NoPerMessage}}</span></div>
                             </div>
                         </div>
                     </div>
@@ -109,7 +112,6 @@
                         this.shopList.push(...res.Body.Shops);
                         if (this.shopList.length == 0) this.tips = true;
                     }).catch(err => {
-                        console.log(err, 0)
                         this.msg(err.Msg)
                     })
                 } else this.msg('您还没有输入内容哦')
@@ -194,8 +196,7 @@
                 position: relative;
                 .item_left {
                     display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
+                    justify-content: flex-start; // align-items: center;
                     flex: 1;
                     .item_left_img {
                         width: 120rpx;
@@ -250,6 +251,30 @@
                             font-size: 26rpx;
                             color: #999;
                             width: 100%;
+                        }
+                        .option {
+                            height: 40rpx;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            margin-top: 10rpx;
+                            p,
+                            span {
+                                color: #1a1a1a;
+                                font-size: 26rpx;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                line-height: 42rpx;
+                                padding: 0 8rpx;
+                                flex: 1;
+                            }
+                            .coupon_text {
+                                padding-right: 20rpx;
+                            }
+                            .no_coupon_text {
+                                padding: 0;
+                            }
                         }
                     }
                     span {

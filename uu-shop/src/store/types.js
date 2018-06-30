@@ -1,7 +1,7 @@
 import keymirror from 'keymirror'
 
 let types = keymirror({
-    COMMIT_CODE:null,
+    BACK_INDEX:null,
 })
 
 export {types}

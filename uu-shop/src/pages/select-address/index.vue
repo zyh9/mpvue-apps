@@ -132,20 +132,6 @@
                 s = Math.round(s * 10000) / 10000;
                 return s * 10
             },
-            //地址搜索列表
-            // siteInfo() {
-            //     QQMap.search({
-            //         keyword: this.val,
-            //         region: this.city,
-            //         success: res => {
-            //             console.log(res.data)
-            //             this.addressList = res.data;
-            //         },
-            //         fail: err => {
-            //             console.log(err)
-            //         }
-            //     })
-            // },
             siteInfo() {
                 QQMap.getSuggestion({
                     keyword: this.val,

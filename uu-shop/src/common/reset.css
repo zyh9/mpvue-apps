@@ -294,6 +294,18 @@ input::-webkit-input-placeholder {
 .icon_express {
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/expressLogo.png');
 }
+.icon_dada {
+  background-image: url('../../static/dada-img.png');
+}
+.icon_commodity {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 120rpx;
+  height: 120rpx;
+  background-image: url('../../static/commodity.png');
+}
 .icon_receipt {
   background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/receipt.png');
 }
@@ -376,11 +388,6 @@ input::-webkit-input-placeholder {
   width: 28rpx ;
   height: 28rpx ;
   background-image: url('../../static/icon_coupon.png');
-}
-.icon_subtraction {
-  width: 28rpx;
-  height: 28rpx;
-  background-image: url('../../static/icon_subtraction.png');
 }
 .icon_shop {
   width: 22rpx ;
