@@ -72,7 +72,7 @@ const post = (opt = {}) => {
           } else if (res.data.State == -1010) {
             //跑腿地址同步
             resolve(res.data)
-          } else if (res.data.State < -10000) {
+          } else if (res.data.State == -13) {
             //订单提交页商品状态码
             resolve(res.data)
           } else {
@@ -279,7 +279,7 @@ const model = _ => {
       if (res.confirm) {
         console.log('用户点击确定')
         wx.redirectTo({
-          url: '/pages/wx-auth/main'
+          url: '/pages/wx-auth/main?type=1'
         })
       } else if (res.cancel) {
         console.log('用户点击取消')

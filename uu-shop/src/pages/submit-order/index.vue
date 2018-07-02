@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                  <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                  <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                </div> -->
+                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                      </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -292,7 +292,7 @@
               if (this.shopInfo.ShopLoc && this.shopInfo.ShopLoc.split(',')[0] && this.selectAddress.AddressLoc) {
                 this.Freight(res.Body.PriceToken)
               }
-            } else if (res.State < -10000) {
+            } else if (res.State == -13) {
               this.orderMsg = res.Msg;
               this.orderMask = true;
               let cartListSum = wx.getStorageSync('cartListSum') || [];
@@ -403,7 +403,7 @@
                     setTimeout(_ => {
                       /* 支付成功跳转订单列表 */
                       wx.redirectTo({
-                        url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                        url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
                       });
                     }, 800)
                   },
@@ -421,7 +421,7 @@
                     setTimeout(_ => {
                       /* 取消支付跳转订单列表 */
                       wx.redirectTo({
-                        url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                        url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
                       });
                     }, 800)
                   }
@@ -461,7 +461,7 @@
                   setTimeout(_ => {
                     /* 支付成功跳转订单列表 */
                     wx.redirectTo({
-                      url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                      url: `/pages/order-details/main?orderId=${orderId}&type=1`
                     });
                   }, 800)
                 },
@@ -479,7 +479,7 @@
                   setTimeout(_ => {
                     /* 取消支付跳转订单列表 */
                     wx.redirectTo({
-                      url: '/pages/order-details/main?orderId=' + res.Body.OrderId
+                      url: `/pages/order-details/main?orderId=${orderId}&type=1`
                     });
                   }, 800)
                 }
@@ -537,18 +537,22 @@
             })
             console.log(goodsDetail, '再来一单')
             this.cartListItem = goodsDetail;
-            let address = res.Body.ReceiveAddress.split('($)');
-            this.selectAddress = {
-              AddressLoc: res.Body.ReceiverLoc,
-              AddressNote: address[1],
-              AddressTitle: address[0],
-              CityName: '',
-              CountyName: '',
-              Id: res.Body.ReceiveAddressId,
-              /* 收货地址id */
-              LinkMan: res.Body.ReceiveMan,
-              LinkManMobile: res.Body.ReceiveMobile,
-              UserNote: address[2],
+            if (wx.getStorageSync('selectAddress')) {
+              this.selectAddress = wx.getStorageSync('selectAddress');
+            } else {
+              let address = res.Body.ReceiveAddress.split('($)');
+              this.selectAddress = {
+                AddressLoc: res.Body.ReceiverLoc,
+                AddressNote: address[1],
+                AddressTitle: address[0],
+                CityName: '',
+                CountyName: '',
+                Id: res.Body.ReceiveAddressId,
+                /* 收货地址id */
+                LinkMan: res.Body.ReceiveMan,
+                LinkManMobile: res.Body.ReceiveMobile,
+                UserNote: address[2],
+              }
             }
             this.QQcityInfo({
               latitude: this.shopInfo.ShopLoc.split(',').map(Number)[1],

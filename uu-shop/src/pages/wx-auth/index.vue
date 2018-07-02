@@ -15,11 +15,13 @@
         },
         onReady() {
             this.tips = '';
+            wx.setStorageSync('auth', this.$mp.query.type)
         },
+        onShow() {},
         methods: {
             setting(e) {
                 console.log(e.mp.detail.authSetting)
-                if (e.mp.detail.authSetting['scope.userLocation']) {
+                if (e.mp.detail.authSetting['scope.userLocation'] && (wx.getStorageSync('auth') || null) == 1) {
                     this.tips = '';
                     this.msg('授权成功')
                     setTimeout(_ => {
@@ -27,10 +29,7 @@
                             url: '/pages/nearby-shop/main'
                         })
                     }, 800)
-                } else {
-                    this.tips = '您有未开启授权的选择项';
-                }
-                if (e.mp.detail.authSetting['scope.userInfo']) {
+                } else if (e.mp.detail.authSetting['scope.userLocation'] && (wx.getStorageSync('auth') || null) == 2) {
                     this.tips = '';
                     this.msg('授权成功')
                     setTimeout(_ => {
@@ -43,7 +42,10 @@
                 }
             },
         },
-        components: {}
+        components: {},
+        onUnload() {
+            wx.removeStorageSync('auth')
+        }
     }
 </script>
 

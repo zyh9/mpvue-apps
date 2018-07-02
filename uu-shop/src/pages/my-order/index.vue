@@ -157,7 +157,7 @@
             },
             orderDetails(id) {
                 wx.navigateTo({
-                    url: '/pages/order-details/main?orderId=' + id
+                    url: `/pages/order-details/main?orderId=${id}&type=2`
                 })
             },
             /* 订单状态文字 */

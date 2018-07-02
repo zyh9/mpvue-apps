@@ -52,7 +52,7 @@
             if (res.confirm) {
               console.log('用户点击确定')
               wx.redirectTo({
-                url: '/pages/wx-auth/main'
+                url: '/pages/wx-auth/main?type=2'
               })
             } else if (res.cancel) {
               console.log('用户点击取消')

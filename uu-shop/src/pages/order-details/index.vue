@@ -181,6 +181,7 @@
             })
         },
         onReady() {
+            console.log(this.$mp.query.type)
             clearInterval(this.timer);
             this.timer = null;
             this.winHeight = this.mapBlockHeight = 0;
@@ -454,12 +455,21 @@
                     }
                     //订单超时取消 => 跳转至订单列表页
                     if (this.orderInfo.State == -1 || this.orderInfo.State == -9) {
-                        setTimeout(_ => {
-                            /* 支付成功跳转订单列表 */
-                            wx.redirectTo({
-                                url: '/pages/my-order/main'
-                            })
-                        }, 800)
+                        if (this.$mp.query.type == 1) {
+                            setTimeout(_ => {
+                                /* 支付成功跳转订单列表 */
+                                wx.redirectTo({
+                                    url: '/pages/my-order/main'
+                                })
+                            }, 800)
+                        } else {
+                            setTimeout(_ => {
+                                /* 支付成功跳转订单列表 */
+                                wx.navigateBack({
+                                    delta: 1
+                                })
+                            }, 800)
+                        }
                     }
                     if (this.orderInfo.State == 10) {
                         this.tips = '感谢光临，很高兴为您服务';
