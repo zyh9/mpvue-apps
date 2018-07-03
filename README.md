@@ -22,8 +22,6 @@
 
 [高德 微信小程序 SDK](http://lbs.amap.com/api/wx/summary)
 
-> 高德 微信小程序 key：801939221fec22a5fd38c25dfd8b2e97
-
 ### 距离计算
 
 ```javascript
