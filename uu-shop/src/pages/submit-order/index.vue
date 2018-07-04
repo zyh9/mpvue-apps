@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                      </div> -->
+                                                                                                                                                                                                            <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                            <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                          </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -539,29 +539,52 @@
             this.cartListItem = goodsDetail;
             if (wx.getStorageSync('selectAddress')) {
               this.selectAddress = wx.getStorageSync('selectAddress');
+              this.QQcityInfo({
+                latitude: this.shopInfo.ShopLoc.split(',').map(Number)[1],
+                longitude: this.shopInfo.ShopLoc.split(',').map(Number)[0]
+              })
             } else {
-              let address = res.Body.ReceiveAddress.split('($)');
-              this.selectAddress = {
-                AddressLoc: res.Body.ReceiverLoc,
-                AddressNote: address[1],
-                AddressTitle: address[0],
-                CityName: '',
-                CountyName: '',
-                Id: res.Body.ReceiveAddressId,
-                /* 收货地址id */
-                LinkMan: res.Body.ReceiveMan,
-                LinkManMobile: res.Body.ReceiveMobile,
-                UserNote: address[2],
-              }
+              this.getAddressInfo(res)
+            }
+          } else {
+            console.log(res.Msg)
+          }
+        }).catch(err => {
+          this.msg(err.Msg)
+        })
+      },
+      //获取所有地址
+      getAddressInfo(info) {
+        this.util.post({
+          url: '/api/Customer/PersonerCenter/Addresses',
+          data: {}
+        }).then(res => {
+          console.log(res)
+          let n = res.Body.findIndex(e => e.Id == info.Body.ReceiveAddressId);
+          //地址信息在个人地址列表里
+          if (n > -1) {
+            let address = info.Body.ReceiveAddress.split('($)');
+            this.selectAddress = {
+              AddressLoc: info.Body.ReceiverLoc,
+              AddressNote: address[1],
+              AddressTitle: address[0],
+              CityName: '',
+              CountyName: '',
+              Id: info.Body.ReceiveAddressId,
+              /* 收货地址id */
+              LinkMan: info.Body.ReceiveMan,
+              LinkManMobile: info.Body.ReceiveMobile,
+              UserNote: address[2],
             }
             this.QQcityInfo({
               latitude: this.shopInfo.ShopLoc.split(',').map(Number)[1],
               longitude: this.shopInfo.ShopLoc.split(',').map(Number)[0]
             })
           } else {
-            console.log(res.Msg)
+            this.msg('请选择您的收货地址')
           }
         }).catch(err => {
+          console.log(err)
           this.msg(err.Msg)
         })
       },
@@ -634,6 +657,10 @@
       addressInfo: function() {
         return this.selectAddress.AddressTitle ? `${this.selectAddress.AddressTitle} ${this.selectAddress.AddressNote}`.split('($)').join(' ') : false
       },
+    },
+    onUnload() {
+      //删除备注信息
+      wx.getStorageSync('note')&&wx.removeStorageSync('note');
     }
   }
 </script>

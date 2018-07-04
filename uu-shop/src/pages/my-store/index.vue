@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                                                                                                                                                                                                                                                                                                                                <cover-view class="shareCover" >
-                                                                                                                                                                                                                                                                                                                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                                                                                                                                                                                                                                                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                                                                                                                                                                                                                                                                                                </cover-view>
-                                                                                                                                                                                                                                                                                                                                                                </canvas>
+                        <cover-view class="shareCover" >
+                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                        </cover-view>
+                        </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -761,6 +761,10 @@
                                     duration: 800
                                 })
                                 this.shareCard = false;
+                            },
+                            fail: err => {
+                                console.log('店铺保存相册取消')
+                                this.util.phModel()
                             }
                         })
                     }

@@ -29,12 +29,20 @@
                             url: '/pages/nearby-shop/main'
                         })
                     }, 800)
-                } else if (e.mp.detail.authSetting['scope.userLocation'] && (wx.getStorageSync('auth') || null) == 2) {
+                } else if (e.mp.detail.authSetting['scope.userInfo'] && (wx.getStorageSync('auth') || null) == 2) {
                     this.tips = '';
                     this.msg('授权成功')
                     setTimeout(_ => {
                         wx.redirectTo({
                             url: '/pages/login/main'
+                        })
+                    }, 800)
+                } else if (e.mp.detail.authSetting['scope.writePhotosAlbum'] && (wx.getStorageSync('auth') || null) == 3) {
+                    this.tips = '';
+                    this.msg('授权成功')
+                    setTimeout(_ => {
+                        wx.navigateBack({
+                            delta: 1
                         })
                     }, 800)
                 } else {

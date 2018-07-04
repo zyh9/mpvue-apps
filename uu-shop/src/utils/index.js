@@ -9,15 +9,14 @@ const QQMap = new QQMapWX({
 const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
+//鹏浩地址
 // const baseUrl = 'http://192.168.6.100:60004';
 // const baseUrl = 'http://192.168.6.12:60003';
-// 孙红军
-// const baseUrl = 'http://192.168.6.89:8085';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    v: '1.1.2',
+    v: '1.1.3',
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''
@@ -270,7 +269,7 @@ const downImg = val => {
   })
 }
 
-//全局模态框
+//地理位置授权
 const model = _ => {
   wx.showModal({
     title: '提示',
@@ -289,4 +288,41 @@ const model = _ => {
   })
 }
 
-export default { get, post, openTime, qqMapInfo, FmtTime, getLoc, downImg, QQMap };
+//保存到相册授权
+const phModel = _ => {
+  wx.showModal({
+    title: '提示',
+    content: '需要您重新授权',
+    success: res => {
+      if (res.confirm) {
+        console.log('用户点击确定')
+        wx.navigateTo({
+          url: '/pages/wx-auth/main?type=3'
+        })
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+        phModel();
+      }
+    }
+  })
+}
+
+const loginModel = _ => {
+  wx.showModal({
+    title: '提示',
+    content: '需要您重新授权',
+    success: res => {
+      if (res.confirm) {
+        console.log('用户点击确定')
+        wx.redirectTo({
+          url: '/pages/wx-auth/main?type=2'
+        })
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+        loginModel();
+      }
+    }
+  })
+}
+
+export default { get, post, openTime, qqMapInfo, FmtTime, getLoc, downImg, QQMap, phModel, loginModel };

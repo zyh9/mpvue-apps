@@ -36,14 +36,12 @@
                 isBindPhone: true,
             }
         },
-        onReady() {},
+        onReady() {
+            this.userData()
+        },
         onShow() {
-            // this.userInfo = {};
             // 判断是否已绑定手机号
             this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
-            if (!this.isBindPhone && !this.userInfo.HeadImg) {
-                this.userData()
-            }
         },
         methods: {
             setting(e) {

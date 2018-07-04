@@ -101,6 +101,7 @@
                     }
                 }).catch(err => {
                     console.log(err)
+                    this.msg(err.Msg)
                 })
             },
             //同步UU跑腿地址
