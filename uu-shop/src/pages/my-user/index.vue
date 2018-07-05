@@ -38,8 +38,6 @@
         },
         onReady() {
             this.userData()
-        },
-        onShow() {
             // 判断是否已绑定手机号
             this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
         },

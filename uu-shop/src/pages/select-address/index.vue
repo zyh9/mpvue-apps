@@ -68,7 +68,6 @@
         onShow() {
             this.val = '';
         },
-        created() {},
         mounted() {
             let query = wx.createSelectorQuery();
             query.select('.top').boundingClientRect()

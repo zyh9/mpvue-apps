@@ -68,7 +68,6 @@
             this.addressList = this.uuptList = [];
             this.addressInfo();
         },
-        mounted() {},
         methods: {
             check() {},
             addAddress() {

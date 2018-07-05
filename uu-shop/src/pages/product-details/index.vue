@@ -62,11 +62,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                                                                                <cover-view class="shareCover" >
-                                                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                                                </cover-view>
-                                                                                            </canvas>
+                                                                                                    <cover-view class="shareCover" >
+                                                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                                                    </cover-view>
+                                                                                                                </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -139,12 +139,6 @@
                 title: '加载中',
                 mask: true
             })
-        },
-        onShow() {
-            this.minShopLogo = '';
-            this.minGoodsPic = '';
-            this.goodsInfo = {};
-            this.shareCard = false;
             if (this.$root.$mp.query.type == 1) {
                 console.log('不走分享')
                 this.getGoodsInfo()
@@ -160,6 +154,12 @@
                     console.log(err)
                 })
             }
+            this.minShopLogo = '';
+            this.minGoodsPic = '';
+            this.goodsInfo = {};
+        },
+        onShow() {
+            this.shareCard = false;
             // 先获取缓存数据
             let cartListSum = wx.getStorageSync('cartListSum') || [];
             //再找到对应店铺
@@ -477,7 +477,7 @@
             saveImg() {
                 wx.canvasToTempFilePath({
                     canvasId: 'myCanvas',
-                    success: res=> {
+                    success: res => {
                         wx.saveImageToPhotosAlbum({
                             filePath: res.tempFilePath,
                             success(result) {
@@ -541,7 +541,7 @@
                                 res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
                             }
                             this.goodsInfo = res.Body;
-                            console.log(this.goodsInfo)
+                            // console.log(this.goodsInfo)
                         }
                     }).catch(err => {
                         wx.hideLoading();

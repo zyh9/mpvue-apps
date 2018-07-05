@@ -43,15 +43,12 @@
         title: ''
       }
     },
-    onShow() {
+    onReady() {
       this.note = '';
       this.userInfo = wx.getStorageSync('userInfo');
       this.address = wx.getStorageSync('address') || {};
       this.note = this.address.UserNote;
       this.title = this.$root.$mp.query.type == 1 ? '新增地址' : '修改地址';
-      // wx.setNavigationBarTitle({
-      //   title: this.title//页面标题
-      // })
     },
     methods: {
       //检测手机号
@@ -151,7 +148,7 @@
                     CountyName: this.address.district || this.address.CountyName,
                     Type: 1
                   })
-                  wx.setStorageSync('selectAddress',select)
+                  wx.setStorageSync('selectAddress', select)
                 }
                 wx.navigateBack({
                   delta: 1

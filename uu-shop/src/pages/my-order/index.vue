@@ -72,21 +72,6 @@
             this.nomore = false;
             this.orderInfo()
         },
-        mounted() {
-            // let query = wx.createSelectorQuery();
-            // query.select('.my_order_select').boundingClientRect()
-            // query.exec(res => {
-            //     let height = res[0].height;
-            //     wx.getSystemInfo({
-            //         success: res => {
-            //             // console.log(res)
-            //             this.winWidth = res.windowWidth;
-            //             //减去上方的高度
-            //             this.winHeight = res.windowHeight - height;
-            //         }
-            //     })
-            // })
-        },
         onPullDownRefresh() { //下拉刷新
             this.page = 1;
             this.nomore = false;

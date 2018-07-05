@@ -90,6 +90,10 @@ const post = (opt = {}) => {
 //地理位置获取
 const qqMapInfo = _ => {
   return new Promise((resolve, reject) => {
+    wx.showLoading({
+      title: '加载中',
+      mask: true,
+    })
     wx.getLocation({
       type: 'wgs84',
       success: res => {
@@ -117,13 +121,14 @@ const qqMapInfo = _ => {
             })
           },
           fail: err => {
-            reject(err)
+            wx.hideLoading();
+            reject(err);
           }
         })
       },
       fail: err => {
         wx.hideLoading();
-        reject('error')
+        reject('error');
         model();
       }
     })
@@ -136,10 +141,6 @@ const wxLogin = _ => {
   return new Promise((resolve, reject) => {
     wx.login({
       success: res => {
-        wx.showLoading({
-          title: '加载中',
-          mask: true,
-        })
         userLogin(res.code).then(res => {
           if (res.State == 1) {
             wx.hideLoading()
@@ -152,13 +153,14 @@ const wxLogin = _ => {
             wxLogin()
           }
         }).catch(err => {
-          wx.hideLoading()
-          msg(err.Msg)
-          reject(err)
+          wx.hideLoading();
+          msg(err.Msg);
+          reject(err);
         })
       },
       fail: err => {
-        console.log(err)
+        wx.hideLoading();
+        console.log(err);
       }
     })
   })
@@ -288,6 +290,25 @@ const model = _ => {
   })
 }
 
+//获取用户信息授权
+const loginModel = _ => {
+  wx.showModal({
+    title: '提示',
+    content: '需要您重新授权',
+    success: res => {
+      if (res.confirm) {
+        console.log('用户点击确定')
+        wx.redirectTo({
+          url: '/pages/wx-auth/main?type=2'
+        })
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+        loginModel();
+      }
+    }
+  })
+}
+
 //保存到相册授权
 const phModel = _ => {
   wx.showModal({
@@ -302,24 +323,6 @@ const phModel = _ => {
       } else if (res.cancel) {
         console.log('用户点击取消')
         phModel();
-      }
-    }
-  })
-}
-
-const loginModel = _ => {
-  wx.showModal({
-    title: '提示',
-    content: '需要您重新授权',
-    success: res => {
-      if (res.confirm) {
-        console.log('用户点击确定')
-        wx.redirectTo({
-          url: '/pages/wx-auth/main?type=2'
-        })
-      } else if (res.cancel) {
-        console.log('用户点击取消')
-        loginModel();
       }
     }
   })
