@@ -609,6 +609,7 @@
 
 ```javascript
 	onLoad(options) {
+		//获取场景码
 		this.scene = options.scene;
 		wx.setStorageSync('scene', this.scene);
 		this.ShopId = this.$mp.query.ShopId || wx.getStorageSync('uShopId') || '1770169616466949';
@@ -617,14 +618,16 @@
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			appid: wx.getStorageSync('uAppId') || '1',
+			appid: '1',
 			token: wx.getStorageSync('loginInfo').Token || '',
 			qrcode: wx.setStorageSync('scene', this.scene) || ''
 		}
 	}
 
 	//获取第三方平台自定义的数据字段
+	
 	let config = wx.getExtConfigSync();
+	
 	config.appId && (wx.setStorageSync('uAppId', config.appId));
 
 	!config.shopId && console.log('未获取到shopId');
