@@ -634,3 +634,13 @@
 
 	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
 ```
+
+
+### 函数节流防抖参考链接
+
+[30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
+
+
+### vue 与 throttle 的坑
+
+[参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
