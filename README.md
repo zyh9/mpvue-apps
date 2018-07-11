@@ -643,3 +643,31 @@
 ### vue 与 throttle 的坑
 
 [参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
+
+### 小程序分包
+
+		前提是项目代码体积已经超过2M的项目才可以使用此方法
+
+		小程序单包最大支持2M，分包后最大可支持8M，故此需要对其进行分包处理
+
+		将main.js里面的pages单独存储于pages.js内（有点像路由的配置文件）
+
+		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
+
+		相应的也就提高了进入小程序的加载速度
+		
+		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
+
+```javascript
+	//pages.js配置（单个页面的配置以及路径）
+	module.exports = [
+		{
+			path: 'pages/admin-index',//页面所在路径
+			subPackage: true,//是否分包，主包可不用配置此项
+			config: {
+				navigationBarTitleText: '',//导航文字
+				navigationBarBackgroundColor:'#0963EE'//导航颜色
+			}
+		},
+	]
+```
