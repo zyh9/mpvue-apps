@@ -3,7 +3,7 @@
     <img src="https://otherfiles-ali.uupt.com/Stunner/FE/C/admin-shop.png" alt="" class="index_bg fade_in">
     <div class="index_btn_img index_btn">
       <p @click="openShop">我也要开店</p>
-      <navigator target="miniProgram" open-type="navigate" app-id="wxec3fbad970d598be" path="/pages/admin-shop-index/main" extra-data="" version="release" hover-class="none"></navigator>
+      <navigator target="miniProgram" open-type="navigate" app-id="wxec3fbad970d598be" path="/pages/admin-shop-index" extra-data="" version="release" hover-class="none"></navigator>
     </div>
   </div>
 </template>
