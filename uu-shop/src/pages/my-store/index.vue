@@ -2,7 +2,7 @@
     <div class="store" v-if="block">
         <div class="store_top_info" v-show="shopInfoList.Logo">
             <div class="store_banner">
-                <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
+                <img :src="shopInfoList.Logo?shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg':''" alt="" class="shop_img fade_in">
                 <div class="shop_right_details">
                     <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'欢迎光临本店，我们不定期会推出活动和优惠！'}}</p>
                     <p>{{time}}</p>
@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                <cover-view class="shareCover" >
-                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                </cover-view>
-                                </canvas>
+                                                <cover-view class="shareCover" >
+                                                <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                </cover-view>
+                                                </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -486,6 +486,7 @@
                 //所有商品汇集  针对左侧列表返回商品为空的作清空处理
                 this.allShopInfoList = allShopInfo.Body.filter(e => e.GoodsInfo.length);
                 if (!this.allShopInfoList.length) this.noShop = true;
+                console.log(this.allShopInfoList)
                 this.allShopInfoList.forEach(e => {
                     e.GoodsInfo.forEach(item => {
                         if (item.MultiSpec == 1) {
@@ -500,7 +501,7 @@
                         } else {
                             item.num = 0;
                             item.sumPrice = 0;
-                            //规格编号
+                            //规格编号  抓过来的数据单个规格数据没有
                             item.Id = item.GoodsSpec[0].Id;
                         }
                         this.sumList.push(item)
@@ -512,6 +513,7 @@
                     })
                     this.shopPageListSum.push([])
                 })
+                // return;
                 wx.hideLoading()
                 this.block = true;
                 this.$store.dispatch('backIndex', false)
@@ -1562,8 +1564,7 @@
                             line-height: 136rpx;
                         }
                         .li_info {
-                            flex: 1;
-                            overflow: hidden;
+                            flex: 1; // overflow: hidden;
                             position: relative;
                             .shop_name {
                                 color: #1d1d1d;

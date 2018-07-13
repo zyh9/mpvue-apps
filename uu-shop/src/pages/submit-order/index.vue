@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                                                <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                                                <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                                              </div> -->
+                                                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                                      </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -434,6 +434,19 @@
                     }
                   })
                 }
+              } else if (res.State == -13) {
+                this.orderMsg = res.Msg;
+                this.orderMask = true;
+                let cartListSum = wx.getStorageSync('cartListSum') || [];
+                cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                console.log(cartListSum)
+                // 再设置缓存数据
+                wx.setStorageSync('cartListSum', cartListSum);
+                //缓存length不存在，直接清除
+                !cartListSum.length && wx.removeStorageSync('cartListSum');
+                wx.removeStorageSync('note');
+                wx.removeStorageSync('selectAddress');
+                wx.removeStorageSync('couponInfo');
               }
             }).catch(err => {
               this.payOnoff = true;
@@ -497,6 +510,19 @@
                     }, 800)
                   }
                 })
+              } else if (res.State == -13) {
+                this.orderMsg = res.Msg;
+                this.orderMask = true;
+                let cartListSum = wx.getStorageSync('cartListSum') || [];
+                cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                console.log(cartListSum)
+                // 再设置缓存数据
+                wx.setStorageSync('cartListSum', cartListSum);
+                //缓存length不存在，直接清除
+                !cartListSum.length && wx.removeStorageSync('cartListSum');
+                wx.removeStorageSync('note');
+                wx.removeStorageSync('selectAddress');
+                wx.removeStorageSync('couponInfo');
               }
             }).catch(err => {
               this.payOnoff = true;
@@ -1114,6 +1140,7 @@
         padding: 66rpx 36rpx 36rpx;
         border-radius: 8rpx;
         p {
+          margin-top: 42rpx;
           width: 58%;
           color: #b2b2b2;
           text-align: center;
@@ -1121,7 +1148,7 @@
           line-height: 48rpx;
         }
         .btn {
-          margin-top: 64rpx;
+          margin-top: 36rpx;
           height: 74rpx;
           border: 30rpx;
           background: #1a1a1a;
