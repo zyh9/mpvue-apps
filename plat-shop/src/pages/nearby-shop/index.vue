@@ -313,21 +313,11 @@
                     z-index: 10;
                 }
             }
-        }
-        .nearby_item:nth-last-of-type(1) {
-            &:after {
-                content: '';
-                display: block;
-                width: 100%;
-                height: 0;
-                border-bottom: none;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                transform: scaleY(0.5);
-                transform-origin: 0 0;
-                z-index: 10;
-            }
+            // .item_top:nth-last-child(1) {
+            //     &:after {
+            //         display: none !important;
+            //     }
+            // }
         }
         .li_mask {
             position: absolute;

@@ -25,7 +25,7 @@
             <img class="fade_in" :src="v.GoodsMasterPic" alt="">
             <div class="item">
               <p class="name">{{v.GoodName}}</p>
-              <p class="spec">{{v.SpecName?v.SpecName:''}}</p>
+              <p class="spec">{{v.SpecName&&v.MultiSpec==1?v.SpecName:''}}</p>
               <p class="num">X{{v.num}}</p>
             </div>
             <div class="sum">
@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                                                      </div> -->
+                                                                                                                                                                                                                                    <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                                                    <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                                                  </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -163,6 +163,7 @@
         IsOrderHasAcivity: '',
         IsAcivityAllowCoupon: '',
         payOnoff: true, //支付开关
+        tips: ''
       }
     },
     onLoad() {
@@ -174,13 +175,16 @@
     },
     onReady() {
       this.ExpressType = '配送方式+配送时长';
-      this.GoodPriceToken = '';
       this.noteText = '';
       wx.removeStorageSync('note');
     },
     onShow() {
       this.payOnoff = true;
       this.infoOver = false;
+      this.totalMoney = '';
+      this.GoodPriceToken = '';
+      //地区配送不支持的提示
+      this.tips = '';
       this.IsOrderHasAcivity = this.IsAcivityAllowCoupon = '';
       /* 选择优惠券返回 */
       if (wx.getStorageSync('couponInfo').couponId) {
@@ -300,7 +304,9 @@
               let cartListSum = wx.getStorageSync('cartListSum') || [];
               //查询所在店铺
               let cartItem = cartListSum.filter(e => e.ShopId == res.Body.ShopID);
-              cartItem[0].cartList = cartItem[0].cartList ? cartItem[0].cartList : [];
+              if (cartItem.length) {
+                cartItem[0].cartList = cartItem[0].cartList ? cartItem[0].cartList : [];
+              }
               let item = [];
               // console.log(res.Body.GoodsPrice.length, cartItem[0].cartList)
               if (res.Body.GoodsPrice.length) { //提交订单中存在可以支付的商品
@@ -358,16 +364,17 @@
             }
           }).catch(err => {
             this.msg(err.Msg)
+            this.tips = err.Msg;
           })
       },
       //创建订单
       createOrder() {
         if (!this.addressInfo) {
           this.msg('请选择收货地址');
-          return
+          return;
         }
         if (this.infoOver == false) {
-          this.msg('网络拥挤，请稍后重试')
+          this.msg(this.tips ? this.tips : '网络拥挤，请稍后重试')
           return;
         }
         if (this.payOnoff) {
@@ -600,7 +607,7 @@
           url: '/api/Customer/PersonerCenter/Addresses',
           data: {}
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           let n = res.Body.findIndex(e => e.Id == info.Body.ReceiveAddressId);
           //地址信息在个人地址列表里
           if (n > -1) {

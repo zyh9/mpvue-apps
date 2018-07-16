@@ -179,7 +179,7 @@
                 <li class="lis" v-for="(v,i) in cartListItem" :key="i" v-if="v.num>0">
                     <div class="set-grow left">
                         <p class="shop_list_name">{{v.GoodName}}</p>
-                        <span v-if='v.SpecName'>{{v.SpecName}}</span>
+                        <span v-if='v.SpecName&&v.MultiSpec==1'>{{v.SpecName}}</span>
                     </div>
                     <div class="right set-flex set-between">
                         <p class="shop_list_price"><i class="icon_discount_text" v-if="v.GoodsType==-1"></i>¥{{v.sumPrice}}</p>
@@ -486,7 +486,7 @@
                 //所有商品汇集  针对左侧列表返回商品为空的作清空处理
                 this.allShopInfoList = allShopInfo.Body.filter(e => e.GoodsInfo.length);
                 if (!this.allShopInfoList.length) this.noShop = true;
-                console.log(this.allShopInfoList)
+                // console.log(this.allShopInfoList)
                 this.allShopInfoList.forEach(e => {
                     e.GoodsInfo.forEach(item => {
                         if (item.MultiSpec == 1) {

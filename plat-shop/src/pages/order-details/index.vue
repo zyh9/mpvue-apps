@@ -397,7 +397,7 @@
                         let num = Math.floor(this.distance(DriverLastLoc.latitude, DriverLastLoc.longitude, ShopLoc.latitude, ShopLoc.longitude) * 1000);
                         this.tips = `跑男距店${num}m`;
                     } else {
-                        let num = this.distance(DriverLastLoc.latitude, DriverLastLoc.longitude, ReceiverLoc.latitude, ReceiverLoc.longitude) * 1000;
+                        let num = Math.floor(this.distance(DriverLastLoc.latitude, DriverLastLoc.longitude, ReceiverLoc.latitude, ReceiverLoc.longitude) * 1000);
                         this.tips = `跑男距您${num}m`;
                     };
                     if (this.mapBlock) {
