@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                                                                            <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                                                                            <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                                                                          </div> -->
+                                                                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                                                      </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
