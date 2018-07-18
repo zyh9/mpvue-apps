@@ -2,7 +2,7 @@
     <div class="store" v-if="block">
         <div class="store_top_info" v-show="shopInfoList.Logo">
             <div class="store_banner">
-                <img :src="shopInfoList.Logo?shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg':''" alt="" class="shop_img fade_in">
+                <img :src="shopInfoList.Logo?shopInfoList.Logo+'?x-oss-process=image/resize,w_200/format,jpg':''" alt="" class="shop_img fade_in">
                 <div class="shop_right_details">
                     <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'欢迎光临本店，我们不定期会推出活动和优惠！'}}</p>
                     <p>{{time}}</p>
@@ -37,15 +37,15 @@
                             </div>
                         </scroll-view>
                         <div class="right_con">
-                            <scroll-view v-for="(item,index) in allShopInfoList" :key="index" v-if="selected==index" scroll-y="true" style="height: 100%" lower-threshold="20" @scrolltolower="scrollHandler(selected)" class="scroll_right">
+                            <scroll-view v-for="(item,index) in allShopInfoList" :key="index" v-if="selected==index" scroll-y="true" style="height: 100%" class="scroll_right">
                                 <!-- <p class="no_shop" v-if="!item.length">此分类暂无商品信息哦</p> -->
                                 <div class="list_item_r" v-if="item.GoodsInfo.length" v-for="(v,i) in item.GoodsInfo" :key="i">
                                     <div class="lis_item_left" @click="goGoodsDetail(v)">
-                                        <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img fade_in" lazy-load="true">
-                                        <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
+                                        <img :src="v.GoodsMasterPic?v.GoodsMasterPic+'?x-oss-process=image/resize,w_200/format,jpg':''" alt="" class="shop_lis_img fade_in" lazy-load="true">
+                                        <div class="shop_lis_mask" v-if="v.State==3||(v.MultiSpec==0&&v.RealStock<=0)||(v.MultiSpec==1&&!v.List.length)">已售罄</div>
                                         <div class="li_info">
                                             <p class="shop_name">{{v.GoodName}}<span v-if="v.GoodsType==-1">{{v.SpecName}}</span></p>
-                                            <p class="discount" v-if="v.GoodsType==-1">{{v.PriceOffNote}}</p>
+                                            <div class="discount"><span v-if="v.GoodsType==-1" class="price_tips">{{v.PriceOffNote}}</span><span v-if="v.MultiSpec==0&&v.RealStock>0&&v.RealStock<=10">仅剩{{v.RealStock}}份</span></div>
                                             <div class="discount_shop" v-if="v.GoodsType==-1">
                                                 <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
                                                 <p class="original_price">¥{{v.OriginalPrice}}</p>
@@ -53,12 +53,12 @@
                                             <p class="price_init" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
                                         </div>
                                     </div>
-                                    <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
+                                    <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)&&v.RealStock>0">
                                         <i class="icon icon_lower" @click="lower($event)" :data-info="v" v-if="v.num>0"></i>
                                         <span v-if="v.num>0">{{v.num}}</span>
                                         <i class="icon icon_add" @click="add($event)" :data-info="v"></i>
                                     </div>
-                                    <div class="select_rule" v-if="OpenState &&(v.MultiSpec==1&&v.State==1)" :data-info="v" @click="format($event)">选规格</div>
+                                    <div class="select_rule" v-if="OpenState &&(v.MultiSpec==1&&v.State==1)&&v.List.length" :data-info="v" @click="format($event)">选规格</div>
                                     <!-- <p v-if="v.State==3" class="sold_out">已售罄</p> -->
                                     <div class="shop_mask_state" v-if="!OpenState" @click="shopOpenState"></div>
                                 </div>
@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                    <cover-view class="shareCover" >
-                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                    </cover-view>
-                                                    </canvas>
+                                                            <cover-view class="shareCover" >
+                                                            <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                            <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                            </cover-view>
+                                                            </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -226,11 +226,11 @@
                 <div class="format_center">
                     <span class="format_info">规格</span>
                     <ul class="format_list">
-                        <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)">{{v.SpecName}}</li>
+                        <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)" v-if="v.RealStock>0">{{v.SpecName}}</li>
                     </ul>
                 </div>
                 <div class="format_bot">
-                    <p class="format_price"><span>¥</span>{{formatList.GoodsSpec[formatLi].OriginalPrice}}</p>
+                    <p class="format_price"><span>¥</span>{{formatList.GoodsSpec[formatLi].OriginalPrice}}<i v-if="formatList.GoodsSpec[formatLi].RealStock>0&&formatList.GoodsSpec[formatLi].RealStock<=10">仅剩{{formatList.GoodsSpec[formatLi].RealStock}}份</i></p>
                     <div class="add_cart" @click="addCart"><span>+</span> 加入购物车</div>
                 </div>
             </div>
@@ -497,15 +497,18 @@
                                 ele.GoodsMasterPic = item.GoodsMasterPic;
                                 ele.State = item.State;
                                 ele.sumPrice = 0;
+                                ele.MultiSpec = 1;
                             })
+                            //多规格判断是否已售罄
+                            item.List = item.GoodsSpec.filter(e => e.RealStock > 0);
                         } else {
                             item.num = 0;
                             item.sumPrice = 0;
+                            item.SpecName = item.GoodsSpec[0].SpecName == '默认' ? '' : item.GoodsSpec[0].SpecName == "" ? '' : ` - ${item.GoodsSpec[0].SpecName}`;
                             //规格编号  抓过来的数据单个规格数据没有
                             item.Id = item.GoodsSpec[0].Id;
-                            item.SpecName = item.GoodsSpec[0].SpecName == '默认' ? '' : ` - ${item.GoodsSpec[0].SpecName}`;
+                            item.RealStock = item.GoodsSpec[0].RealStock;
                         }
-                        item.GoodsMasterPic = item.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         this.sumList.push(item)
                     })
                     //单项分类设置页面索引以及终止状态
@@ -556,16 +559,16 @@
                     }
                 })
             },
-            scrollHandler(select) {
-                if (this.shopPageIndex[select].quest) {
-                    //单项的page++
-                    this.shopPageIndex[select].page++;
-                    console.log('加载至' + this.shopPageIndex[select].page)
-                    this.shopPageInfo(this.itemId, select, this.shopPageIndex[select])
-                } else {
-                    // this.msg('已经没有更多商品了')
-                }
-            },
+            // scrollHandler(select) {
+            //     if (this.shopPageIndex[select].quest) {
+            //         //单项的page++
+            //         this.shopPageIndex[select].page++;
+            //         console.log('加载至' + this.shopPageIndex[select].page)
+            //         this.shopPageInfo(this.itemId, select, this.shopPageIndex[select])
+            //     } else {
+            //         // this.msg('已经没有更多商品了')
+            //     }
+            // },
             //切换左侧类别
             checked(item, index) {
                 if (this.selected == index) return;
@@ -607,7 +610,6 @@
                                 e.sumPrice = 0;
                                 e.SpecName = e.GoodsSpec[0].SpecName == '默认' ? '' : ` - ${e.GoodsSpec[0].SpecName}`;
                             }
-                            e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
                         if (res.Body.length < 10) {
                             if (select.page > 1) { //页面大于1
@@ -644,6 +646,8 @@
                 let {
                     info
                 } = e.target.dataset;
+                info.GoodsSpec = info.GoodsSpec.filter(e => e.RealStock > 0);
+                // console.log(info)
                 this.formatList = info;
                 this.formatMask = true;
             },
@@ -1170,7 +1174,7 @@
                 }
             },
             goGoodsDetail(item) {
-                if (item.State == 3) {
+                if (item.State == 3 || (item.MultiSpec == 0 && item.RealStock <= 0) || (item.MultiSpec == 1 && !item.List.length)) {
                     this.msg('商品已售罄')
                     return;
                 }
@@ -1600,6 +1604,9 @@
                                 top: 48rpx;
                                 font-size: 22rpx;
                                 color: #999;
+                                .price_tips {
+                                    margin-right: 24rpx;
+                                }
                             }
                             .price_init {
                                 color: #ff4d3a;
@@ -2430,6 +2437,13 @@
                     span {
                         font-size: 32rpx;
                         margin-right: 10rpx;
+                    }
+                    i {
+                        margin-left: 24rpx;
+                        color: #939393;
+                        font-size: 24rpx;
+                        font-weight: normal;
+                        display: inline-block;
                     }
                 }
                 .add_cart {

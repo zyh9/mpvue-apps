@@ -3,7 +3,7 @@
         <div class="search_top">
             <div class="search">
                 <i class="icon icon_search_2"></i>
-                <input type="text" placeholder="搜索" v-model="val">
+                <input type="text" placeholder="搜索" v-model="val" focus="true">
                 <i class="icon icon_del" v-if="val" @click="clear"></i>
             </div>
             <p class="text" @click="searchClick">搜索</p>

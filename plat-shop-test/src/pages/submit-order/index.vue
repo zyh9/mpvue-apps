@@ -11,7 +11,7 @@
           </div>
           <span class="linkUser" v-if="addressInfo">{{selectAddress.LinkMan}}{{selectAddress.LinkManMobile}}</span>
         </div>
-        <div class="options">
+        <div class="options fade_in">
           <p>{{ExpressType}}</p>
         </div>
       </div>
@@ -57,7 +57,7 @@
         </div>
         <div class="consume_sum">
           <p class="consume_l">小计</p>
-          <p class="consume_r" v-if="GoodPriceToken!=''"><i v-if="reliefSum">已节省{{reliefSum}}元</i><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
+          <p class="consume_r" v-if="GoodPriceToken!=''"><i v-if="reliefSum">共节省{{reliefSum}}元</i><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
           <p class="select_num" v-if="GoodPriceToken==''">选择地址后计算</p>
         </div>
       </div>
@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                                                                        <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                                                                        <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                                                                      </div> -->
+                                                                                                                                                                                                                                          <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                                                          <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                                                        </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -173,12 +173,10 @@
         mask: true
       })
     },
-    onReady() {
+    onShow() {
+      this.selectAddress = {};
       this.ExpressType = '配送方式+配送时长';
       this.noteText = '';
-      wx.removeStorageSync('note');
-    },
-    onShow() {
       this.payOnoff = true;
       this.infoOver = false;
       this.totalMoney = '';
@@ -355,7 +353,7 @@
               this.ExpressPrice = res.Body.ExpressPrice;
               this.GoodPriceToken = res.Body.PriceToken;
               this.ExpressPriceToken = res.Body.ExpressPriceToken;
-              this.ExpressType = res.Body.ExpressType == 2 ? '快递配送' : '跑腿配送';
+              this.ExpressType = res.Body.ExpressType == 2 ? '快递配送' : res.Body.ExpressType == 4 ? '商家自送' : '跑腿配送';
               this.totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000) - Math.round(this.goodsInfo.CouponAmount * 10000)) / 10000;
               this.ExpressPriceOff = res.Body.ExpressPriceOff;
               this.reliefSum = (Math.round(this.goodsInfo.GoodPriceOffMoney * 10000) + Math.round(this.goodsInfo.CouponAmount * 10000) + Math.round(res.Body.ExpressPriceOff * 10000)) / 10000;

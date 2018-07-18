@@ -82,7 +82,7 @@
             </div>
             <div class="consume_sum">
                 <p class="consume_l">小计</p>
-                <p class="consume_r"><span>¥</span>{{orderInfo.TotalMoney}}</p>
+                <p class="consume_r"><i v-if="orderInfo.orderSumPrice>0">共节省{{orderInfo.orderSumPrice}}元</i><span>¥</span>{{orderInfo.TotalMoney}}</p>
             </div>
             <div class="shop_info_list">
                 <div class="shop_tel" @click="tel(orderInfo.ShopMobile)">
@@ -301,15 +301,15 @@
                     .then(res => {
                         if (res.State == 1) {
                             wx.requestPayment({
-                                'timeStamp': res.Body.timeStamp,
-                                'nonceStr': res.Body.nonceStr,
-                                'package': res.Body.package,
-                                'signType': 'MD5',
-                                'paySign': res.Body.paySign,
-                                'success': payres => {
+                                timeStamp: res.Body.timeStamp,
+                                nonceStr: res.Body.nonceStr,
+                                package: res.Body.package,
+                                signType: res.Body.signType,
+                                paySign: res.Body.paySign,
+                                success: payres => {
                                     this.orderDetails()
                                 },
-                                'fail': err => {
+                                fail: err => {
                                     this.msg('您已取消支付')
                                 }
                             })
@@ -442,6 +442,8 @@
                     this.orderInfo = Object.assign({}, res.Body, {
                         stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState, res.Body.ExpressType)
                     })
+                    this.orderInfo.orderSumPrice = (Math.round(this.orderInfo.PaotuiMoneyOff* 10000)+Math.round(this.orderInfo.CouponAmountMoney* 10000))/10000;
+                    // console.log(this.orderInfo.orderSumPrice)
                     //地图所需信息
                     if (this.orderInfo.State >= 4 && this.orderInfo.State < 10 && this.orderInfo.ExpressType != 2) {
                         // console.log(this.util.downImg)
@@ -924,6 +926,12 @@
                     color: #1d1d1d;
                     span {
                         font-size: 24rpx;
+                    }
+                    i {
+                        font-size: 24rpx;
+                        color: #b2b2b2;
+                        display: inline-block;
+                        margin-right: 16rpx;
                     }
                 }
             }

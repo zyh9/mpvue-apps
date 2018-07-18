@@ -35,7 +35,7 @@
               timeStamp: res.Body.wxPayInfo.timeStamp,
               nonceStr: res.Body.wxPayInfo.nonceStr,
               package: res.Body.wxPayInfo.package,
-              signType: 'MD5',
+              signType: res.Body.wxPayInfo.signType,
               paySign: res.Body.wxPayInfo.paySign,
               success: payres => {
                 console.log(payres)

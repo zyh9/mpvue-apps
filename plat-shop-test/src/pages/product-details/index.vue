@@ -2,7 +2,7 @@
     <div class="product-details" v-if="block">
         <scroll-view scroll-y="true" style="height: 100%;padding:0  35rpx 110rpx;box-sizing:border-box;" lower-threshold="60" @scrolltolower="scrollHandler">
             <div class="shop_top">
-                <img :src="goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_400/format,jpg'" alt="" class="shop_img fade_in">
+                <img :src="goodsInfo.GoodMasterPic?goodsInfo.GoodMasterPic+'?x-oss-process=image/resize,w_1000/format,jpg':''" alt="" class="shop_img fade_in">
                 <i class="icon icon_goodsShare" @click="share"></i>
             </div>
             <div class="info">
@@ -13,16 +13,16 @@
                         <p class="original_price">¥{{goodsInfo.OriginalPrice}}</p>
                     </div>
                     <p class="shop_price" v-else><span>¥</span>{{goodsInfo.SalesPrice?goodsInfo.SalesPrice:goodsInfo.OriginalPrice}}</p>
-                    <div class="count" v-if="goodsInfo.State==1&&!isRule&&goodsInfo.ResidueCount>0">
+                    <div class="count" v-if="goodsInfo.State==1&&!isRule&&goodsInfo.RealStock>0">
                         <i class="icon icon_lower" @click="lower" v-if="goodsInfo.num>0" :data-info="goodsInfo"></i>
                         <span v-if="goodsInfo.num>0">{{goodsInfo.num}}</span>
                         <i class="icon icon_add" @click="add" :data-info="goodsInfo"></i>
                     </div>
                     <div class="select_rule" @click="format" v-if="goodsInfo.State==1&&isRule&&goodsInfo.List.length" :data-info="goodsInfo">选规格</div>
-                    <p v-if="goodsInfo.State==3 ||(isRule&&!goodsInfo.List.length) ||(!isRule&&goodsInfo.ResidueCount<=0)" class="sold_out">已售罄</p>
+                    <p v-if="goodsInfo.State==3 ||(isRule&&!goodsInfo.List.length) ||(!isRule&&goodsInfo.RealStock<=0)" class="sold_out">已售罄</p>
                 </div>
-                <div class="good_type" v-if="goodsInfo.GoodType==-1&&goodsInfo.ResidueCount>0&&goodsInfo.ResidueCount<=10">库存: {{goodsInfo.ResidueCount}}</div>
-                <div class="good_type" v-if="goodsInfo.GoodType!=-1&&!isRule&&goodsInfo.ResidueCount>0&&goodsInfo.ResidueCount<=10">库存: {{goodsInfo.ResidueCount}}</div>
+                <div class="good_type" v-if="goodsInfo.GoodType==-1&&goodsInfo.RealStock>0&&goodsInfo.RealStock<=10">仅剩{{goodsInfo.RealStock}}份</div>
+                <div class="good_type" v-if="goodsInfo.GoodType!=-1&&!isRule&&goodsInfo.RealStock>0&&goodsInfo.RealStock<=10">仅剩{{goodsInfo.RealStock}}份</div>
                 <div class="main">
                     <div class="introduction" v-if="goodsInfo.GoodBrief">
                         <div class="item">商品简介</div>
@@ -31,7 +31,7 @@
                     <div class="graphic" v-if="goodsInfo.GoodPics.length">
                         <div class="item">图文详情</div>
                         <div class="detail">
-                            <img class="fade_in" v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v+'?x-oss-process=image/resize,w_400/format,jpg'" mode="widthFix" alt="" />
+                            <img class="fade_in" v-for='(v,i) in goodsInfo.GoodPics' :key="i" :src="v?v+'?x-oss-process=image/resize,w_1000/format,jpg':''" mode="widthFix" alt="" />
                         </div>
                     </div>
                 </div>
@@ -64,11 +64,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;position:absolute;top:0;left:0;"> 
-                                    <cover-view class="shareCover" >
-                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                    </cover-view>
-                                                </canvas>
+                                        <cover-view class="shareCover" >
+                                        <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                        <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                        </cover-view>
+                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -80,11 +80,11 @@
                 <div class="format_center">
                     <span class="format_info">规格</span>
                     <ul class="format_list">
-                        <li v-for="(v,i) in formatList.GoodSpecs" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)" v-if="v.ResidueCount>0">{{v.SpecName}}</li>
+                        <li v-for="(v,i) in formatList.GoodSpecs" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)" v-if="v.RealStock>0">{{v.SpecName}}</li>
                     </ul>
                 </div>
                 <div class="format_bot">
-                    <p class="format_price"><span>¥</span>{{formatList.GoodSpecs[formatLi].OriginalPrice}}<i v-if="formatList.GoodSpecs[formatLi].ResidueCount>0&&formatList.GoodSpecs[formatLi].ResidueCount<=10">库存: {{formatList.GoodSpecs[formatLi].ResidueCount}}</i></p>
+                    <p class="format_price"><span>¥</span>{{formatList.GoodSpecs[formatLi].OriginalPrice}}<i v-if="formatList.GoodSpecs[formatLi].RealStock>0&&formatList.GoodSpecs[formatLi].RealStock<=10">仅剩{{formatList.GoodSpecs[formatLi].RealStock}}份</i></p>
                     <div class="add_cart" @click="addCart"><span>+</span> 加入购物车</div>
                 </div>
             </div>
@@ -242,6 +242,7 @@
                 let {
                     info
                 } = e.target.dataset;
+                info.GoodSpecs = info.GoodSpecs.filter(e=>e.RealStock>0);
                 this.formatList = info;
                 this.formatMask = true;
             },
@@ -524,7 +525,7 @@
                                 res.Body.IsBuyed = res.Body.GoodSpecs[0].IsBuyed;
                                 res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
                                 res.Body.SpecName = res.Body.GoodSpecs[0].SpecName == '默认' ? '' : ` - ${res.Body.GoodSpecs[0].SpecName}`;
-                                res.Body.ResidueCount = res.Body.GoodSpecs[0].ResidueCount;
+                                res.Body.RealStock = res.Body.GoodSpecs[0].RealStock;
                             } else {
                                 res.Body.GoodSpecs.forEach(item => {
                                     item.num = 0;
@@ -540,11 +541,11 @@
                                     item.GoodId = res.Body.GoodId;
                                     item.GoodName = res.Body.GoodName;
                                     item.GoodsMasterPic = res.Body.GoodMasterPic;
+                                    item.MultiSpec = 1;
                                 })
-                                res.Body.MultiSpec = 1;
                                 res.Body.OriginalPrice = res.Body.GoodSpecs[0].OriginalPrice;
                                 res.Body.SalesPrice = res.Body.GoodSpecs[0].SalesPrice;
-                                res.Body.List = res.Body.GoodSpecs.filter(e => e.ResidueCount > 0)
+                                res.Body.List = res.Body.GoodSpecs.filter(e => e.RealStock > 0)
                                 // console.log(res.Body)
                             }
                             this.goodsInfo = res.Body;
@@ -610,7 +611,6 @@
                 font-weight: 900;
             }
             .price_sum {
-                
                 position: relative;
                 .discount_shop {
                     display: flex;

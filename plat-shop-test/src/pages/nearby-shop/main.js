@@ -9,6 +9,6 @@ export default {
         navigationBarTitleText: '附近店铺',
         backgroundTextStyle: "dark",
         enablePullDownRefresh: true,
-        onReachBottomDistance: 50,
+        onReachBottomDistance: 80,
     }
 }

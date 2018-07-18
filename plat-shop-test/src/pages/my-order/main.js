@@ -9,6 +9,6 @@ export default {
         navigationBarTitleText: '',
         backgroundTextStyle: "dark",
         enablePullDownRefresh: true,
-        onReachBottomDistance: 50,
+        onReachBottomDistance: 80,
     }
 }

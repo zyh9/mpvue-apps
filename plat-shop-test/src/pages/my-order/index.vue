@@ -40,7 +40,7 @@
                     </ul>
                 </div>
             </li>
-            <div class="no_more" v-if="nomore">没有更多</div>
+            <div class="no_more" v-if="nomore">没有更多订单了</div>
         </ul>
     </div>
 </template>
@@ -178,7 +178,7 @@
                         break;
                     case 4:
                     case 5:
-                        text = e.ExpressType==2?'已发货':'配送中';
+                        text = e.ExpressType == 2 ? '已发货' : '配送中';
                         break;
                     case 10:
                         text = '已完成';
@@ -198,19 +198,19 @@
                     .then(res => {
                         if (res.State == 1) {
                             wx.requestPayment({
-                                'timeStamp': res.Body.timeStamp,
-                                'nonceStr': res.Body.nonceStr,
-                                'package': res.Body.package,
-                                'signType': 'MD5',
-                                'paySign': res.Body.paySign,
-                                'success': payres => {
+                                timeStamp: res.Body.timeStamp,
+                                nonceStr: res.Body.nonceStr,
+                                package: res.Body.package,
+                                signType: res.Body.signType,
+                                paySign: res.Body.paySign,
+                                success: payres => {
                                     setTimeout(_ => {
                                         wx.navigateTo({
                                             url: '/pages/order-details/main?orderId=' + item.OrderId
                                         })
                                     }, 300)
                                 },
-                                'fail': err => {
+                                fail: err => {
                                     this.msg('您已取消支付')
                                     setTimeout(_ => {
                                         wx.navigateTo({
@@ -509,13 +509,12 @@
         }
     }
     .no_more {
-        margin-top: 20rpx;
-        height: 60rpx;
+        height: 70rpx;
         width: 100%;
-        line-height: 60rpx;
-        font-size: 26rpx;
+        line-height: 70rpx;
+        font-size: 20rpx;
         color: #999;
         text-align: center;
-        background: #fff;
+        background: #ebebeb;
     }
 </style>

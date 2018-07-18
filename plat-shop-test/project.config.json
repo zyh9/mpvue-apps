@@ -34,7 +34,7 @@
 				{
 					"id": 0,
 					"name": "扫码支付",
-					"pathName": "pages/code-pay/main",
+					"pathName": "pages/pay-error/main",
 					"query": "scene=1824037918214150"
 				},
 				{
