@@ -109,7 +109,7 @@
             </div>
             <div class="options">
                 <p>配送方式</p>
-                <p>{{orderInfo.ExpressType== 2 ? '快递配送' : '跑腿配送'}}</p>
+                <p>{{orderInfo.ExpressType== 2 ? '快递配送' : orderInfo.ExpressType== 4?'商家自送':'跑腿配送'}}</p>
             </div>
             <div class="options other">
                 <p>收货地址</p>
@@ -218,7 +218,6 @@
                                 break;
                             case -1:
                                 text = '商家已接单';
-                                /* 商户不同意取消 */
                                 break;
                                 // case 2:
                                 // /* 商户同意取消 */
@@ -229,7 +228,7 @@
                         text = '正在配货';
                         break;
                     case 4:
-                        text = ExpressType == 2 ? '已发货' : '跑男已接单';
+                        text = ExpressType == 2 || ExpressType == 4 ? '已发货' : '跑男已接单';
                         break;
                     case 5:
                         text = '跑男已取货';
@@ -442,16 +441,16 @@
                     this.orderInfo = Object.assign({}, res.Body, {
                         stateText: this.orderLabels(res.Body.State, res.Body.CancelApplyState, res.Body.ExpressType)
                     })
-                    this.orderInfo.orderSumPrice = (Math.round(this.orderInfo.PaotuiMoneyOff* 10000)+Math.round(this.orderInfo.CouponAmountMoney* 10000))/10000;
+                    this.orderInfo.orderSumPrice = (Math.round(this.orderInfo.PaotuiMoneyOff * 10000) + Math.round(this.orderInfo.CouponAmountMoney * 10000)) / 10000;
                     // console.log(this.orderInfo.orderSumPrice)
-                    //地图所需信息
-                    if (this.orderInfo.State >= 4 && this.orderInfo.State < 10 && this.orderInfo.ExpressType != 2) {
+                    //地图所需信息 （不包含快递和商家自送）
+                    if (this.orderInfo.State >= 4 && this.orderInfo.State < 10 && this.orderInfo.ExpressType != 2 && this.orderInfo.ExpressType != 4) {
                         // console.log(this.util.downImg)
                         this.requireImg(this.orderInfo.ExpressType, this.orderInfo.State).catch(err => {
                             this.msg('地图信息获取失败')
                         })
                     }
-                    //订单跟踪信息
+                    //订单跟踪信息 (不包含商家自送)
                     if (this.orderInfo.State > 3 || this.orderInfo.State < 0) {
                         this.orderTracking()
                     }
