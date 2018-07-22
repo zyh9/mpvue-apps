@@ -1,0 +1,87 @@
+{
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.1.1",
+	"appid": "wxec3fbad970d598be",
+	"projectname": "admin-packge",
+	"svr": "",
+	"client": "",
+	"qcloudRoot": "",
+	"miniprogramRoot": "./dist/",
+	"pluginRoot": "",
+	"scripts": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "折扣",
+					"pathName": "pages/admin-rebate-list",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "规格",
+					"pathName": "pages/admin-emit-spec",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "商品管理",
+					"pathName": "pages/admin-commodity-manage",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "计价",
+					"pathName": "pages/admin-delivery-price",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "配送计价",
+					"pathName": "pages/admin-delivery-price",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "订单",
+					"pathName": "pages/admin-order",
+					"query": ""
+				},
+				{
+					"id": 6,
+					"name": "引导页",
+					"pathName": "pages/admin-mask",
+					"query": ""
+				}
+			]
+		}
+	}
+}
