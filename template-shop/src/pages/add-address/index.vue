@@ -40,10 +40,12 @@
           LinkMan: '',
           LinkManMobile: ''
         },
-        title: ''
+        title: '',
+        saveOnoff: true
       }
     },
-    onReady() {
+    onShow() {
+      this.saveOnoff = true;
       this.note = '';
       this.userInfo = wx.getStorageSync('userInfo');
       this.address = wx.getStorageSync('address') || {};
@@ -114,49 +116,54 @@
       addAddress() {
         if (this.authName(this.address.LinkMan) && this.phone(this.address.LinkManMobile) && this.authTitle(this.addressTitle) && this.authDetails(this.addressNote)) {
           const location = this.trans(this.location);
-          this.util.post({
-              url: '/api/Customer/PersonerCenter/UpdateAddress',
-              data: {
-                Id: this.$root.$mp.query.addressId || 0,
-                AddressTitle: this.addressTitle,
-                AddressNote: this.addressNote,
-                AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
-                UserNote: this.note ? this.note : '',
-                LinkMan: this.address.LinkMan,
-                LinkManMobile: this.address.LinkManMobile,
-                LinkManSex: this.userInfo.gender,
-                CityName: this.address.city || this.address.CityName,
-                CountyName: this.address.district || this.address.CountyName,
-                Type: 1
-              }
-            })
-            .then(res => {
-              if (res.State == 1) {
-                wx.removeStorageSync('address');
-                if (this.$root.$mp.query.type == 2) {
-                  let selectAddress = wx.getStorageSync('selectAddress');
-                  let select = Object.assign({}, selectAddress, {
-                    Id: this.$root.$mp.query.addressId || 0,
-                    AddressTitle: this.addressTitle,
-                    AddressNote: this.addressNote,
-                    AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
-                    UserNote: this.note ? this.note : '',
-                    LinkMan: this.address.LinkMan,
-                    LinkManMobile: this.address.LinkManMobile,
-                    LinkManSex: this.userInfo.gender,
-                    CityName: this.address.city || this.address.CityName,
-                    CountyName: this.address.district || this.address.CountyName,
-                    Type: 1
-                  })
-                  wx.setStorageSync('selectAddress', select)
+          if (this.saveOnoff) {
+            this.saveOnoff = false;
+            this.util.post({
+                url: '/api/Customer/PersonerCenter/UpdateAddress',
+                data: {
+                  Id: this.$root.$mp.query.addressId || 0,
+                  AddressTitle: this.addressTitle,
+                  AddressNote: this.addressNote,
+                  AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
+                  UserNote: this.note ? this.note : '',
+                  LinkMan: this.address.LinkMan,
+                  LinkManMobile: this.address.LinkManMobile,
+                  LinkManSex: this.userInfo.gender,
+                  CityName: this.address.city || this.address.CityName,
+                  CountyName: this.address.district || this.address.CountyName,
+                  Type: 1
                 }
-                wx.navigateBack({
-                  delta: 1
-                })
-              }
-            }).catch(err => {
-              this.msg(err.Msg)
-            })
+              })
+              .then(res => {
+                if (res.State == 1) {
+                  this.saveOnoff = true;
+                  wx.removeStorageSync('address');
+                  if (this.$root.$mp.query.type == 2) {
+                    let selectAddress = wx.getStorageSync('selectAddress');
+                    let select = Object.assign({}, selectAddress, {
+                      Id: this.$root.$mp.query.addressId || 0,
+                      AddressTitle: this.addressTitle,
+                      AddressNote: this.addressNote,
+                      AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
+                      UserNote: this.note ? this.note : '',
+                      LinkMan: this.address.LinkMan,
+                      LinkManMobile: this.address.LinkManMobile,
+                      LinkManSex: this.userInfo.gender,
+                      CityName: this.address.city || this.address.CityName,
+                      CountyName: this.address.district || this.address.CountyName,
+                      Type: 1
+                    })
+                    wx.setStorageSync('selectAddress', select)
+                  }
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                }
+              }).catch(err => {
+                this.saveOnoff = true;
+                this.msg(err.Msg)
+              })
+          }
         }
       }
     },

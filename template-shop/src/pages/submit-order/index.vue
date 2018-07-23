@@ -11,7 +11,7 @@
           </div>
           <span class="linkUser" v-if="addressInfo">{{selectAddress.LinkMan}}{{selectAddress.LinkManMobile}}</span>
         </div>
-        <div class="options">
+        <div class="options fade_in">
           <p>{{ExpressType}}</p>
         </div>
       </div>
@@ -25,7 +25,7 @@
             <img class="fade_in" :src="v.GoodsMasterPic" alt="">
             <div class="item">
               <p class="name">{{v.GoodName}}</p>
-              <p class="spec">{{v.SpecName?v.SpecName:''}}</p>
+              <p class="spec">{{v.SpecName&&v.MultiSpec==1?v.SpecName:''}}</p>
               <p class="num">X{{v.num}}</p>
             </div>
             <div class="sum">
@@ -57,7 +57,7 @@
         </div>
         <div class="consume_sum">
           <p class="consume_l">小计</p>
-          <p class="consume_r" v-if="GoodPriceToken!=''"><i v-if="reliefSum">已节省{{reliefSum}}元</i><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
+          <p class="consume_r" v-if="GoodPriceToken!=''"><i v-if="reliefSum">共节省{{reliefSum}}元</i><span>¥</span>{{GoodPriceToken==''?'':totalMoney}}</p>
           <p class="select_num" v-if="GoodPriceToken==''">选择地址后计算</p>
         </div>
       </div>
@@ -80,9 +80,9 @@
       </form>
     </div>
     <!-- <div class="copy_info">
-                                                                                                                                                                                                            <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
-                                                                                                                                                                                                            <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
-                                                                                                                                                                                                          </div> -->
+                                                                                                                                                                                                                                          <p class="form_id" @click="copyInfo(formId)">{{formId}}</p>
+                                                                                                                                                                                                                                          <p class="pay_id" @click="copyInfo(packageId)">{{packageId}}</p>
+                                                                                                                                                                                                                                        </div> -->
     <div class="mask" v-if="isActive" @click="isActive = false"></div>
     <div class="distribution_card" :class="{distribution_card_active:isActive}">
       <div class="distribution_card_item">
@@ -161,7 +161,9 @@
         //提交订单状态
         infoOver: false,
         IsOrderHasAcivity: '',
-        IsAcivityAllowCoupon: ''
+        IsAcivityAllowCoupon: '',
+        payOnoff: true, //支付开关
+        tips: ''
       }
     },
     onLoad() {
@@ -171,14 +173,16 @@
         mask: true
       })
     },
-    onReady() {
-      this.ExpressType = '配送方式+配送时长';
-      this.GoodPriceToken = '';
-      this.noteText = '';
-      wx.removeStorageSync('note');
-    },
     onShow() {
+      this.selectAddress = {};
+      this.ExpressType = '配送方式+配送时长';
+      this.noteText = '';
+      this.payOnoff = true;
       this.infoOver = false;
+      this.totalMoney = '';
+      this.GoodPriceToken = '';
+      //地区配送不支持的提示
+      this.tips = '';
       this.IsOrderHasAcivity = this.IsAcivityAllowCoupon = '';
       /* 选择优惠券返回 */
       if (wx.getStorageSync('couponInfo').couponId) {
@@ -207,7 +211,7 @@
         let cartItem = cartListSum.filter(e => e.ShopId == wx.getStorageSync('shopInfo').ShopId);
         this.cartListItem = cartItem.length ? cartItem[0].cartList : [];
         this.cartListItem.forEach(e => {
-          e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
+          e.GoodsMasterPic = e.GoodsMasterPic.indexOf('x-oss-process=image') > -1 ? e.GoodsMasterPic : e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
         })
         console.log(this.cartListItem, '订单提交页')
         this.shopInfo = wx.getStorageSync('shopInfo') || [];
@@ -298,7 +302,9 @@
               let cartListSum = wx.getStorageSync('cartListSum') || [];
               //查询所在店铺
               let cartItem = cartListSum.filter(e => e.ShopId == res.Body.ShopID);
-              cartItem[0].cartList = cartItem[0].cartList ? cartItem[0].cartList : [];
+              if (cartItem.length) {
+                cartItem[0].cartList = cartItem[0].cartList ? cartItem[0].cartList : [];
+              }
               let item = [];
               // console.log(res.Body.GoodsPrice.length, cartItem[0].cartList)
               if (res.Body.GoodsPrice.length) { //提交订单中存在可以支付的商品
@@ -347,7 +353,7 @@
               this.ExpressPrice = res.Body.ExpressPrice;
               this.GoodPriceToken = res.Body.PriceToken;
               this.ExpressPriceToken = res.Body.ExpressPriceToken;
-              this.ExpressType = res.Body.ExpressType == 2 ? '快递配送' : '跑腿配送';
+              this.ExpressType = res.Body.ExpressType == 2 ? '快递配送' : res.Body.ExpressType == 4 ? '商家自送' : '跑腿配送';
               this.totalMoney = (Math.round(this.goodsInfo.GoodMoney * 10000) + Math.round(this.goodsInfo.PackageMoney * 10000) + Math.round(this.ExpressPrice * 10000) - Math.round(this.goodsInfo.CouponAmount * 10000)) / 10000;
               this.ExpressPriceOff = res.Body.ExpressPriceOff;
               this.reliefSum = (Math.round(this.goodsInfo.GoodPriceOffMoney * 10000) + Math.round(this.goodsInfo.CouponAmount * 10000) + Math.round(res.Body.ExpressPriceOff * 10000)) / 10000;
@@ -356,40 +362,123 @@
             }
           }).catch(err => {
             this.msg(err.Msg)
+            this.tips = err.Msg;
           })
       },
       //创建订单
       createOrder() {
         if (!this.addressInfo) {
           this.msg('请选择收货地址');
-          return
-        }
-        if (this.infoOver == false) {
-          this.msg('网络拥挤，请稍后重试')
           return;
         }
-        this.util.post({
-            url: '/api/Customer/Order/CreateOrder',
-            data: {
-              ReceiveAddressId: this.selectAddress.Id,
-              GoodPriceToken: this.GoodPriceToken,
-              ExpressPriceToken: this.ExpressPriceToken,
-              Remarks: this.noteText
-            }
-          })
-          .then(res => {
-            if (res.State == 1) {
-              if (res.Body.wxPayInfo == null) {
-                this.OrderRePay(res.Body.OrderId)
-              } else {
-                this.packageId = res.Body.wxPayInfo.package;
+        if (this.infoOver == false) {
+          this.msg(this.tips ? this.tips : '网络拥挤，请稍后重试')
+          return;
+        }
+        if (this.payOnoff) {
+          this.payOnoff = false;
+          this.util.post({
+              url: '/api/Customer/Order/CreateOrder',
+              data: {
+                ReceiveAddressId: this.selectAddress.Id,
+                GoodPriceToken: this.GoodPriceToken,
+                ExpressPriceToken: this.ExpressPriceToken,
+                Remarks: this.noteText
+              }
+            })
+            .then(res => {
+              if (res.State == 1) {
+                if (res.Body.wxPayInfo == null) {
+                  this.payOnoff = true;
+                  this.OrderRePay(res.Body.OrderId)
+                } else {
+                  this.packageId = res.Body.wxPayInfo.package;
+                  wx.requestPayment({
+                    timeStamp: res.Body.wxPayInfo.timeStamp,
+                    nonceStr: res.Body.wxPayInfo.nonceStr,
+                    package: res.Body.wxPayInfo.package,
+                    signType: res.Body.wxPayInfo.signType,
+                    paySign: res.Body.wxPayInfo.paySign,
+                    success: payres => {
+                      let cartListSum = wx.getStorageSync('cartListSum') || [];
+                      cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                      console.log(cartListSum)
+                      // 再设置缓存数据
+                      wx.setStorageSync('cartListSum', cartListSum);
+                      //缓存length不存在，直接清除
+                      !cartListSum.length && wx.removeStorageSync('cartListSum');
+                      wx.removeStorageSync('note');
+                      wx.removeStorageSync('selectAddress');
+                      wx.removeStorageSync('couponInfo');
+                      this.payOnoff = true;
+                      setTimeout(_ => {
+                        /* 支付成功跳转订单列表 */
+                        wx.redirectTo({
+                          url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
+                        });
+                      }, 800)
+                    },
+                    fail: err => {
+                      console.log(err)
+                      this.msg('您已取消支付')
+                      let cartListSum = wx.getStorageSync('cartListSum') || [];
+                      cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                      console.log(cartListSum)
+                      // 再设置缓存数据
+                      wx.setStorageSync('cartListSum', cartListSum);
+                      //缓存length不存在，直接清除
+                      !cartListSum.length && wx.removeStorageSync('cartListSum');
+                      wx.removeStorageSync('note');
+                      wx.removeStorageSync('selectAddress');
+                      this.payOnoff = true;
+                      setTimeout(_ => {
+                        /* 取消支付跳转订单列表 */
+                        wx.redirectTo({
+                          url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
+                        });
+                      }, 800)
+                    }
+                  })
+                }
+              } else if (res.State == -13) {
+                this.orderMsg = res.Msg;
+                this.orderMask = true;
+                let cartListSum = wx.getStorageSync('cartListSum') || [];
+                cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                console.log(cartListSum)
+                // 再设置缓存数据
+                wx.setStorageSync('cartListSum', cartListSum);
+                //缓存length不存在，直接清除
+                !cartListSum.length && wx.removeStorageSync('cartListSum');
+                wx.removeStorageSync('note');
+                wx.removeStorageSync('selectAddress');
+                wx.removeStorageSync('couponInfo');
+              }
+            }).catch(err => {
+              this.payOnoff = true;
+              this.msg(err.Msg)
+            })
+        }
+      },
+      /* 再次生成订单信息 */
+      OrderRePay(orderId) {
+        if (this.payOnoff) {
+          this.payOnoff = false;
+          this.util.post({
+              url: '/api/Customer/Order/OrderRePay',
+              data: {
+                OrderId: orderId,
+              }
+            })
+            .then(res => {
+              if (res.State == 1) {
                 wx.requestPayment({
-                  'timeStamp': res.Body.wxPayInfo.timeStamp,
-                  'nonceStr': res.Body.wxPayInfo.nonceStr,
-                  'package': res.Body.wxPayInfo.package,
-                  'signType': 'MD5',
-                  'paySign': res.Body.wxPayInfo.paySign,
-                  'success': payres => {
+                  timeStamp: res.Body.timeStamp,
+                  nonceStr: res.Body.nonceStr,
+                  package: res.Body.package,
+                  signType: res.Body.signType,
+                  paySign: res.Body.paySign,
+                  success: payres => {
                     let cartListSum = wx.getStorageSync('cartListSum') || [];
                     cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
                     console.log(cartListSum)
@@ -399,15 +488,16 @@
                     !cartListSum.length && wx.removeStorageSync('cartListSum');
                     wx.removeStorageSync('note');
                     wx.removeStorageSync('selectAddress');
-                    wx.removeStorageSync('couponInfo');
+                    this.payOnoff = true;
                     setTimeout(_ => {
                       /* 支付成功跳转订单列表 */
                       wx.redirectTo({
-                        url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
+                        url: `/pages/order-details/main?orderId=${orderId}&type=1`
                       });
                     }, 800)
                   },
-                  'fail': err => {
+                  fail: err => {
+                    console.log(err)
                     this.msg('您已取消支付')
                     let cartListSum = wx.getStorageSync('cartListSum') || [];
                     cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
@@ -418,76 +508,34 @@
                     !cartListSum.length && wx.removeStorageSync('cartListSum');
                     wx.removeStorageSync('note');
                     wx.removeStorageSync('selectAddress');
+                    this.payOnoff = true;
                     setTimeout(_ => {
                       /* 取消支付跳转订单列表 */
                       wx.redirectTo({
-                        url: `/pages/order-details/main?orderId=${res.Body.OrderId}&type=1`
+                        url: `/pages/order-details/main?orderId=${orderId}&type=1`
                       });
                     }, 800)
                   }
                 })
+              } else if (res.State == -13) {
+                this.orderMsg = res.Msg;
+                this.orderMask = true;
+                let cartListSum = wx.getStorageSync('cartListSum') || [];
+                cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
+                console.log(cartListSum)
+                // 再设置缓存数据
+                wx.setStorageSync('cartListSum', cartListSum);
+                //缓存length不存在，直接清除
+                !cartListSum.length && wx.removeStorageSync('cartListSum');
+                wx.removeStorageSync('note');
+                wx.removeStorageSync('selectAddress');
+                wx.removeStorageSync('couponInfo');
               }
-            }
-          }).catch(err => {
-            this.msg(err.Msg)
-          })
-      },
-      /* 再次生成订单信息 */
-      OrderRePay(orderId) {
-        this.util.post({
-            url: '/api/Customer/Order/OrderRePay',
-            data: {
-              OrderId: orderId,
-            }
-          })
-          .then(res => {
-            if (res.State == 1) {
-              wx.requestPayment({
-                'timeStamp': res.Body.timeStamp,
-                'nonceStr': res.Body.nonceStr,
-                'package': res.Body.package,
-                'signType': 'MD5',
-                'paySign': res.Body.paySign,
-                'success': payres => {
-                  let cartListSum = wx.getStorageSync('cartListSum') || [];
-                  cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
-                  console.log(cartListSum)
-                  // 再设置缓存数据
-                  wx.setStorageSync('cartListSum', cartListSum);
-                  //缓存length不存在，直接清除
-                  !cartListSum.length && wx.removeStorageSync('cartListSum');
-                  wx.removeStorageSync('note');
-                  wx.removeStorageSync('selectAddress');
-                  setTimeout(_ => {
-                    /* 支付成功跳转订单列表 */
-                    wx.redirectTo({
-                      url: `/pages/order-details/main?orderId=${orderId}&type=1`
-                    });
-                  }, 800)
-                },
-                'fail': res => {
-                  this.msg('您已取消支付')
-                  let cartListSum = wx.getStorageSync('cartListSum') || [];
-                  cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId);
-                  console.log(cartListSum)
-                  // 再设置缓存数据
-                  wx.setStorageSync('cartListSum', cartListSum);
-                  //缓存length不存在，直接清除
-                  !cartListSum.length && wx.removeStorageSync('cartListSum');
-                  wx.removeStorageSync('note');
-                  wx.removeStorageSync('selectAddress');
-                  setTimeout(_ => {
-                    /* 取消支付跳转订单列表 */
-                    wx.redirectTo({
-                      url: `/pages/order-details/main?orderId=${orderId}&type=1`
-                    });
-                  }, 800)
-                }
-              })
-            }
-          }).catch(err => {
-            this.msg(err.Msg)
-          })
+            }).catch(err => {
+              this.payOnoff = true;
+              this.msg(err.Msg)
+            })
+        }
       },
       noteInfo() {
         if (this.$root.$mp.query.orderId) {
@@ -559,7 +607,7 @@
           url: '/api/Customer/PersonerCenter/Addresses',
           data: {}
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           let n = res.Body.findIndex(e => e.Id == info.Body.ReceiveAddressId);
           //地址信息在个人地址列表里
           if (n > -1) {
@@ -660,7 +708,7 @@
     },
     onUnload() {
       //删除备注信息
-      wx.getStorageSync('note')&&wx.removeStorageSync('note');
+      wx.getStorageSync('note') && wx.removeStorageSync('note');
     }
   }
 </script>
@@ -1099,6 +1147,7 @@
         padding: 66rpx 36rpx 36rpx;
         border-radius: 8rpx;
         p {
+          margin-top: 42rpx;
           width: 58%;
           color: #b2b2b2;
           text-align: center;
@@ -1106,7 +1155,7 @@
           line-height: 48rpx;
         }
         .btn {
-          margin-top: 64rpx;
+          margin-top: 36rpx;
           height: 74rpx;
           border: 30rpx;
           background: #1a1a1a;

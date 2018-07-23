@@ -7,7 +7,6 @@ const QQMap = new QQMapWX({
 const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8060';
-// const baseUrl = 'http://192.168.6.180:8070';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置

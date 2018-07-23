@@ -2,7 +2,7 @@
     <div class="store" v-if="block">
         <div class="store_top_info" v-show="shopInfoList.Logo">
             <div class="store_banner">
-                <img :src="shopInfoList.Logo+'?x-oss-process=image/resize,w_100/format,jpg'" alt="" class="shop_img fade_in">
+                <img :src="shopInfoList.Logo?shopInfoList.Logo+'?x-oss-process=image/resize,w_200/format,jpg':''" alt="" class="shop_img fade_in">
                 <div class="shop_right_details">
                     <p>简介：{{shopInfoList.ShopSummary?shopInfoList.ShopSummary:'欢迎光临本店，我们不定期会推出活动和优惠！'}}</p>
                     <p>{{time}}</p>
@@ -37,15 +37,15 @@
                             </div>
                         </scroll-view>
                         <div class="right_con">
-                            <scroll-view v-for="(item,index) in shopPageListSum" :key="index" v-if="selected==index" scroll-y="true" style="height: 100%" lower-threshold="20" @scrolltolower="scrollHandler(selected)" class="scroll_right">
+                            <scroll-view v-for="(item,index) in allShopInfoList" :key="index" v-if="selected==index" scroll-y="true" style="height: 100%" class="scroll_right">
                                 <!-- <p class="no_shop" v-if="!item.length">此分类暂无商品信息哦</p> -->
-                                <div class="list_item_r" v-if="item.length" v-for="(v,i) in item" :key="i">
+                                <div class="list_item_r" v-if="item.GoodsInfo.length" v-for="(v,i) in item.GoodsInfo" :key="i">
                                     <div class="lis_item_left" @click="goGoodsDetail(v)">
-                                        <img :src="v.GoodsMasterPic" alt="" class="shop_lis_img fade_in" lazy-load="true">
-                                        <div class="shop_lis_mask" v-if="v.State==3">已售罄</div>
+                                        <img :src="v.GoodsMasterPic?v.GoodsMasterPic+'?x-oss-process=image/resize,w_200/format,jpg':''" alt="" class="shop_lis_img fade_in" lazy-load="true">
+                                        <div class="shop_lis_mask" v-if="v.State==3||(v.MultiSpec==0&&v.RealStock<=0)||(v.MultiSpec==1&&!v.List.length)">已售罄</div>
                                         <div class="li_info">
                                             <p class="shop_name">{{v.GoodName}}<span v-if="v.GoodsType==-1">{{v.SpecName}}</span></p>
-                                            <p class="discount" v-if="v.GoodsType==-1">{{v.PriceOffNote}}</p>
+                                            <div class="discount"><span v-if="v.GoodsType==-1" class="price_tips">{{v.PriceOffNote}}</span><span v-if="v.MultiSpec==0&&v.RealStock>0&&v.RealStock<=10">仅剩{{v.RealStock}}份</span></div>
                                             <div class="discount_shop" v-if="v.GoodsType==-1">
                                                 <p class="price"><span>¥</span>{{v.SalesPrice}}</p>
                                                 <p class="original_price">¥{{v.OriginalPrice}}</p>
@@ -53,12 +53,12 @@
                                             <p class="price_init" v-else><span>¥</span>{{v.SalesPrice?v.SalesPrice:v.OriginalPrice}}</p>
                                         </div>
                                     </div>
-                                    <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)">
+                                    <div class="count" v-if="OpenState &&(v.MultiSpec==0&&v.State==1)&&v.RealStock>0">
                                         <i class="icon icon_lower" @click="lower($event)" :data-info="v" v-if="v.num>0"></i>
                                         <span v-if="v.num>0">{{v.num}}</span>
                                         <i class="icon icon_add" @click="add($event)" :data-info="v"></i>
                                     </div>
-                                    <div class="select_rule" v-if="OpenState &&(v.MultiSpec==1&&v.State==1)" :data-info="v" @click="format($event)">选规格</div>
+                                    <div class="select_rule" v-if="OpenState &&(v.MultiSpec==1&&v.State==1)&&v.List.length" :data-info="v" @click="format($event)">选规格</div>
                                     <!-- <p v-if="v.State==3" class="sold_out">已售罄</p> -->
                                     <div class="shop_mask_state" v-if="!OpenState" @click="shopOpenState"></div>
                                 </div>
@@ -179,7 +179,7 @@
                 <li class="lis" v-for="(v,i) in cartListItem" :key="i" v-if="v.num>0">
                     <div class="set-grow left">
                         <p class="shop_list_name">{{v.GoodName}}</p>
-                        <span v-if='v.SpecName'>{{v.SpecName}}</span>
+                        <span v-if='v.SpecName&&v.MultiSpec==1'>{{v.SpecName}}</span>
                     </div>
                     <div class="right set-flex set-between">
                         <p class="shop_list_price"><i class="icon_discount_text" v-if="v.GoodsType==-1"></i>¥{{v.sumPrice}}</p>
@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                    <cover-view class="shareCover" >
-                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                    </cover-view>
-                                    </canvas>
+                                                            <cover-view class="shareCover" >
+                                                            <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                            <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                            </cover-view>
+                                                            </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -226,12 +226,12 @@
                 <div class="format_center">
                     <span class="format_info">规格</span>
                     <ul class="format_list">
-                        <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)">{{v.SpecName}}</li>
+                        <li v-for="(v,i) in formatList.GoodsSpec" :key="i" :class="{select_format_li:i==formatLi}" @click="formatCheck(i)" v-if="v.RealStock>0">{{v.SpecName}}</li>
                     </ul>
                 </div>
                 <div class="format_bot">
-                    <p class="format_price"><span>¥</span>{{formatList.GoodsSpec[formatLi].OriginalPrice}}</p>
-                    <div class="add_cart" @click="addCart(shopPageListSum[selected])"><span>+</span> 加入购物车</div>
+                    <p class="format_price"><span>¥</span>{{formatList.GoodsSpec[formatLi].OriginalPrice}}<i v-if="formatList.GoodsSpec[formatLi].RealStock>0&&formatList.GoodsSpec[formatLi].RealStock<=10">仅剩{{formatList.GoodsSpec[formatLi].RealStock}}份</i></p>
+                    <div class="add_cart" @click="addCart"><span>+</span> 加入购物车</div>
                 </div>
             </div>
         </div>
@@ -339,6 +339,11 @@
                     console.log(err)
                     wx.hideLoading();
                     this.msg(err.Msg)
+                    setTimeout(_ => {
+                        wx.switchTab({
+                            url: '/pages/nearby-shop/main'
+                        })
+                    }, 1000)
                 })
             } else {
                 console.log('走分享')
@@ -406,17 +411,17 @@
                         item.sumPrice = 0;
                     }
                 })
-                this.shopPageListSum.forEach(item => {
-                    item.forEach(e => {
-                        if (e.MultiSpec == 1) {
-                            e.GoodsSpec.forEach(ele => {
-                                ele.num = 0;
-                            })
-                        } else {
-                            e.num = 0;
-                        }
-                    })
-                })
+                // this.shopPageListSum.forEach(item => {
+                //     item.forEach(e => {
+                //         if (e.MultiSpec == 1) {
+                //             e.GoodsSpec.forEach(ele => {
+                //                 ele.num = 0;
+                //             })
+                //         } else {
+                //             e.num = 0;
+                //         }
+                //     })
+                // })
                 //清空列表数量
                 this.allShopInfoList.forEach(e => {
                     e.sum = 0;
@@ -480,6 +485,7 @@
                 let allShopInfo = await this.allShopInfo()
                 //所有商品汇集  针对左侧列表返回商品为空的作清空处理
                 this.allShopInfoList = allShopInfo.Body.filter(e => e.GoodsInfo.length);
+                // console.log(this.allShopInfoList)
                 if (!this.allShopInfoList.length) this.noShop = true;
                 this.allShopInfoList.forEach(e => {
                     e.GoodsInfo.forEach(item => {
@@ -491,25 +497,45 @@
                                 ele.GoodsMasterPic = item.GoodsMasterPic;
                                 ele.State = item.State;
                                 ele.sumPrice = 0;
+                                ele.MultiSpec = 1;
                             })
+                            //多规格判断是否已售罄
+                            item.List = item.GoodsSpec.filter(e => e.RealStock > 0);
                         } else {
                             item.num = 0;
                             item.sumPrice = 0;
-                            //规格编号
+                            item.SpecName = item.GoodsSpec[0].SpecName == '默认' ? '' : item.GoodsSpec[0].SpecName == "" ? '' : ` - ${item.GoodsSpec[0].SpecName}`;
+                            //规格编号  抓过来的数据单个规格数据没有
                             item.Id = item.GoodsSpec[0].Id;
+                            item.RealStock = item.GoodsSpec[0].RealStock;
                         }
                         this.sumList.push(item)
                     })
                     //单项分类设置页面索引以及终止状态
-                    this.shopPageIndex.push({
-                        page: 1,
-                        quest: true
-                    })
-                    this.shopPageListSum.push([])
+                    // this.shopPageIndex.push({
+                    //     page: 1,
+                    //     quest: true
+                    // })
+                    // this.shopPageListSum.push([])
                 })
                 wx.hideLoading()
                 this.block = true;
                 this.$store.dispatch('backIndex', false)
+                if (this.shopInfoList.OpenState == 1) { //店铺营业走缓存
+                    // 先获取缓存数据
+                    let cartListSum = wx.getStorageSync('cartListSum') || [];
+                    //再找到对应店铺
+                    let cartItem = cartListSum.filter(e => e.ShopId == wx.getStorageSync('shopInfo').ShopId);
+                    this.cartListItem = cartItem.length ? cartItem[0].cartList : [];
+                    this.cartListItem = this.cartListItem.filter(e => e.num != 0);
+                    //当前店铺购物车的列表不为空走缓存，反之过滤设置缓存（主要针对购物车无商品且缓存中仍存在商品数量为零的情况）
+                    this.cartListItem.length ? this.cache() : (cartListSum = cartListSum.filter(e => e.ShopId != wx.getStorageSync('shopInfo').ShopId))
+                    // 再设置缓存数据
+                    wx.setStorageSync('cartListSum', cartListSum);
+                    //缓存length不存在，直接清除
+                    !cartListSum.length && wx.removeStorageSync('cartListSum');
+                }
+                return;
                 // console.log(this.shopPageIndex)
                 //获取分类以及分页
                 this.allShopInfoList.length && this.shopPageInfo(this.allShopInfoList[0].ID);
@@ -533,25 +559,25 @@
                     }
                 })
             },
-            scrollHandler(select) {
-                if (this.shopPageIndex[select].quest) {
-                    //单项的page++
-                    this.shopPageIndex[select].page++;
-                    console.log('加载至' + this.shopPageIndex[select].page)
-                    this.shopPageInfo(this.itemId, select, this.shopPageIndex[select])
-                } else {
-                    // this.msg('已经没有更多商品了')
-                }
-            },
+            // scrollHandler(select) {
+            //     if (this.shopPageIndex[select].quest) {
+            //         //单项的page++
+            //         this.shopPageIndex[select].page++;
+            //         console.log('加载至' + this.shopPageIndex[select].page)
+            //         this.shopPageInfo(this.itemId, select, this.shopPageIndex[select])
+            //     } else {
+            //         // this.msg('已经没有更多商品了')
+            //     }
+            // },
             //切换左侧类别
             checked(item, index) {
                 if (this.selected == index) return;
-                this.itemId = item.ID;
-                //没有请求数据列表的才会请求
-                // if (typeof(this.shopPageListSum[index]) == 'undefined') {
-                if (!this.shopPageListSum[index].length) {
-                    this.shopPageInfo(this.itemId, index)
-                }
+                // this.itemId = item.ID;
+                // //没有请求数据列表的才会请求
+                // // if (typeof(this.shopPageListSum[index]) == 'undefined') {
+                // if (!this.shopPageListSum[index].length) {
+                //     this.shopPageInfo(this.itemId, index)
+                // }
                 this.selected = index;
             },
             //单项分类商品信息获取  index默认为0  select={}
@@ -584,7 +610,6 @@
                                 e.sumPrice = 0;
                                 e.SpecName = e.GoodsSpec[0].SpecName == '默认' ? '' : ` - ${e.GoodsSpec[0].SpecName}`;
                             }
-                            e.GoodsMasterPic = e.GoodsMasterPic + '?x-oss-process=image/resize,w_100/format,jpg';
                         })
                         if (res.Body.length < 10) {
                             if (select.page > 1) { //页面大于1
@@ -621,6 +646,8 @@
                 let {
                     info
                 } = e.target.dataset;
+                info.GoodsSpec = info.GoodsSpec.filter(e => e.RealStock > 0);
+                // console.log(info)
                 this.formatList = info;
                 this.formatMask = true;
             },
@@ -817,14 +844,14 @@
                             console.log('每单限一份')
                         }
                     }
-                    this.shopPageListSum.forEach(item => {
-                        item.forEach(ele => {
-                            if (ele.GoodId == info.GoodId) {
-                                ele.num = info.num;
-                                ele.num--;
-                            }
-                        })
-                    })
+                    // this.shopPageListSum.forEach(item => {
+                    //     item.forEach(ele => {
+                    //         if (ele.GoodId == info.GoodId) {
+                    //             ele.num = info.num;
+                    //             ele.num--;
+                    //         }
+                    //     })
+                    // })
                     this.sumList.forEach(ele => {
                         if (ele.GoodId == info.GoodId) {
                             ele.num = info.num;
@@ -833,16 +860,16 @@
                         }
                     })
                 } else {
-                    this.shopPageListSum.forEach(item => {
-                        item.forEach(ele => {
-                            if (ele.MultiSpec == 1) {
-                                ele.GoodsSpec.forEach(e => {
-                                    e.num = info.num;
-                                    e.num--;
-                                })
-                            }
-                        })
-                    })
+                    // this.shopPageListSum.forEach(item => {
+                    //     item.forEach(ele => {
+                    //         if (ele.MultiSpec == 1) {
+                    //             ele.GoodsSpec.forEach(e => {
+                    //                 e.num = info.num;
+                    //                 e.num--;
+                    //             })
+                    //         }
+                    //     })
+                    // })
                     this.sumList.forEach(ele => {
                         if (ele.MultiSpec == 1) {
                             ele.GoodsSpec.forEach(e => {
@@ -884,16 +911,16 @@
                         this.addFun(info)
                     }
                 } else { //多规格增加
-                    this.shopPageListSum.forEach(item => {
-                        item.forEach(ele => {
-                            if (ele.MultiSpec == 1) {
-                                ele.GoodsSpec.forEach(e => {
-                                    e.num = info.num;
-                                    e.num++;
-                                })
-                            }
-                        })
-                    })
+                    // this.shopPageListSum.forEach(item => {
+                    //     item.forEach(ele => {
+                    //         if (ele.MultiSpec == 1) {
+                    //             ele.GoodsSpec.forEach(e => {
+                    //                 e.num = info.num;
+                    //                 e.num++;
+                    //             })
+                    //         }
+                    //     })
+                    // })
                     this.sumList.forEach(ele => {
                         if (ele.MultiSpec == 1) {
                             ele.GoodsSpec.forEach(e => {
@@ -908,14 +935,14 @@
                 }
             },
             addFun(info) {
-                this.shopPageListSum.forEach(item => {
-                    item.forEach(ele => {
-                        if (ele.GoodId == info.GoodId) {
-                            ele.num = info.num;
-                            ele.num++;
-                        }
-                    })
-                })
+                // this.shopPageListSum.forEach(item => {
+                //     item.forEach(ele => {
+                //         if (ele.GoodId == info.GoodId) {
+                //             ele.num = info.num;
+                //             ele.num++;
+                //         }
+                //     })
+                // })
                 this.sumList.forEach(ele => {
                     if (ele.GoodId == info.GoodId) {
                         ele.num = info.num;
@@ -1026,27 +1053,27 @@
             cache() {
                 console.log('走缓存了');
                 // console.log(this.cartListItem)
-                if (!this.shopPageListSum.length) return;
-                let listItem = this.shopPageListSum[this.selected];
-                listItem.forEach(item => {
-                    if (item.MultiSpec == 0) { //无规格
-                        item.num = 0;
-                        this.cartListItem.forEach(ele => {
-                            if (item.GoodId == ele.GoodId) {
-                                item.num = ele.num;
-                            }
-                        })
-                    } else { //有规格
-                        item.GoodsSpec.forEach(ele => {
-                            ele.num = 0;
-                            this.cartListItem.forEach($item => {
-                                if (ele.Id == $item.Id) {
-                                    ele.num = $item.num;
-                                }
-                            })
-                        })
-                    }
-                })
+                // if (!this.shopPageListSum.length) return;
+                // let listItem = this.shopPageListSum[this.selected];
+                // listItem.forEach(item => {
+                //     if (item.MultiSpec == 0) { //无规格
+                //         item.num = 0;
+                //         this.cartListItem.forEach(ele => {
+                //             if (item.GoodId == ele.GoodId) {
+                //                 item.num = ele.num;
+                //             }
+                //         })
+                //     } else { //有规格
+                //         item.GoodsSpec.forEach(ele => {
+                //             ele.num = 0;
+                //             this.cartListItem.forEach($item => {
+                //                 if (ele.Id == $item.Id) {
+                //                     ele.num = $item.num;
+                //                 }
+                //             })
+                //         })
+                //     }
+                // })
                 //针对全部商品的缓存赋值
                 this.sumList.forEach(item => {
                     if (item.MultiSpec == 0) { //无规格
@@ -1096,17 +1123,17 @@
             clearCart() {
                 this.cartActive = false;
                 this.cartListItem = [];
-                this.shopPageListSum.forEach(e => {
-                    e.forEach(item => {
-                        if (item.MultiSpec == 1) {
-                            item.GoodsSpec.forEach(ele => {
-                                ele.num = 0;
-                            })
-                        } else {
-                            item.num = 0;
-                        }
-                    })
-                })
+                // this.shopPageListSum.forEach(e => {
+                //     e.forEach(item => {
+                //         if (item.MultiSpec == 1) {
+                //             item.GoodsSpec.forEach(ele => {
+                //                 ele.num = 0;
+                //             })
+                //         } else {
+                //             item.num = 0;
+                //         }
+                //     })
+                // })
                 this.sumList.forEach(e => {
                     if (e.MultiSpec == 1) {
                         e.GoodsSpec.forEach(ele => {
@@ -1147,7 +1174,7 @@
                 }
             },
             goGoodsDetail(item) {
-                if (item.State == 3) {
+                if (item.State == 3 || (item.MultiSpec == 0 && item.RealStock <= 0) || (item.MultiSpec == 1 && !item.List.length)) {
                     this.msg('商品已售罄')
                     return;
                 }
@@ -1168,24 +1195,25 @@
                 this.formatLi = i;
             },
             //规格加入购物车
-            addCart(list) {
+            addCart() {
                 //获取点击的规格和价格
                 let info = this.formatList.GoodsSpec[this.formatLi];
-                list.forEach(item => {
-                    if (item.MultiSpec == 1) {
-                        item.GoodsSpec.forEach(e => {
-                            if (e.Id == info.Id) {
-                                info.num++;
-                                e.num = info.num;
-                            }
-                        })
-                    }
-                })
+                // console.log(list)
+                // list.forEach(item => {
+                //     if (item.MultiSpec == 1) {
+                //         item.GoodsSpec.forEach(e => {
+                //             if (e.Id == info.Id) {
+                //                 info.num++;
+                //                 e.num = info.num;
+                //             }
+                //         })
+                //     }
+                // })
                 this.sumList.forEach(item => {
                     if (item.MultiSpec == 1) { //有规格
                         item.GoodsSpec.forEach(ele => {
                             if (ele.Id == info.Id) {
-                                ele.num = info.num;
+                                ele.num = info.num++;
                             }
                         })
                     }
@@ -1557,8 +1585,7 @@
                             line-height: 136rpx;
                         }
                         .li_info {
-                            flex: 1;
-                            overflow: hidden;
+                            flex: 1; // overflow: hidden;
                             position: relative;
                             .shop_name {
                                 color: #1d1d1d;
@@ -1577,6 +1604,9 @@
                                 top: 48rpx;
                                 font-size: 22rpx;
                                 color: #999;
+                                .price_tips {
+                                    margin-right: 24rpx;
+                                }
                             }
                             .price_init {
                                 color: #ff4d3a;
@@ -2407,6 +2437,13 @@
                     span {
                         font-size: 32rpx;
                         margin-right: 10rpx;
+                    }
+                    i {
+                        margin-left: 24rpx;
+                        color: #939393;
+                        font-size: 24rpx;
+                        font-weight: normal;
+                        display: inline-block;
                     }
                 }
                 .add_cart {
