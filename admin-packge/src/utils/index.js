@@ -5,7 +5,7 @@ const QQMap = new QQMapWX({
   key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
 })
 //线上地址
-const baseUrl = 'https://stunnermerchant.uupt.com';
+// const baseUrl = 'https://stunnermerchant.uupt.com';
 // const baseUrl = 'http://192.168.6.12:60004';
 //光明地址
 // const baseUrl = 'http://192.168.6.180:8070';
@@ -14,7 +14,7 @@ const baseUrl = 'https://stunnermerchant.uupt.com';
 //海涛
 // const baseUrl = 'http://192.168.6.156:50652';
 // 袁沼
-// const baseUrl = 'http://192.168.6.66:6002';
+const baseUrl = 'http://192.168.6.66:6002';
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {

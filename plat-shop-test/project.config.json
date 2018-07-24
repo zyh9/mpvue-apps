@@ -11,6 +11,7 @@
 	"compileType": "miniprogram",
 	"appid": "wxbf3133166adc4375",
 	"projectname": "%E6%B5%8B%E8%AF%95",
+	"libVersion": "2.2.0",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -30,20 +31,7 @@
 		},
 		"miniprogram": {
 			"current": -1,
-			"list": [
-				{
-					"id": 0,
-					"name": "扫码支付",
-					"pathName": "pages/pay-error/main",
-					"query": ""
-				},
-				{
-					"id": 4,
-					"name": "授权",
-					"pathName": "pages/wx-auth/main",
-					"query": ""
-				}
-			]
+			"list": []
 		}
 	}
 }

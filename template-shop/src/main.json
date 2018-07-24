@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/my-store/main",
+    "pages/product-details/main",
+    "pages/submit-order/main",
+    "pages/add-note/main",
+    "pages/select-address/main",
+    "pages/my-address/main",
+    "pages/add-address/main",
+    "pages/my-order/main",
+    "pages/order-details/main",
+    "pages/login/main",
+    "pages/wx-auth/main",
+    "pages/my-coupon/main",
+    "pages/code-pay/main",
+    "pages/pay-ok/main",
+    "pages/pay-error/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "优小店",
+    "navigationBarTextStyle": "black"
+  }
+}

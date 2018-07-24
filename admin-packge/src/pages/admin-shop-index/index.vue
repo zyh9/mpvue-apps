@@ -60,22 +60,9 @@
                         this.$store.dispatch('polling', {
                             polling: this.pollingVal++
                         })
-                        this.newOrderPush()
                     }
                 }).catch(err => {
                     console.log(err)
-                })
-            },
-            newOrderPush() {
-                const innerAudioContext = wx.createInnerAudioContext()
-                innerAudioContext.autoplay = true
-                innerAudioContext.src = 'https://otherfiles-ali.uupt.com/Stunner/FE/M/neworderremind.mp3';
-                innerAudioContext.onPlay(() => {
-                    console.log('开始播放')
-                })
-                innerAudioContext.onError((res) => {
-                    console.log(res.errMsg)
-                    console.log(res.errCode)
                 })
             },
             openShop() {
@@ -106,7 +93,21 @@
                 }
             },
         },
-        components: {}
+        components: {},
+        watch: {
+            pollingVal: function(newVal, oldVal) {
+                const innerAudioContext = wx.createInnerAudioContext()
+                innerAudioContext.autoplay = true
+                innerAudioContext.src = 'https://otherfiles-ali.uupt.com/Stunner/FE/M/neworderremind.mp3';
+                innerAudioContext.onPlay(() => {
+                    console.log('开始播放')
+                })
+                innerAudioContext.onError((res) => {
+                    console.log(res.errMsg)
+                    console.log(res.errCode)
+                })
+            }
+        }
     }
 </script>
 

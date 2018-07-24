@@ -37,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 7,
 			"list": [
 				{
 					"id": 0,
@@ -78,7 +78,13 @@
 				{
 					"id": 6,
 					"name": "引导页",
-					"pathName": "pages/admin-mask",
+					"pathName": "pages/admin-select-plat",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "登陆",
+					"pathName": "pages/admin-shop-login",
 					"query": ""
 				}
 			]

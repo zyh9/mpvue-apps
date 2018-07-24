@@ -686,7 +686,6 @@
             polling: function(newVal, oldVal) {
                 console.log('您有新订单了')
                 this.polling = newVal;
-                console.log('订单页消息推送监听', this.polling)
             }
         },
         components: {}

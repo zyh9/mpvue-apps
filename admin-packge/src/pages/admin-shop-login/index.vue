@@ -79,6 +79,10 @@
                     }).then(res => {
                         if (res.State == 1) {
                             this.msg(res.Msg)
+                            let loginInfo = Object.assign({}, wx.getStorageSync('loginInfo'), {
+                                ShopID: res.Body.ShopID>0?res.Body.ShopID:0
+                            })
+                            wx.setStorageSync('loginInfo', loginInfo)
                             this.countdown = 60;
                             this.countdownInfo = `${this.countdown}s后重新获取`;
                             this.countdownTimer = setInterval(() => {

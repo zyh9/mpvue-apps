@@ -219,6 +219,21 @@ input::-webkit-input-placeholder {
   height: 60rpx;
   background-image: url('../../static/icon_save2.png');
 }
+.black_edit {
+  width: 30rpx;
+  height: 30rpx;
+  background-image: url('../../static/black_edit.png');
+}
+.black_delete {
+  width: 30rpx;
+  height: 30rpx;
+  background-image: url('../../static/black_delete.png');
+}
+.black_add {
+  width: 30rpx;
+  height: 30rpx;
+  background-image: url('../../static/black_add.png');
+}
 .icon_reduce {
   width: 40rpx;
   height: 40rpx;
@@ -552,7 +567,7 @@ input::-webkit-input-placeholder {
   background-image: url('../../static/icon_arrowSpec.png');
 }
 .select_bg {
-  background-image: url('https://otherfiles-ali.uupt.com/Stunner/FE/M/872fa0069aed4883bed1a8732487b7a7_big.png');
+  background-image: url('../../static/select-bg.png');
   background-size: 100% 100%;
 }
 .select_plat {

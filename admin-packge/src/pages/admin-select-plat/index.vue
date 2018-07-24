@@ -2,11 +2,11 @@
     <div class="admin_select_plat select_bg">
         <h3>选择店铺类型</h3>
         <div class="select_item mb40">
-            <img class="fade_in" src="https://otherfiles-ali.uupt.com/Stunner/FE/M/33584f06333c400588d66348b729d1ad_big.png" alt="">
+            <img class="fade_in" src="../../../static/select-plat.png" alt="">
             <div class="select_plat_btn sleect_btn" @click="plat"></div>
         </div>
         <div class="select_item">
-            <img class="fade_in" src="https://otherfiles-ali.uupt.com/Stunner/FE/M/5f78715564dc4c1fab3a5a697722bdfa_big.png" alt="">
+            <img class="fade_in" src="../../../static/select-vip.png" alt="">
             <div class="select_exclusive_btn sleect_btn" @click="exclusive"></div>
         </div>
     </div>

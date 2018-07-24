@@ -1759,6 +1759,9 @@
                 }
                 .swiper_item {
                     height: 46rpx !important;
+                    i{
+                        margin-left: 8rpx;
+                    }
                 }
                 .option {
                     height: 46rpx;
