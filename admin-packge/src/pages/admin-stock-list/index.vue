@@ -30,7 +30,7 @@
 
         },
         onShow() {
-            console.log(this.$mp.query.goodId)
+            // console.log(this.$mp.query.goodId)
             this.goodId = this.$mp.query.goodId;
             this.stockList = [];
             this.getStockList();
@@ -40,7 +40,7 @@
             //保存
             saveStock() {
                 for(let i=0;i<this.stockList.length;i++){
-                    console.log(this.stockList[i].stockMount.length,this.stockList[i].stockMount)
+                    // console.log(this.stockList[i].stockMount.length,this.stockList[i].stockMount)
                     if(this.stockList[i].stockMount.length == 0){
                         this.msg('请输入完整信息')
                         return
@@ -59,7 +59,7 @@
                     })
                 })
                 
-                console.log(SpecGoodsCountList)
+                // console.log(SpecGoodsCountList)
                 //如果没有修改库存 
                 if(SpecGoodsCountList.length == 0) {
                     wx.navigateBack({
@@ -79,7 +79,7 @@
                     //     value: ele.isStock ? 999999999 : Number(ele.stockMount)
                     // })
                 })
-                console.log(obj)
+                // console.log(obj)
                 this.util
                     .post({
                         url:'/api/Merchant/Goods/EditGoodsStock',
@@ -89,7 +89,7 @@
                             SpecGoodsStockList: obj
                         }
                     }).then( res => {
-                        console.log(res)
+                        // console.log(res)
                         if(res.State == 1) {
                             this.msg('修改成功');
                             wx.navigateBack({
@@ -104,14 +104,14 @@
             },
             //取消
             cancelStock() {
-                console.log('取消');
+                // console.log('取消');
                 wx.navigateBack({
                     delta: 1
                 })
             },
 
             clickStock(item,index) {
-                console.log(item)
+                // console.log(item)
                 if(item.isStock) {
                     item.isStock = !item.isStock;
                     item.stockMount = '';
@@ -132,7 +132,7 @@
                         }
                     })
                     .then(res => {
-                        console.log(res);
+                        // console.log(res);
                         if(res.State == 1) {
                             //自定义添加字段 isStock点击无限  stockMount库存数量>99999为无限   isInit是否为初始数据
                             res.Body.forEach(element => {
@@ -146,7 +146,7 @@
                             });
                             this.stockList = res.Body;
                             this.oldStockList = JSON.parse(JSON.stringify(this.stockList));
-                            console.log(this.stockList);
+                            // console.log(this.stockList);
                         }else {
                             this.msg(res.Msg);
                         }
