@@ -20,13 +20,13 @@ function getEntry (rootSrc) {
     var key = relative(rootSrc, file).replace('.js', '');
     map[key] = file;
   })
-  glob.sync(rootSrc + '/pages/**/main.json')
-  .forEach(file => {
-    configFilesArray.push({
-      from: file,
-      to: relative(rootSrc, file)
-    })
-   })
+  // glob.sync(rootSrc + '/pages/**/main.json')
+  // .forEach(file => {
+  //   configFilesArray.push({
+  //     from: file,
+  //     to: relative(rootSrc, file)
+  //   })
+  //  })
    return map;
 }
 

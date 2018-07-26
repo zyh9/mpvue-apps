@@ -28,7 +28,6 @@
 </template>
 
 <script>
-  import gcoord from 'gcoord'
   export default {
     data() {
       return {
@@ -105,17 +104,9 @@
           url: '/pages/select-address/main'
         })
       },
-      trans(location) {
-        var result = gcoord.transform(
-          [location.lng, location.lat], // 经纬度坐标
-          gcoord.WGS84, // 当前坐标系
-          gcoord.BD09 // 目标坐标系
-        );
-        return result;
-      },
       addAddress() {
         if (this.authName(this.address.LinkMan) && this.phone(this.address.LinkManMobile) && this.authTitle(this.addressTitle) && this.authDetails(this.addressNote)) {
-          const location = this.trans(this.location);
+          
           if (this.saveOnoff) {
             this.saveOnoff = false;
             this.util.post({
@@ -124,7 +115,7 @@
                   Id: this.$root.$mp.query.addressId || 0,
                   AddressTitle: this.addressTitle,
                   AddressNote: this.addressNote,
-                  AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
+                  AddressLoc: `${this.location.lng},${this.location.lat}`,
                   UserNote: this.note ? this.note : '',
                   LinkMan: this.address.LinkMan,
                   LinkManMobile: this.address.LinkManMobile,
@@ -144,7 +135,7 @@
                       Id: this.$root.$mp.query.addressId || 0,
                       AddressTitle: this.addressTitle,
                       AddressNote: this.addressNote,
-                      AddressLoc: this.$root.$mp.query.type == 1 ? `${location[0]},${location[1]}` : `${this.location.lng},${this.location.lat}`,
+                      AddressLoc: `${this.location.lng},${this.location.lat}`,
                       UserNote: this.note ? this.note : '',
                       LinkMan: this.address.LinkMan,
                       LinkManMobile: this.address.LinkManMobile,

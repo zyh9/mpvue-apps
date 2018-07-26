@@ -190,7 +190,7 @@
                 } = pos;
                 var result = gcoord.transform(
                     [lat, lng], // 经纬度坐标
-                    gcoord.WGS84, // 目标坐标系
+                    gcoord.GCJ02, // 目标坐标系
                     gcoord.BD09, // 当前坐标系    
                 );
                 let location = {

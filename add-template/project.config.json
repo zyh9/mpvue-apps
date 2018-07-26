@@ -1,0 +1,80 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"miniprogramRoot": "./dist/",
+	"compileType": "miniprogram",
+	"appid": "wxbf3133166adc4375",
+	"projectname": "%E6%96%B0%E6%A8%A1%E6%9D%BF",
+	"libVersion": "2.2.0",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 6,
+			"list": [
+				{
+					"id": 0,
+					"name": "购物车",
+					"pathName": "pages/cart/main",
+					"query": ""
+				},
+				{
+					"id": 1,
+					"name": "我的",
+					"pathName": "pages/vip-recharge/main",
+					"query": ""
+				},
+				{
+					"id": 2,
+					"name": "会员",
+					"pathName": "pages/card-money/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "支付",
+					"pathName": "pages/code-pay/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "注册会员",
+					"pathName": "pages/login-vip/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "支付密码",
+					"pathName": "pages/pay-password/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "填写信息",
+					"pathName": "pages/inp-info/main",
+					"query": ""
+				}
+			]
+		}
+	}
+}

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+    import gcoord from 'gcoord'
     // 引入SDK核心类
     import QQMapWX from '../../utils/qqmap-wx-jssdk.js';
     const QQMap = new QQMapWX({
@@ -144,15 +145,29 @@
                     }
                 })
             },
+            trans(location) {
+                var result = gcoord.transform(
+                    [location.lng, location.lat], // 经纬度坐标
+                    gcoord.GCJ02, // 当前坐标系
+                    gcoord.BD09 // 目标坐标系
+                );
+                return result;
+            },
             //确定搜索地址
             setAddress(e) {
-                console.log(e)
+                // console.log(e)
                 let {
                     address
                 } = e.currentTarget.dataset;
+                //转换坐标之后的地址
+                const location = this.trans(address.location);
+                // console.log(location)
                 wx.setStorageSync('address', Object.assign({}, wx.getStorageSync('address'), {
                     name: address.address,
-                    location: address.location,
+                    location: {
+                        lat:location[1],
+                        lng:location[0]
+                    },
                     title: address.title,
                     city: address.city || address.ad_info.city,
                     district: address.district || address.ad_info.district

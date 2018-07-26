@@ -22,6 +22,8 @@
 
 [高德 微信小程序 SDK](http://lbs.amap.com/api/wx/summary)
 
+> 高德 微信小程序 key：801939221fec22a5fd38c25dfd8b2e97
+
 ### 距离计算
 
 ```javascript
@@ -33,7 +35,7 @@
 	    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
 	    s = s * 6378.137;
 	    s = Math.round(s * 10000) / 10000;
-	    return s*10;
+	    return s*10
 	}
 ```
 
@@ -126,17 +128,17 @@
 	const QQMap = new QQMapWX({
 		key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
 	})
-	
+
 	//数据请求地址
-	const baseUrl = 'http://192.168.1.1:3000';
-	
+	const baseUrl = 'http://192.168.6.66:6001';
+
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			// appid: '1'
+			// appid: 'wxbf3133166adc4375'
 		}
 	}
-	
+
 	//get数据请求
 	const get = (opt = {}) => {
 		let time = new Date().getTime();
@@ -160,7 +162,7 @@
 			})
 		})
 	}
-	
+
 	//post数据请求
 	const post = (opt = {}) => {
 		let time = new Date().getTime();
@@ -197,7 +199,7 @@
 			})
 		})
 	}
-	
+
 	//地理位置获取
 	const qqMapInfo = _ => {
 		return new Promise((resolve, reject) => {
@@ -235,7 +237,7 @@
 			})
 		})
 	}
-	
+
 	//全局wxLogin token获取
 	const wxLogin = _ => {
 		// 调用登录接口
@@ -259,8 +261,6 @@
 			})
 		})
 	}
-	
-	//登录接口
 	const userLogin = async code => {
 		return await post({
 			url: '/api/Customer/Login/WxJsCodeLogin',
@@ -296,8 +296,9 @@
 			return [`${a}:${b}-${c}:${d}`];
 		}
 	}
-	
+
 	export default { get, post, openTime, qqMapInfo };
+
 ```
 
 ```javascript
@@ -610,29 +611,26 @@
 
 ```javascript
 	onLoad(options) {
-		//获取场景码
 		this.scene = options.scene;
 		wx.setStorageSync('scene', this.scene);
 		this.ShopId = this.$mp.query.ShopId || wx.getStorageSync('uShopId') || '1770169616466949';
 	}
-	
+
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			appid: '1',
+			appid: wx.getStorageSync('uAppId') || '1',
 			token: wx.getStorageSync('loginInfo').Token || '',
 			qrcode: wx.setStorageSync('scene', this.scene) || ''
 		}
 	}
-	
+
 	//获取第三方平台自定义的数据字段
-	
 	let config = wx.getExtConfigSync();
-	
 	config.appId && (wx.setStorageSync('uAppId', config.appId));
-	
+
 	!config.shopId && console.log('未获取到shopId');
-	
+
 	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
 ```
 
@@ -644,16 +642,17 @@
 
 [参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
 
+
 ### 小程序分包
 
 		前提是项目代码体积已经超过2M的项目才可以使用此方法
-		
+
 		小程序单包最大支持2M，分包后最大可支持8M，故此需要对其进行分包处理
-		
+
 		将main.js里面的pages单独存储于pages.js内（有点像路由的配置文件）
-		
+
 		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
-		
+
 		相应的也就提高了进入小程序的加载速度
 		
 		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
