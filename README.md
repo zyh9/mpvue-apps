@@ -1,5 +1,83 @@
 ## mpvue 踩坑之旅
 
+### 虚拟导航跳转处理（看不懂，看不懂）
+
+```javascript
+	/**
+	 * 
+	 * @param {this} vm Vue实例
+	 * @param {String} pos 在哪里
+	 * @param {String} to 去哪里
+	 */
+	const openBusiness = (vm,pos,to) => {
+		let {path} = vm.$root.$mp.query;
+		console.log(path)
+		if(path=='business'&&pos=='cart'&&to=='business'){
+			console.log('购物车进首页')
+			wx.navigateBack({
+				delta: 1
+			})
+		}else if(path=='business'&&pos=='user'&&to=='business'){
+			console.log('我的进首页')
+			wx.navigateBack({
+				delta: 2
+			})
+		}else if(path=='cart'&&pos=='user'&&to=='business'){
+			console.log('首页进购物车进我的进首页')
+			wx.navigateBack({
+				delta: 2
+			})
+		}else if(path=='user'&&pos=='cart'&&to=='business'){
+			console.log('首页进我的进购物车进首页')
+			wx.navigateBack({
+				delta: 2
+			})
+		}
+	}
+
+	const openCart = (vm,pos,to) => {
+		let {path} = vm.$root.$mp.query;
+		console.log(path)
+		if(!path&&pos=='business'&&to=='cart'){
+			console.log('首页进购物车')
+			wx.navigateTo({
+				url: `/pages/cart/main?path=business`
+			})
+		}else if(path=='cart'&&pos=='user'&&to=='cart'){
+			console.log('首页进购物车进我的进购物车')
+			wx.navigateBack({
+				delta: 1
+			})
+		}else if(path=='business'&&pos=='user'&&to=='cart'){
+			console.log('首页进我的进购物车')
+			wx.navigateTo({
+				url: `/pages/cart/main?path=user`
+			})
+		}
+	}
+
+	const openUser = (vm,pos,to) => {
+		let {path} = vm.$root.$mp.query;
+		console.log(path)
+		if(!path&&pos=='business'&&to=='user'){
+			console.log('首页进我的')
+			wx.navigateTo({
+				url: `/pages/shop-user/main?path=business`
+			})
+		}else if(path=='business'&&pos=='cart'&&to=='user'){
+			console.log('首页进购物车进我的')
+			wx.navigateTo({
+				url: `/pages/shop-user/main?path=cart`
+			})
+		}else if(path=='user'&&pos=='cart'&&to=='user'){
+			console.log('首页进我的进购物车进我的')
+			wx.navigateBack({
+				delta: 1
+			})
+		}
+	}
+```
+
 ### 定位
 
 		引入腾讯的微信小程序JavaScript SDK
