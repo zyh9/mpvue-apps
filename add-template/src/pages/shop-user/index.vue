@@ -27,16 +27,20 @@
         <p>我的优惠券</p>
       </div>
       <div class="options" @click="goVip">
-        <i class="icon icon_offer"></i>
+        <i class="icon icon_vip"></i>
         <p>我的会员卡</p>
+      </div>
+      <div class="options" @click="goVip">
+        <i class="icon icon_shop_img"></i>
+        <p>关于店铺</p>
       </div>
     </div>
     <div class="tab_bar">
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openBusiness">
         <img src="../../../static/tabBar/index.png" alt="">
         <p>首页</p>
       </div>
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openCart">
         <img src="../../../static/tabBar/cart.png" alt="">
         <p>购物车</p>
       </div>
@@ -130,7 +134,13 @@
         wx.navigateTo({
           url: '/pages/my-coupon/main?type=1'
         });
-      }
+      },
+      openBusiness() {
+        this.util.openBusiness(this,'user','business')
+      },
+      openCart() {
+        this.util.openCart(this,'user','cart')
+      },
     },
     computed: {},
   }

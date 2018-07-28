@@ -210,11 +210,11 @@
         <div class="saveImg" v-if='shareCard'>
             <div class="main">
                 <canvas canvas-id='myCanvas' style="background:#fff;width: 100%;height: 100%;"> 
-                                                            <cover-view class="shareCover" >
-                                                            <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
-                                                            <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
-                                                            </cover-view>
-                                                            </canvas>
+                                                                    <cover-view class="shareCover" >
+                                                                    <cover-image  @click='shareClose' class="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png"/>
+                                                                    <cover-image @click='saveImg' class="saveBtn" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/saveImg.png"/>
+                                                                    </cover-view>
+                                                                    </canvas>
             </div>
         </div>
         <div class="format_mask" @click="formatMask=false,formatLi = 0" v-if="formatMask">
@@ -266,7 +266,6 @@
                 formatMask: false, //选择规格mask
                 formatList: [], //规格列表
                 formatLi: 0, //默认选择第一个规格
-                isBindPhone: true, //是否绑定手机号
                 code: '', //微信code
                 time: '', //营业时间
                 timeInfo: '',
@@ -391,7 +390,6 @@
             }
             this.couponActive = false;
             this.cartActive = false;
-            this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
             // 先获取缓存数据
             let cartListSum = wx.getStorageSync('cartListSum') || [];
             //再找到对应店铺
@@ -664,7 +662,7 @@
                 this.maskActive = true;
             },
             shareQR() {
-                if (this.isBindPhone) {
+                if (wx.getStorageSync('loginInfo').IsBindPhone == 0) {
                     this.msg('您还没有登录哦')
                     wx.redirectTo({
                         url: `/pages/login/main`
@@ -1158,8 +1156,7 @@
             settlement() {
                 if (this.cartListItem.length) {
                     //判断手机号绑定状态
-                    this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
-                    if (!this.isBindPhone) {
+                    if (wx.getStorageSync('loginInfo').IsBindPhone == 1) {
                         let ShopId = String(wx.getStorageSync('shopInfo').ShopId) || '';
                         wx.navigateTo({
                             url: `/pages/submit-order/main?ShopId=${ShopId}`
@@ -1235,7 +1232,7 @@
                 })
             },
             address() {
-                if (this.isBindPhone) {
+                if (wx.getStorageSync('loginInfo').IsBindPhone == 0) {
                     this.msg('您还没有登录哦')
                     setTimeout(_ => {
                         wx.navigateTo({
@@ -1249,7 +1246,7 @@
                 }
             },
             order() {
-                if (this.isBindPhone) {
+                if (wx.getStorageSync('loginInfo').IsBindPhone == 0) {
                     this.msg('您还没有登录哦')
                     setTimeout(_ => {
                         wx.navigateTo({
@@ -1263,7 +1260,7 @@
                 }
             },
             goCoupon() {
-                if (this.isBindPhone) {
+                if (wx.getStorageSync('loginInfo').IsBindPhone == 0) {
                     this.msg('您还没有登录哦')
                     setTimeout(_ => {
                         wx.navigateTo({
@@ -1288,7 +1285,7 @@
             },
             /* 领取优惠券 */
             receiveCoupon(v) {
-                if (this.isBindPhone) {
+                if (wx.getStorageSync('loginInfo').IsBindPhone == 0) {
                     this.msg('您还没有登录哦')
                     setTimeout(_ => {
                         wx.navigateTo({
@@ -1759,7 +1756,7 @@
                 }
                 .swiper_item {
                     height: 46rpx !important;
-                    i{
+                    i {
                         margin-left: 8rpx;
                     }
                 }

@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="tab_bar">
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openBusiness">
         <img src="../../../static/tabBar/index.png" alt="">
         <p>首页</p>
       </div>
@@ -34,7 +34,7 @@
         <img src="../../../static/tabBar/cart-active.png" alt="">
         <p class="active">购物车</p>
       </div>
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openUser">
         <img src="../../../static/tabBar/user.png" alt="">
         <p>我的</p>
       </div>
@@ -46,6 +46,14 @@
   export default {
     data() {
       return {}
+    },
+    methods: {
+      openBusiness() {
+        this.util.openBusiness(this,'cart','business')
+      },
+      openUser() {
+        this.util.openUser(this,'cart','user')
+      },
     },
     components: {}
   }

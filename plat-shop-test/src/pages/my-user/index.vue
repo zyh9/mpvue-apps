@@ -36,10 +36,14 @@
                 isBindPhone: true,
             }
         },
-        onReady() {
-            this.userData()
+        onShow() {
             // 判断是否已绑定手机号
             this.isBindPhone = wx.getStorageSync('loginInfo').IsBindPhone == 1 ? false : true;
+            if (wx.getStorageSync('user')) {
+                this.userInfo = wx.getStorageSync('user')
+            } else {
+                this.userData()
+            }
         },
         methods: {
             setting(e) {
@@ -75,6 +79,7 @@
                                 this.userInfo.UserMobile = this.userInfo.UserMobile.substr(0, 3).padEnd(7, '*') + this.userInfo.UserMobile.substr(7);
                                 this.userInfo.NickName = this.userInfo.NickName.length > 8 ? this.userInfo.NickName.slice(0, 8) + '...' : this.userInfo.NickName;
                                 // console.log(this.userInfo)
+                                wx.setStorageSync('user', this.userInfo)
                             }
                         }).catch(err => {
                             this.msg(err.Msg)
@@ -144,7 +149,7 @@
                 }
             }
         }
-        &>.options {
+        .options {
             background: url('https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_arrowRight.png') no-repeat right center;
             background-size: 25rpx 25rpx;
             height: 108rpx;

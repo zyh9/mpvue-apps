@@ -6,13 +6,13 @@
           <i class="icon icon_search_3"></i>
           <p class="text">搜索</p>
         </div>
-        <div class="classify">
+        <div class="classify" @click="openType">
           <i class="icon icon_classify"></i>
           <span>分类</span>
         </div>
       </div>
       <div class="business-banner">
-        <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration">
+        <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" circular="true">
           <block v-for="(item,index) in imgUrls" :key="index">
             <swiper-item>
               <img :src="item" class="slide-image" />
@@ -55,11 +55,11 @@
         <img src="../../../static/tabBar/index-active.png" alt="">
         <p class="active">首页</p>
       </div>
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openCart">
         <img src="../../../static/tabBar/cart.png" alt="">
         <p>购物车</p>
       </div>
-      <div class="tab_bar_item">
+      <div class="tab_bar_item" @click="openUser">
         <img src="../../../static/tabBar/user.png" alt="">
         <p>我的</p>
       </div>
@@ -84,17 +84,39 @@
       }
     },
     onLoad() {},
-    onShow() {
-      // this.getData();
+    onReady() {
+      this.getUserInfo();
     },
-    onReady() {},
+    onShow() {
+    },
     methods: {
-      getData() {
-        this.util.post({}).then(res => {
+      getUserInfo() {
+        this.util.post({
+          url: '/api/Customer/Browse/GetShopInfo',
+          data: {
+            ShopId: '1817162813555718'
+          }
+        }).then(res => {
           console.log(res)
         }).catch(err => {
           this.msg(err.Msg)
         })
+      },
+      search() {
+        wx.navigateTo({
+          url: `/pages/search-product/main`
+        })
+      },
+      openType() {
+        wx.navigateTo({
+          url: `/pages/type-list/main`
+        })
+      },
+      openCart() {
+        this.util.openCart(this, 'business', 'cart')
+      },
+      openUser() {
+        this.util.openUser(this, 'business', 'user')
       }
     },
     components: {}
@@ -119,13 +141,13 @@
       justify-content: flex-start;
       .search {
         flex: 1;
-        height: 62rpx;
+        height: 64rpx;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         overflow: hidden;
         background-color: rgba(235, 235, 235, 0.8);
-        border-radius: 31rpx;
+        border-radius: 32rpx;
         margin-right: 20rpx;
         padding-left: 24rpx;
         box-sizing: border-box;

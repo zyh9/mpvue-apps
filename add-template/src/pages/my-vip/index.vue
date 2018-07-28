@@ -37,7 +37,8 @@
                 <div class="options">
                     <p>我的会员卡</p>
                 </div>
-                <img src="../../../static/qrcode.png" alt="" @click="rotate" :class="{rotate_deg:active}">
+                <img class="qrcode_bg" src="../../../static/qrcode-bg.png" alt="">
+                <img class="qrcode_img" :src="active?qrcodeTop:qrcodeImg" alt="" @click="rotate">
             </div>
         </div>
     </div>
@@ -47,7 +48,9 @@
     export default {
         data() {
             return {
-                active: false
+                active: false,
+                qrcodeImg: require('../../../static/qrcode.png'),
+                qrcodeTop: require('../../../static/qrcode-top.png'),
             }
         },
         onShow() {},
@@ -154,10 +157,9 @@
             }
         }
         .vip_card_bot {
-            box-shadow: 0 -6rpx 20rpx rgba(184, 184, 184, 0.2);
             transition: margin 0.5s ease;
             margin-top: -572rpx;
-            background: #fff;
+            background-color: #fff;
             padding: 36rpx;
             display: flex;
             flex-direction: column;
@@ -228,15 +230,24 @@
                     z-index: 10;
                 }
             }
-            img {
-                width: 138rpx;
-                height: 138rpx;
+            .qrcode_bg {
+                width: 100%;
+                height: 100rpx;
+                position: absolute;
+                top: -50rpx;
+                left: 0;
+                z-index: 5;
+            }
+            .qrcode_img {
+                width: 118rpx;
+                height: 118rpx;
                 position: absolute;
                 right: 40rpx;
-                top: -69rpx;
+                top: -26rpx;
                 transform-origin: center;
                 transform: rotate(0deg);
                 transition: transform 0.5s ease;
+                z-index: 10;
             }
             .rotate_deg {
                 transform: rotate(180deg);

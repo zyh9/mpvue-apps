@@ -8,14 +8,14 @@ const QQMap = new QQMapWX({
 //线上地址
 // const baseUrl = 'https://stunnercustomer.uupt.com';
 //光明地址
-const baseUrl = 'http://192.168.6.180:8060'; 
+// const baseUrl = 'http://192.168.6.180:8060'; 
 //鹏浩地址
 // const baseUrl = 'http://192.168.6.100:60004';
 // const baseUrl = 'http://192.168.6.12:60003';
 //袁沼
 // const baseUrl = 'http://192.168.6.66:6001';
 //海涛
-// const baseUrl = 'http://192.168.6.156:50654';
+const baseUrl = 'http://192.168.6.156:50654';
 
 const commonHeader = _ => {
   //headers每次必传数据存放位置
@@ -335,4 +335,79 @@ const phModel = _ => {
   })
 }
 
-export default { get, post, openTime, qqMapInfo, FmtTime, getLoc, downImg, QQMap, phModel, loginModel };
+//跳转处理（看不懂，看不懂）
+/**
+ * 
+ * @param {this} vm Vue实例
+ * @param {String} pos 在哪里
+ * @param {String} to 去哪里
+ */
+const openBusiness = (vm,pos,to) => {
+  let {path} = vm.$root.$mp.query;
+  console.log(path)
+  if(path=='business'&&pos=='cart'&&to=='business'){
+    console.log('购物车进首页')
+    wx.navigateBack({
+      delta: 1
+    })
+  }else if(path=='business'&&pos=='user'&&to=='business'){
+    console.log('我的进首页')
+    wx.navigateBack({
+      delta: 2
+    })
+  }else if(path=='cart'&&pos=='user'&&to=='business'){
+    console.log('首页进购物车进我的进首页')
+    wx.navigateBack({
+      delta: 2
+    })
+  }else if(path=='user'&&pos=='cart'&&to=='business'){
+    console.log('首页进我的进购物车进首页')
+    wx.navigateBack({
+      delta: 2
+    })
+  }
+}
+
+const openCart = (vm,pos,to) => {
+  let {path} = vm.$root.$mp.query;
+  console.log(path)
+  if(!path&&pos=='business'&&to=='cart'){
+    console.log('首页进购物车')
+    wx.navigateTo({
+      url: `/pages/cart/main?path=business`
+    })
+  }else if(path=='cart'&&pos=='user'&&to=='cart'){
+    console.log('首页进购物车进我的进购物车')
+    wx.navigateBack({
+      delta: 1
+    })
+  }else if(path=='business'&&pos=='user'&&to=='cart'){
+    console.log('首页进我的进购物车')
+    wx.navigateTo({
+      url: `/pages/cart/main?path=user`
+    })
+  }
+}
+
+const openUser = (vm,pos,to) => {
+  let {path} = vm.$root.$mp.query;
+  console.log(path)
+  if(!path&&pos=='business'&&to=='user'){
+    console.log('首页进我的')
+    wx.navigateTo({
+      url: `/pages/shop-user/main?path=business`
+    })
+  }else if(path=='business'&&pos=='cart'&&to=='user'){
+    console.log('首页进购物车进我的')
+    wx.navigateTo({
+      url: `/pages/shop-user/main?path=cart`
+    })
+  }else if(path=='user'&&pos=='cart'&&to=='user'){
+    console.log('首页进我的进购物车进我的')
+    wx.navigateBack({
+      delta: 1
+    })
+  }
+}
+
+export default { get, post, openTime, qqMapInfo, FmtTime, getLoc, downImg, QQMap, phModel, loginModel, openBusiness, openCart, openUser};

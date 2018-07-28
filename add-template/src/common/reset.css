@@ -249,6 +249,16 @@ input::-webkit-input-placeholder {
   height: 41rpx;
   background-image: url('../../static/icon-offer.png');
 }
+.icon_shop_img {
+  width: 41rpx;
+  height: 41rpx;
+  background-image: url('../../static/shop-img.png');
+}
+.icon_vip {
+  width: 41rpx;
+  height: 41rpx;
+  background-image: url('../../static/icon-vip.png');
+}
 .icon_lower {
   width: 58rpx;
   height: 58rpx;

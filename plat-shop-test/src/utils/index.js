@@ -20,7 +20,7 @@ const baseUrl = 'https://stunnercustomer.uupt.com';
 const commonHeader = _ => {
   //headers每次必传数据存放位置
   return {
-    // v: '1.1.5',
+    v: '1.1.5.1',
     appid: '1',
     token: wx.getStorageSync('loginInfo').Token || '',
     qrcode: wx.setStorageSync('scene', this.scene) || ''

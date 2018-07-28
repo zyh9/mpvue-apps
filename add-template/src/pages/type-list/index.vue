@@ -1,8 +1,8 @@
 <template>
   <div class="type_list">
     <h3 class="title">分类列表</h3>
-    <div class="options" v-for="(v,i) in 20" :key="i">
-      <p>我的订单</p>
+    <div class="options" v-for="(v,i) in typeList" :key="i">
+      <p>{{v.Name}}</p>
     </div>
   </div>
 </template>
@@ -10,10 +10,28 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        typeList:[]
+      }
     },
-    onReady() {},
-    methods: {},
+    onReady() {
+      this.typeList = [];
+      this.getTypeList()
+    },
+    methods: {
+      getTypeList() {
+        this.util.post({
+          url: '/api/Customer/Browse/GetGoodsTypes',
+          data: {
+            ShopId: '1817162813555718'
+          }
+        }).then(res => {
+          this.typeList = res.Body;
+        }).catch(err => {
+          this.msg(err.Msg)
+        })
+      }
+    },
     watch: {},
     onUnload() {}
   }

@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
@@ -47,7 +47,7 @@
 				{
 					"id": 2,
 					"name": "会员",
-					"pathName": "pages/card-money/main",
+					"pathName": "pages/my-vip/main",
 					"query": ""
 				},
 				{
@@ -72,6 +72,18 @@
 					"id": -1,
 					"name": "填写信息",
 					"pathName": "pages/inp-info/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "首页",
+					"pathName": "pages/business/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "授权",
+					"pathName": "pages/wx-auth/main",
 					"query": ""
 				}
 			]
