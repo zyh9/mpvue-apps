@@ -100,8 +100,6 @@
 
 [高德 微信小程序 SDK](http://lbs.amap.com/api/wx/summary)
 
-> 高德 微信小程序 key：801939221fec22a5fd38c25dfd8b2e97
-
 ### 距离计算
 
 ```javascript
@@ -208,12 +206,12 @@
 	})
 
 	//数据请求地址
-	const baseUrl = 'http://192.168.6.66:6001';
+	const baseUrl = 'localhost:8080';
 
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			// appid: ''
+			// appid: '暂无'
 		}
 	}
 
@@ -341,7 +339,7 @@
 	}
 	const userLogin = async code => {
 		return await post({
-			url: '/api/Customer/Login/WxJsCodeLogin',
+			url: 'WxJsCodeLogin',
 			data: {
 				jsCode: code,
 			},
@@ -705,6 +703,7 @@
 
 	//获取第三方平台自定义的数据字段
 	let config = wx.getExtConfigSync();
+	
 	config.appId && (wx.setStorageSync('uAppId', config.appId));
 
 	!config.shopId && console.log('未获取到shopId');
