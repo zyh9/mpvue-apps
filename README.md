@@ -43,15 +43,15 @@
 			wx.navigateTo({
 				url: `/pages/cart/main?path=business`
 			})
-		}else if(path=='cart'&&pos=='user'&&to=='cart'){
-			console.log('首页进购物车进我的进购物车')
-			wx.navigateBack({
-				delta: 1
-			})
 		}else if(path=='business'&&pos=='user'&&to=='cart'){
 			console.log('首页进我的进购物车')
 			wx.navigateTo({
 				url: `/pages/cart/main?path=user`
+			})
+		}else if(path=='cart'&&pos=='user'&&to=='cart'){
+			console.log('首页进购物车进我的进购物车')
+			wx.navigateBack({
+				delta: 1
 			})
 		}
 	}
@@ -213,7 +213,7 @@
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			// appid: 'wxbf3133166adc4375'
+			// appid: ''
 		}
 	}
 
@@ -263,7 +263,7 @@
 							wxLogin()
 							resolve(res.data)
 						} else if (res.data.State == -1010) {
-							//跑腿地址同步
+							//地址同步
 							resolve(res.data)
 						} else {
 							//抛出异常
