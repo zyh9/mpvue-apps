@@ -641,6 +641,7 @@
 
 [参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
 
+[其它](https://github.com/zyh9/Small-example/tree/master/other/)
 
 ### 小程序分包
 
