@@ -677,35 +677,40 @@
 
 ```html
 	<div class="vip_code">
-		<input type="number" focus="true" maxlength="6" v-model="code" placeholder-style="color:transparent;" />
-		<div v-for="(v,i) in codeLen" :key="i" class="item_code">{{codeArr[i]}}</div>
+		<input type="number"
+		 focus="true" 
+		 maxlength="6" 
+		 v-model="code"
+		 placeholder-style="color:transparent;" />
+		<div v-for="(v,i) in codeLen" :key="i"
+		 class="item_code">{{codeArr[i]}}</div>
 	</div>
 ```
 
 ```javascript
 	export default {
-    data() {
-      return {
-        vipMask: true,
-        code: '',
-        codeLen: 6,
-      }
-    },
-    methods: {},
-    computed: {
-      codeArr() {
-        let arr = [];
-        this.code.split('').forEach(_ => arr.push('·'));
-        return arr;
-      },
-    },
-    watch: {
-      code: function(newVal, oldVal) {
-        // console.log(newVal)
-      }
-    },
-    components: {}
-  }
+		data() {
+			return {
+				vipMask: true,
+				code: '',
+				codeLen: 6,
+			}
+		},
+		methods: {},
+		computed: {
+			codeArr() {
+				let arr = [];
+				this.code.split('').forEach(_ => arr.push('·'));
+				return arr;
+			},
+		},
+		watch: {
+			code: function(newVal, oldVal) {
+				// console.log(newVal)
+			}
+		},
+		components: {}
+	}
 ```
 
 ```css
