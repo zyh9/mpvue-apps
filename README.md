@@ -641,7 +641,6 @@
 
 [参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
 
-[其它](https://github.com/zyh9/Small-example/tree/master/other/)
 
 ### 小程序分包
 
@@ -671,81 +670,19 @@
 	]
 ```
 
-### 虚拟支付弹窗密码输入
+### 虚拟导航层级处理
 
-> 实现方式并不复杂（看看就懂的那种）
-
-```html
-	<div class="vip_code">
-		<input type="number"
-		 focus="true" 
-		 maxlength="6" 
-		 v-model="code"
-		 placeholder-style="color:transparent;" />
-		<div v-for="(v,i) in codeLen" :key="i"
-		 class="item_code">{{codeArr[i]}}</div>
-	</div>
-```
+> 判断当前路径是否在路径数组中，存在即回退，不存在则导向新的路径，可解决层级过深的问题
 
 ```javascript
-	export default {
-		data() {
-			return {
-				vipMask: true,
-				code: '',
-				codeLen: 6,
-			}
-		},
-		methods: {},
-		computed: {
-			codeArr() {
-				let arr = [];
-				this.code.split('').forEach(_ => arr.push('·'));
-				return arr;
-			},
-		},
-		watch: {
-			code: function(newVal, oldVal) {
-				// console.log(newVal)
-			}
-		},
-		components: {}
-	}
-```
-
-```css
-	.vip_code {
-		width: 588rpx;
-		height: 98rpx;
-		position: relative;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		input {
-			position: absolute;
-			height: 98rpx;
-			top: 0;
-			left: -400rpx;
-			right: 0;
-			bottom: 0;
-			opacity: 0;
-			font-size: 20rpx;
-			color: transparent;
-		}
-		.item_code {
-			width: 98rpx;
-			height: 98rpx;
-			box-sizing: border-box;
-			border: 1px solid #999;
-			border-left: none;
-			font-size: 100rpx;
-			color: #1a1a1a;
-			text-align: center;
-			line-height: 98rpx;
-		}
-		.item_code:nth-of-type(1) {
-			border-left: 1px solid #999;
-		}
+	let index = getCurrentPages().findIndex(e => e.route == 'pages/shop-user/main');
+	if (index > -1) {
+		wx.navigateBack({
+			delta: getCurrentPages().length - 1 - index
+		})
+	} else {
+		wx.navigateTo({
+			url: '/pages/shop-user/main'
+		})
 	}
 ```
