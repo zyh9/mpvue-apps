@@ -591,13 +591,35 @@
 		
 		再使用async/await来获取所有的图片本地地址，用catch来抛出图片地址获取异常的情况
 
+```javascript
+	//获取线上图片生成本地临时路径
+	const downImg = val => {
+		return new Promise((resolve, reject) => {
+			//判断本地图片路径是否存在
+			if (val.indexOf('wxfile://') == -1) {
+				wx.downloadFile({
+					url: val,
+					success: res => {
+						resolve(res.tempFilePath)
+					},
+					fail: err => {
+						reject(err)
+					}
+				})
+			} else {
+				resolve(val)
+			}
+		})
+	}
+```
+
 > 优化图片请求方式，采用异步加载
 
 ```javascript
 	Promise.all([this.downImg(this.QrCodeUrl),
 			this.downImg(this.Logo),
 			this.downImg(this.shopInfoList.Logo),
-			this.downImg('https://otherfiles-ali.uupt.com/Stunner/FE/C/shareCard.png')
+			this.downImg(this.shopInfoList.Bg)
 	]).then(res=>{
 			console.log(res,111)
 	}).catch(err=>{
@@ -656,6 +678,8 @@
 		
 		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
 
+[github地址](https://github.com/F-loat/mpvue-quickstart)
+
 ```javascript
 	//pages.js配置（单个页面的配置以及路径）
 	module.exports = [
@@ -664,7 +688,10 @@
 			subPackage: true,//是否分包，主包可不用配置此项
 			config: {
 				navigationBarTitleText: '',//导航文字
-				navigationBarBackgroundColor:'#0963EE'//导航颜色
+				navigationBarBackgroundColor: '',//导航颜色
+				enablePullDownRefresh: true,//启用下拉刷新
+				onReachBottomDistance: 60,//触底距离
+				backgroundTextStyle: "dark",//下拉loading样式
 			}
 		},
 	]
@@ -686,3 +713,13 @@
 		})
 	}
 ```
+
+### 库存不足折回店铺首页以及订单继续支付成功折回订单列表
+
+		针对提交订单库存不足折回店铺首页以及订单继续支付成功折回订单列表的处理
+
+		我们使用了状态管理存储布尔值来解决：
+
+			1.库存不足折回店铺首页，刷新商品列表
+
+			2.继续支付订单支付成功后，进入订单列表页启用下拉刷新
