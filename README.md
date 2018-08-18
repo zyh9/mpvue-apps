@@ -713,3 +713,20 @@
 		})
 	}
 ```
+
+### 小程序0.5像素边框
+
+```css
+	element:before {
+		content: '';
+		position: absolute;
+		top: -50%;
+		bottom: -50%;
+		left: -50%;
+		right: -50%;
+		-webkit-transform: scale(0.5);
+		transform: scale(0.5);
+		border: 1px solid #999;
+		border-radius: 6rpx;
+	}
+```
