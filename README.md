@@ -33,7 +33,7 @@
 	    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
 	    s = s * 6378.137;
 	    s = Math.round(s * 10000) / 10000;
-	    return s;
+	    return s; //返回数值单位：公里
 	}
 ```
 
@@ -729,4 +729,64 @@
 		border: 1px solid #999;
 		border-radius: 6rpx;
 	}
+```
+
+### 微信APP定位权限关闭以及小程序定位权限关闭
+
+> 只看getLocation API fail的处理方式
+
+```javascript
+	return new Promise((resolve, reject) => {
+		wx.getLocation({
+			type: 'wgs84',
+			success: res => {
+				//...
+			}
+			fail: err => {
+				wx.getSetting({
+					success: ok => {
+						if(!(ok.authSetting['scope.userLocation'])){
+							//小程序位置信息权限关闭
+							console.log('小程序定位未开启')
+							model(1);
+						}else{
+							console.log('手机定位未开启')
+							model(2);
+						}
+					},
+					fail: error => {
+							console.log('权限获取失败')
+					}
+				})
+				reject('位置信息获取失败');
+			}
+		})
+	})
+```
+
+>地理位置授权
+
+```javascript
+const model = val => {
+  wx.showModal({
+    title: '定位失败',
+    content: `未获取到你的地理位置，请检查${val==1?'小程序':'微信APP'}是否已关闭定位权限，或尝试重新打开小程序`,
+    // showCancel:false,
+    success: res => {
+      if (res.confirm) {
+        console.log('用户点击确定')
+        if(val==1){
+          wx.redirectTo({
+            url: '/pages/wx-auth/main?type=1'
+          })
+        }
+        //调用wxLogin接口
+      } else if (res.cancel) {
+        console.log('用户点击取消')
+        // model(val);
+        //调用wxLogin接口 
+      }
+    }
+  })
+}
 ```
