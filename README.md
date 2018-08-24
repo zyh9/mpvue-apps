@@ -743,23 +743,29 @@
 				//...
 			}
 			fail: err => {
-				wx.getSetting({
-					success: ok => {
-						if(!(ok.authSetting['scope.userLocation'])){
-							//小程序位置信息权限关闭
-							console.log('小程序定位未开启')
-							model(1);
-						}else{
-							console.log('手机定位未开启')
-							model(2);
-						}
-					},
-					fail: error => {
-							console.log('权限获取失败')
-					}
-				})
-				reject('位置信息获取失败');
-			}
+        wx.hideLoading();
+        //无定位判断
+        if(wx.getStorageSync('QQmap')&&!wx.getStorageSync('QQmap').mapGet){
+          reject('位置信息获取失败，启用无定位搜索');
+        }else{
+          wx.getSetting({
+            success: ok => {
+              if(!(ok.authSetting['scope.userLocation'])){
+                //小程序位置信息权限关闭
+                console.log('小程序定位未开启')
+                model(1);
+              }else{
+                console.log('手机定位未开启')
+                model(2);
+              }
+            },
+            fail: error => {
+                console.log('权限获取失败')
+            }
+          })
+          reject('位置信息获取失败');
+        }
+      }
 		})
 	})
 ```
