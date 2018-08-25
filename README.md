@@ -736,63 +736,55 @@
 > 只看getLocation API fail的处理方式
 
 ```javascript
-	return new Promise((resolve, reject) => {
-		wx.getLocation({
-			type: 'wgs84',
-			success: res => {
-				//...
-			}
-			fail: err => {
-        wx.hideLoading();
-        //无定位判断
-        if(wx.getStorageSync('QQmap')&&!wx.getStorageSync('QQmap').mapGet){
-          reject('位置信息获取失败，启用无定位搜索');
-        }else{
-          wx.getSetting({
-            success: ok => {
-              if(!(ok.authSetting['scope.userLocation'])){
-                //小程序位置信息权限关闭
-                console.log('小程序定位未开启')
-                model(1);
-              }else{
-                console.log('手机定位未开启')
-                model(2);
-              }
-            },
-            fail: error => {
-                console.log('权限获取失败')
-            }
-          })
-          reject('位置信息获取失败');
-        }
-      }
-		})
-	})
+	fail: err => {
+		wx.hideLoading();
+		//无定位判断
+		if(wx.getStorageSync('QQmap')&&!wx.getStorageSync('QQmap').mapGet){
+			reject('位置信息获取失败，启用无定位搜索');
+		}else{
+			wx.getSetting({
+				success: ok => {
+					if(!(ok.authSetting['scope.userLocation'])){
+						//小程序位置信息权限关闭
+						console.log('小程序定位未开启')
+						model(1);
+					}else{
+						console.log('手机定位未开启')
+						model(2);
+					}
+				},
+				fail: error => {
+						console.log('权限获取失败')
+				}
+			})
+			reject('位置信息获取失败');
+		}
+	}
 ```
 
 >地理位置授权
 
 ```javascript
-const model = val => {
-  wx.showModal({
-    title: '定位失败',
-    content: `未获取到你的地理位置，请检查${val==1?'小程序':'微信APP'}是否已关闭定位权限，或尝试重新打开小程序`,
-    // showCancel:false,
-    success: res => {
-      if (res.confirm) {
-        console.log('用户点击确定')
-        if(val==1){
-          wx.redirectTo({
-            url: '/pages/wx-auth/main?type=1'
-          })
-        }
-        //调用wxLogin接口
-      } else if (res.cancel) {
-        console.log('用户点击取消')
-        // model(val);
-        //调用wxLogin接口 
-      }
-    }
-  })
-}
+	const model = val => {
+		wx.showModal({
+			title: '定位失败',
+			content: `未获取到你的地理位置，请检查${val==1?'小程序':'微信APP'}是否已关闭定位权限，或尝试重新打开小程序`,
+			// showCancel:false,
+			success: res => {
+				if (res.confirm) {
+					console.log('用户点击确定')
+					if(val==1){
+						wx.redirectTo({
+							url: '/pages/wx-auth/main?type=1'
+						})
+					}
+					//调用wxLogin接口
+				} else if (res.cancel) {
+					console.log('用户点击取消')
+					// model(val);
+					//调用wxLogin接口 
+				}
+			}
+		})
+	}
 ```
