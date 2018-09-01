@@ -133,7 +133,9 @@
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			// appid: '暂无'
+			appid: '1',
+			token: wx.getStorageSync('loginInfo').Token || '',
+			qrcode: wx.setStorageSync('scene', this.scene) || ''
 		}
 	}
 
@@ -264,10 +266,6 @@
 			url: 'WxJsCodeLogin',
 			data: {
 				jsCode: code,
-			},
-			headers: {
-				appid: '1',
-				qrcode: ''
 			}
 		})
 	}
@@ -295,7 +293,7 @@
 		}
 	}
 
-	export default { get, post, openTime, qqMapInfo };
+	export default { get, post, openTime, qqMapInfo, wxLogin };
 
 ```
 
@@ -304,9 +302,6 @@
 	let shopInfo = async _ =>{
 		let data1 = await this.util.post({
 			url:'http://XXXXXX',
-			headers:{
-				token:'222'
-			}
 			data:{
 				demo:'111'
 			}
@@ -314,9 +309,6 @@
 		console.log(data1)
 		let data2 = await this.util.post({
 			url:'http://XXXXXX',
-			headers:{
-				token:'222'
-			}
 			data:{
 				demo:'111'
 			}
@@ -787,4 +779,10 @@
 			}
 		})
 	}
+```
+
+### textarea去除输入法上方完成栏
+
+```html
+	<textarea :show-confirm-bar="false"></textarea>
 ```
