@@ -786,3 +786,7 @@
 ```html
 	<textarea :show-confirm-bar="false"></textarea>
 ```
+
+### 优化setState的数据频繁更新
+
+[github issues地址](https://github.com/Meituan-Dianping/mpvue/issues/639)
