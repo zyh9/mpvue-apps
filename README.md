@@ -1,6 +1,6 @@
 ## mpvue 踩坑之旅
 
-### 定位
+### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
 		
@@ -15,6 +15,8 @@
 		改为export default QQMapWX; 引入改为import QQMapWX from 'XXX/qqmap-wx-jssdk.js'; 即可
 		
 		百度的微信小程序JavaScript SDK和其类似，故此不再赘述
+
+> 注：另一种解决方法，把地图SDK放到static下，别让它被webpack编译就不会报错了
 
 [腾讯 微信小程序 SDK](http://lbs.qq.com/qqmap_wx_jssdk/index.html)
 
