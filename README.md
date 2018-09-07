@@ -75,7 +75,7 @@
 	console.log( result );  // [ 116.41661560068297, 39.92196580126834 ]
 ```
 
-[gcoord github地址](https://github.com/hujiulong/gcoord)
+[gcoord github地址，请戳我](https://github.com/hujiulong/gcoord)
 
 ### autoprefixer配置
 
@@ -651,11 +651,11 @@
 
 ### 函数节流防抖参考链接
 
-[30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
+[30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
 
 ### vue 与 throttle 的坑
 
-[参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
+[参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
 
 
 ### 小程序分包
@@ -672,7 +672,7 @@
 		
 		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
 
-[github地址](https://github.com/F-loat/mpvue-quickstart)
+[mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
 
 ```javascript
 	//pages.js配置（单个页面的配置以及路径）
@@ -791,4 +791,4 @@
 
 ### 优化setState的数据频繁更新
 
-[github issues地址](https://github.com/Meituan-Dianping/mpvue/issues/639)
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
