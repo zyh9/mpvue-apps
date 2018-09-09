@@ -1,6 +1,6 @@
 ## mpvue 踩坑之旅
 
-### 定位
+### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
 		
@@ -15,6 +15,8 @@
 		改为export default QQMapWX; 引入改为import QQMapWX from 'XXX/qqmap-wx-jssdk.js'; 即可
 		
 		百度的微信小程序JavaScript SDK和其类似，故此不再赘述
+
+> 注：另一种解决方法，把地图SDK放到static下，别让它被webpack编译就不会报错了
 
 [腾讯 微信小程序 SDK](http://lbs.qq.com/qqmap_wx_jssdk/index.html)
 
@@ -73,7 +75,7 @@
 	console.log( result );  // [ 116.41661560068297, 39.92196580126834 ]
 ```
 
-[gcoord github地址](https://github.com/hujiulong/gcoord)
+[gcoord github地址，请戳我](https://github.com/hujiulong/gcoord)
 
 ### autoprefixer配置
 
@@ -124,7 +126,7 @@
 ```javascript
 	import QQMapWX from './qqmap-wx-jssdk.js';
 	const QQMap = new QQMapWX({
-		key: 'BZMBZ-OKXRU-DINVZ-2SRN5-4KWJ7-S6B6O'
+		key: '****'
 	})
 
 	//数据请求地址
@@ -133,7 +135,9 @@
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			// appid: '暂无'
+			appid: '1',
+			token: wx.getStorageSync('loginInfo').Token || '',
+			qrcode: wx.setStorageSync('scene', this.scene) || ''
 		}
 	}
 
@@ -182,10 +186,7 @@
 							//调用wxLogin接口
 							wxLogin()
 							resolve(res.data)
-						} else if (res.data.State == -1010) {
-							//地址同步
-							resolve(res.data)
-						} else {
+						}else {
 							//抛出异常
 							reject(res.data)
 						}
@@ -264,10 +265,6 @@
 			url: 'WxJsCodeLogin',
 			data: {
 				jsCode: code,
-			},
-			headers: {
-				appid: '1',
-				qrcode: ''
 			}
 		})
 	}
@@ -295,7 +292,7 @@
 		}
 	}
 
-	export default { get, post, openTime, qqMapInfo };
+	export default { get, post, openTime, qqMapInfo, wxLogin };
 
 ```
 
@@ -304,9 +301,6 @@
 	let shopInfo = async _ =>{
 		let data1 = await this.util.post({
 			url:'http://XXXXXX',
-			headers:{
-				token:'222'
-			}
 			data:{
 				demo:'111'
 			}
@@ -314,9 +308,6 @@
 		console.log(data1)
 		let data2 = await this.util.post({
 			url:'http://XXXXXX',
-			headers:{
-				token:'222'
-			}
 			data:{
 				demo:'111'
 			}
@@ -617,9 +608,7 @@
 
 ```javascript
 	Promise.all([this.downImg(this.QrCodeUrl),
-			this.downImg(this.Logo),
-			this.downImg(this.shopInfoList.Logo),
-			this.downImg(this.shopInfoList.Bg)
+			this.downImg(this.Logo)
 	]).then(res=>{
 			console.log(res,111)
 	}).catch(err=>{
@@ -650,18 +639,16 @@
 
 	config.appId && (wx.setStorageSync('uAppId', config.appId));
 
-	!config.shopId && console.log('未获取到shopId');
-
 	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
 ```
 
 ### 函数节流防抖参考链接
 
-[30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
+[30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
 
 ### vue 与 throttle 的坑
 
-[参考链接](http://fszer.github.io/2018/01/21/vue%E4%B8%8Ethroltte%E7%9A%84%E5%9D%91/)
+[参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
 
 
 ### 小程序分包
@@ -678,7 +665,7 @@
 		
 		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
 
-[github地址](https://github.com/F-loat/mpvue-quickstart)
+[mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
 
 ```javascript
 	//pages.js配置（单个页面的配置以及路径）
@@ -702,14 +689,14 @@
 > 判断当前路径是否在路径数组中，存在即回退，不存在则导向新的路径，可解决层级过深的问题
 
 ```javascript
-	let index = getCurrentPages().findIndex(e => e.route == 'pages/shop-user/main');
+	let index = getCurrentPages().findIndex(e => e.route == 'pages/index/main');
 	if (index > -1) {
 		wx.navigateBack({
 			delta: getCurrentPages().length - 1 - index
 		})
 	} else {
 		wx.navigateTo({
-			url: '/pages/shop-user/main'
+			url: '/pages/index/main'
 		})
 	}
 ```
@@ -788,3 +775,13 @@
 		})
 	}
 ```
+
+### textarea去除输入法上方完成栏
+
+```html
+	<textarea :show-confirm-bar="false"></textarea>
+```
+
+### 优化setState的数据频繁更新
+
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
