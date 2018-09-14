@@ -616,6 +616,35 @@
 	})
 ```
 
+### canvas文字截取
+
+```javascript
+	/**
+	 * ctx,画布对象
+	 * str,需要绘制的文字
+	 * splitLen,切割的长度字符串
+	 * strHeight,每行文字之间的高度
+	 * x,位置
+	 * y,位置
+	 */
+	fontLineFeed(ctx, str, splitLen, strHeight, x, y) {
+		let strArr = [];
+		for (let i = 0, len = str.length / splitLen; i < len; i++) {
+			strArr.push(str.substring(i * splitLen, i * splitLen + splitLen));
+		}
+		if (str.length > splitLen) {
+			strArr[0] = strArr[0] + '...';
+		}
+		// console.log(strArr[0])
+		// let s = 0;
+		// for (let j = 0, len = strArr.length; j < len; j++) {
+		//     s = s + strHeight;
+		//     ctx.fillText(strArr[j], x, y + s);
+		// }
+		ctx.fillText(strArr[0], x, y);
+	}
+```
+
 ### 三方模板店铺页
 
 ```javascript
