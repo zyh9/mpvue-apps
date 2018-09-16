@@ -514,9 +514,8 @@
 		data() {
 		  return {
 		    cartList: [],
-		    startX: 0,
-		    delBtnWidth: 60,
-		    leftMove: 0
+		    startX: 0,//按下的位置
+		    delBtnWidth: 60,//删除按钮的宽度以及平移的宽度
 		  }
 		},
 		onShow() { //页面渲染就会触发
@@ -691,8 +690,6 @@
 		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
 
 		相应的也就提高了进入小程序的加载速度
-		
-		pages.js数组的第一项就是作为首页的页面，没有类似于小程序的'^'前置方法
 
 [mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
 
