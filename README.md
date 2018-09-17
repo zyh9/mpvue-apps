@@ -445,7 +445,6 @@
 		    liHeight: 0, //单个配置的高度
 		  }
 		},
-		onShow() {},
 		mounted() {
 		  let query = wx.createSelectorQuery();
 		  query.select('.deploy_item').boundingClientRect()
@@ -503,7 +502,6 @@
 		    })
 		  },
 		},
-		components: {}
 	}
 ```
 
@@ -524,7 +522,6 @@
 		  })
 		  console.log(this.cartList)
 		},
-		mounted() {},
 		methods: {
 		  touchS(e) {
 		    if (e.touches.length == 1) {
@@ -567,7 +564,6 @@
 		    }
 		  },
 		},
-		components: {}
 	}
 ```
 
@@ -658,7 +654,7 @@
 		return {
 			appid: wx.getStorageSync('uAppId') || '1',
 			token: wx.getStorageSync('loginInfo').Token || '',
-			qrcode: wx.setStorageSync('scene', this.scene) || ''
+			qrcode: wx.getStorageSync('scene') || ''
 		}
 	}
 
