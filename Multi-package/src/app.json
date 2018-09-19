@@ -1,0 +1,33 @@
+{
+	"window": {
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#3c59ee",
+		"navigationBarTitleText": "",
+		"navigationBarTextStyle": "white"
+	},
+	"tabBar": {
+		"backgroundColor": "#fff",
+		"selectedColor": "#3c59ee",
+		"color": "#b2b2b2",
+		"list": [
+			{
+				"selectedIconPath": "static/tabBar/admin_indexActive.png",
+				"iconPath": "static/tabBar/admin_index.png",
+				"pagePath": "pages/index",
+				"text": "首页"
+			},
+			{
+				"selectedIconPath": "static/tabBar/admin_orderActive.png",
+				"iconPath": "static/tabBar/admin_order.png",
+				"pagePath": "pages/order",
+				"text": "订单"
+			},
+			{
+				"selectedIconPath": "static/tabBar/admin_userActive.png",
+				"iconPath": "static/tabBar/admin_user.png",
+				"pagePath": "pages/user",
+				"text": "我的"
+			}
+		]
+	}
+}
