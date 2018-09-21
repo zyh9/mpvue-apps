@@ -1,7 +1,7 @@
 {
-  "name": "uu-shop",
+  "name": "mpvue-zyh",
   "version": "1.0.0",
-  "description": "分包demo",
+  "description": "单包demo",
   "author": "zhangyanhui <1124596031@qq.com>",
   "private": true,
   "scripts": {
