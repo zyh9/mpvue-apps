@@ -1,5 +1,11 @@
 ## mpvue 踩坑之旅
 
+### 单包、分包demo
+
+[单包demo](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
+
+[分包demo](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
+
 ### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
