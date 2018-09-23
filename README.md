@@ -2,9 +2,42 @@
 
 ### 单包、分包demo
 
-[单包demo](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
+> 单包介绍
 
-[分包demo](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
+[单包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
+
+> 分包介绍
+
+[分包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
+
+		前提是项目代码体积已经超过2M的项目才可以使用此方法
+
+		小程序单包最大支持2M，分包后最大可支持8M，故此需要对其进行分包处理
+
+		将main.js里面的pages单独存储于pages.js内（有点像路由的配置文件）
+
+		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
+
+		相应的也就提高了进入小程序的加载速度
+
+[mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
+
+```javascript
+	//pages.js配置（单个页面的配置以及路径）
+	module.exports = [
+		{
+			path: 'pages/admin-index',//页面所在路径
+			subPackage: true,//是否分包，主包可不用配置此项
+			config: {
+				navigationBarTitleText: '',//导航文字
+				navigationBarBackgroundColor: '',//导航颜色
+				enablePullDownRefresh: true,//启用下拉刷新
+				onReachBottomDistance: 60,//触底距离
+				backgroundTextStyle: "dark",//下拉loading样式
+			}
+		},
+	]
+```
 
 ### 地理位置获取
 
@@ -679,38 +712,6 @@
 ### vue 与 throttle 的坑
 
 [参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
-
-
-### 小程序分包
-
-		前提是项目代码体积已经超过2M的项目才可以使用此方法
-
-		小程序单包最大支持2M，分包后最大可支持8M，故此需要对其进行分包处理
-
-		将main.js里面的pages单独存储于pages.js内（有点像路由的配置文件）
-
-		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
-
-		相应的也就提高了进入小程序的加载速度
-
-[mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
-
-```javascript
-	//pages.js配置（单个页面的配置以及路径）
-	module.exports = [
-		{
-			path: 'pages/admin-index',//页面所在路径
-			subPackage: true,//是否分包，主包可不用配置此项
-			config: {
-				navigationBarTitleText: '',//导航文字
-				navigationBarBackgroundColor: '',//导航颜色
-				enablePullDownRefresh: true,//启用下拉刷新
-				onReachBottomDistance: 60,//触底距离
-				backgroundTextStyle: "dark",//下拉loading样式
-			}
-		},
-	]
-```
 
 ### 虚拟导航层级处理
 
