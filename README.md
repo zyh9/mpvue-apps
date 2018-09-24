@@ -6,6 +6,17 @@
 
 [单包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
 
+```javascript
+	//main.json配置（单个页面的配置）
+	{
+		navigationBarTitleText: '',//导航文字
+		navigationBarBackgroundColor: '',//导航颜色
+		enablePullDownRefresh: true,//启用下拉刷新
+		onReachBottomDistance: 60,//触底距离
+		backgroundTextStyle: "dark",//下拉loading样式
+	}
+```
+
 > 分包介绍
 
 [分包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
@@ -14,7 +25,7 @@
 
 		小程序单包最大支持2M，分包后最大可支持8M，故此需要对其进行分包处理
 
-		将main.js里面的pages单独存储于pages.js内（有点像路由的配置文件）
+		将单个页面的配置单独存储于pages.js内（有点像路由的配置文件）
 
 		然后根据功能性来划分相应模块，只有用户触及到某些模块的时候才会去加载
 
