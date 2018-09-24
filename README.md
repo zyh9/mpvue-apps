@@ -716,14 +716,6 @@
 	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
 ```
 
-### 函数节流防抖参考链接
-
-[30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
-
-### vue 与 throttle 的坑
-
-[参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
-
 ### 虚拟导航层级处理
 
 > 灵感源自于有赞对虚拟导航的处理方式，判断当前路径是否在路径数组中，存在即回退，不存在则导向新的路径，可解决层级过深的问题
@@ -823,6 +815,14 @@
 ```html
 	<textarea :show-confirm-bar="false"></textarea>
 ```
+
+### 函数节流防抖参考链接
+
+[30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
+
+### vue 与 throttle 的坑
+
+[参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
 
 ### 优化setState的数据频繁更新
 
