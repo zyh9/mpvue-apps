@@ -810,6 +810,14 @@
 	}
 ```
 
+### 小程序跳转另一个小程序
+
+		可使用navigator标签，但想要在另外一个小程序来接受参数的话就需要使用到extra-data属性
+
+		但在跳转过去的onShow(options){}里，并未获取到referrerInfo信息
+
+		解决方法：使用小游戏的 wx.getLaunchOptionsSync() 方法
+
 ### textarea去除输入法上方完成栏
 
 ```html
