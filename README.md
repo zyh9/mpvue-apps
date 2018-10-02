@@ -174,10 +174,6 @@
 > 先看数据请求代码
 
 ```javascript
-	import QQMapWX from './qqmap-wx-jssdk.js';
-	const QQMap = new QQMapWX({
-		key: '****'
-	})
 
 	//数据请求地址
 	const baseUrl = 'localhost:8080';
@@ -185,9 +181,7 @@
 	const commonHeader = _ => {
 		//headers每次必传数据存放位置
 		return {
-			appid: '1',
-			token: wx.getStorageSync('loginInfo').Token || '',
-			qrcode: wx.setStorageSync('scene', this.scene) || ''
+			//...
 		}
 	}
 
@@ -228,18 +222,7 @@
 				method: "POST",
 				success: res => {
 					setTimeout(_ => {
-						if (res.data.State == 1) {
-							//返回正常的数据
-							resolve(res.data)
-						} else if (res.data.State == -10) {
-							//针对token失效问题
-							//调用wxLogin接口
-							wxLogin()
-							resolve(res.data)
-						}else {
-							//抛出异常
-							reject(res.data)
-						}
+						resolve(res.data)
 					}, 0)
 				},
 				fail: err => {
@@ -249,100 +232,7 @@
 		})
 	}
 
-	//地理位置获取
-	const qqMapInfo = _ => {
-		return new Promise((resolve, reject) => {
-			wx.getLocation({
-				type: 'wgs84',
-				success: res => {
-					QQMap.reverseGeocoder({
-						location: {
-							latitude: res.latitude,
-							longitude: res.longitude
-						},
-						success: ok => {
-							//城市 经纬度
-							let pos = {
-								city: ok.result.address_component.city,
-								latitude: res.latitude,
-								longitude: res.longitude
-							}
-							wx.setStorageSync('QQmap', pos)
-							//调用wxLogin接口
-							wxLogin().then(res => {
-								resolve(res)
-							}).catch(err => {
-								reject(err)
-							})
-						},
-						fail: err => {
-							reject(err)
-						}
-					})
-				},
-				fail: err => {
-					console.log(err)
-				}
-			})
-		})
-	}
-
-	//全局wxLogin token获取
-	const wxLogin = _ => {
-		// 调用登录接口
-		return new Promise((resolve, reject) => {
-			wx.login({
-				success: res => {
-					userLogin(res.code).then(res => {
-						if (res.State == 1) {
-							resolve(res)
-							wx.setStorageSync('loginInfo', res.Body)
-						} else if (res.State == -10) {
-							wxLogin()
-						}
-					}).catch(err => {
-						reject(err)
-					})
-				},
-				fail: err => {
-					console.log(err)
-				}
-			})
-		})
-	}
-	const userLogin = async code => {
-		return await post({
-			url: 'WxJsCodeLogin',
-			data: {
-				jsCode: code,
-			}
-		})
-	}
-
-	// 营业时间格式化 示例：'0-140,180-300' => ['00:00-02:20','03:00-05:00']
-	// 返回一个数组，使用的时候直接String转化为字符串，做相应操作
-	const openTime = str => {
-		const two = n => {
-			return n < 10 ? '0' + n : '' + n;
-		}
-		if (str.indexOf(',') > -1) {
-			return str.split(',').map(e => {
-				let a = two(Math.floor(e.split('-')[0] / 60))
-				let b = two(Math.floor(e.split('-')[0] % 60))
-				let c = two(Math.floor(e.split('-')[1] / 60))
-				let d = two(Math.floor(e.split('-')[1] % 60))
-				return e = `${a}:${b}-${c}:${d}`;
-			})
-		} else {
-			let a = two(Math.floor(str.split('-')[0] / 60))
-			let b = two(Math.floor(str.split('-')[0] % 60))
-			let c = two(Math.floor(str.split('-')[1] / 60))
-			let d = two(Math.floor(str.split('-')[1] % 60))
-			return [`${a}:${b}-${c}:${d}`];
-		}
-	}
-
-	export default { get, post, openTime, qqMapInfo, wxLogin };
+	export default { get, post };
 
 ```
 
@@ -690,32 +580,6 @@
 	}
 ```
 
-### 三方模板店铺页
-
-```javascript
-	onLoad(options) {
-		this.scene = options.scene;
-		wx.setStorageSync('scene', this.scene);
-		this.ShopId = this.$mp.query.ShopId || wx.getStorageSync('uShopId') || '测试店铺id';
-	}
-
-	const commonHeader = _ => {
-		//headers每次必传数据存放位置
-		return {
-			appid: wx.getStorageSync('uAppId') || '1',
-			token: wx.getStorageSync('loginInfo').Token || '',
-			qrcode: wx.getStorageSync('scene') || ''
-		}
-	}
-
-	//获取第三方平台自定义的数据字段
-	let config = wx.getExtConfigSync();
-
-	config.appId && (wx.setStorageSync('uAppId', config.appId));
-
-	config.shopId && (wx.setStorageSync('uShopId', config.shopId));
-```
-
 ### 虚拟导航层级处理
 
 > 灵感源自于有赞对虚拟导航的处理方式，判断当前路径是否在路径数组中，存在即回退，不存在则导向新的路径，可解决层级过深的问题
@@ -749,64 +613,6 @@
 		transform: scale(0.5);
 		border: 1px solid #999;
 		border-radius: 6rpx;
-	}
-```
-
-### 微信APP定位权限关闭以及小程序定位权限关闭
-
-> 只看getLocation API fail的处理方式
-
-```javascript
-	fail: err => {
-		wx.hideLoading();
-		//无定位判断
-		if(wx.getStorageSync('QQmap')&&!wx.getStorageSync('QQmap').mapGet){
-			reject('位置信息获取失败，启用无定位搜索');
-		}else{
-			wx.getSetting({
-				success: ok => {
-					if(!(ok.authSetting['scope.userLocation'])){
-						//小程序位置信息权限关闭
-						console.log('小程序定位未开启')
-						model(1);
-					}else{
-						console.log('手机定位未开启')
-						model(2);
-					}
-				},
-				fail: error => {
-						console.log('权限获取失败')
-				}
-			})
-			reject('位置信息获取失败');
-		}
-	}
-```
-
->地理位置授权
-
-```javascript
-	const model = val => {
-		wx.showModal({
-			title: '定位失败',
-			content: `未获取到你的地理位置，请检查${val==1?'小程序':'微信APP'}是否已关闭定位权限，或尝试重新打开小程序`,
-			// showCancel:false,
-			success: res => {
-				if (res.confirm) {
-					console.log('用户点击确定')
-					if(val==1){
-						wx.redirectTo({
-							url: '/pages/wx-auth/main?type=1'
-						})
-					}
-					//调用wxLogin接口
-				} else if (res.cancel) {
-					console.log('用户点击取消')
-					// model(val);
-					//调用wxLogin接口 
-				}
-			}
-		})
 	}
 ```
 
