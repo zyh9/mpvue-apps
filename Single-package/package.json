@@ -2,7 +2,7 @@
   "name": "mpvue-zyh",
   "version": "1.0.0",
   "description": "单包demo",
-  "author": "zhangyanhui <1124596031@qq.com>",
+  "author": "zyh9 <1124596031@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
