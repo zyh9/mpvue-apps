@@ -262,7 +262,7 @@
 	shopInfo().then(res=>{console.log(res)}).catch(err=>{console.log(err)})
 ```
 
-### vuex的加入（纯属瞎搞）
+### vuex的加入
 
 ```javascript
 		
