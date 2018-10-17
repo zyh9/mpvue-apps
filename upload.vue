@@ -1,8 +1,8 @@
 <template>
-    <div class="upload_shop_img">
+    <div class="upload">
         <canvas class="canvas" canvas-id="cropper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" disable-scroll="true" :style="{ width: cropperOpt.width + 'px', height: cropperOpt.height + 'px'}"></canvas>
         <cover-view class="cropper-buttons">
-            <cover-view class="upload" @tap="uploadTap">上传图片</cover-view>
+            <cover-view class="uploadImg" @tap="uploadTap">上传图片</cover-view>
             <cover-view class="getCropperImage" @tap="getCropperImage">生成图片</cover-view>
         </cover-view>
     </div>
@@ -135,7 +135,7 @@
 </script>
 
 <style lang="less">
-    .upload_shop_img {
+    .upload {
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, .8);
@@ -157,7 +157,7 @@
         font-size: 30rpx;
         color: #ccc;
         font-weight: 900;
-        .upload,
+        .uploadImg,
         .getCropperImage {
             width: 50%;
             text-align: center;
