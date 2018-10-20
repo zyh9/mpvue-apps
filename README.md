@@ -488,3 +488,6 @@
 ### 小程序图片裁剪上传插件
 
 [we-cropper地址，请戳我](https://github.com/we-plugin/we-cropper)
+
+### 热更新失效问题，以及文件拷贝出错问题
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/801)
