@@ -11,9 +11,9 @@
 	{
 		navigationBarTitleText: '',//导航文字
 		navigationBarBackgroundColor: '',//导航颜色
+		backgroundTextStyle: "dark",//下拉loading样式
 		enablePullDownRefresh: true,//启用下拉刷新
 		onReachBottomDistance: 60,//触底距离
-		backgroundTextStyle: "dark",//下拉loading样式
 	}
 ```
 
@@ -37,16 +37,26 @@
 	//pages.js配置（单个页面的配置以及路径）
 	module.exports = [
 		{
-			path: 'pages/admin-index',//页面所在路径
+			path: 'pages/index',//主包页面所在路径
+			config: {
+				navigationBarTitleText: '',//导航文字
+				navigationBarBackgroundColor: '',//导航颜色
+				backgroundTextStyle: "dark",//下拉loading样式
+				enablePullDownRefresh: true,//启用下拉刷新
+				onReachBottomDistance: 60,//触底距离
+			}
+		},
+		{
+			path: 'pagesOther/other',//分包页面所在路径
 			subPackage: true,//是否分包，主包可不用配置此项
 			config: {
 				navigationBarTitleText: '',//导航文字
 				navigationBarBackgroundColor: '',//导航颜色
+				backgroundTextStyle: "dark",//下拉loading样式
 				enablePullDownRefresh: true,//启用下拉刷新
 				onReachBottomDistance: 60,//触底距离
-				backgroundTextStyle: "dark",//下拉loading样式
 			}
-		},
+		}
 	]
 ```
 
@@ -481,13 +491,14 @@
 
 [参考链接，请戳我](http://fszer.github.io/2018/01/21/vue与throltte的坑/)
 
-### 优化setState的数据频繁更新
-
-[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
-
 ### 小程序图片裁剪上传插件
 
 [we-cropper地址，请戳我](https://github.com/we-plugin/we-cropper)
 
-### 热更新失效问题，以及文件拷贝出错问题
+### 优化setState的数据频繁更新
+
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
+
+### 热更新失效问题以及文件拷贝出错问题
+
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/801)
