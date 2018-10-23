@@ -60,6 +60,40 @@
 	]
 ```
 
+### mpvue-loader已经支持分包
+
+```javascript
+	//webpack.base.conf.js文件
+	const appEntry = { app: resolve('./src/main.js') }
+	configFilesArray.push({
+		from: resolve('./src/main.json'),
+		to: 'app.json'
+	})
+
+	function getEntry (rootSrc, path) {
+	var map = {};
+	glob.sync(rootSrc + '/' + path + '/**/main.js')
+	.forEach(file => {
+		var key = relative(rootSrc, file).replace('.js', '');
+		map[key] = file;
+	})
+	return map;
+	}
+
+	// const pagesEntry = getEntry(resolve('./src'), 'pages')
+	// const entry = Object.assign({}, appEntry, pagesEntry)
+
+	//根据main.json配置循环导入即可
+	var { entryPath } = require('../src/main.json')
+	var entryArray = [];
+	entryPath.forEach( e =>{
+	entryArray.push(
+		getEntry(resolve('./src'), e)
+	)
+	})
+	const entry = Object.assign({}, appEntry, ...entryArray)
+```
+
 ### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
