@@ -502,3 +502,9 @@
 ### 热更新失效问题以及文件拷贝出错问题
 
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/801)
+
+### mpvue-loader升级指南
+
+[更改日志，请戳我](http://mpvue.com/change-log/)
+
+[升级指南以及webpack配置，请戳我](http://mpvue.com/change-log/2018.7.24/)
