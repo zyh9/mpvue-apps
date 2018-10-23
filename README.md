@@ -71,13 +71,13 @@
 	})
 
 	function getEntry (rootSrc, path) {
-	var map = {};
-	glob.sync(rootSrc + '/' + path + '/**/main.js')
-	.forEach(file => {
-		var key = relative(rootSrc, file).replace('.js', '');
-		map[key] = file;
-	})
-	return map;
+		var map = {};
+		glob.sync(rootSrc + '/' + path + '/**/main.js')
+		.forEach(file => {
+			var key = relative(rootSrc, file).replace('.js', '');
+			map[key] = file;
+		})
+		return map;
 	}
 
 	// const pagesEntry = getEntry(resolve('./src'), 'pages')
@@ -87,9 +87,9 @@
 	var { entryPath } = require('../src/main.json')
 	var entryArray = [];
 	entryPath.forEach( e =>{
-	entryArray.push(
-		getEntry(resolve('./src'), e)
-	)
+		entryArray.push(
+			getEntry(resolve('./src'), e)
+		)
 	})
 	const entry = Object.assign({}, appEntry, ...entryArray)
 ```
