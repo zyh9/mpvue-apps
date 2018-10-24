@@ -80,18 +80,17 @@
 		return map;
 	}
 
-	// const pagesEntry = getEntry(resolve('./src'), 'pages')
-	// const entry = Object.assign({}, appEntry, pagesEntry)
-
-	//根据main.json配置循环导入即可
-	var { entryPath } = require('../src/main.json')
-	var entryArray = [];
-	entryPath.forEach( e =>{
-		entryArray.push(
-			getEntry(resolve('./src'), e)
-		)
-	})
-	const entry = Object.assign({}, appEntry, ...entryArray)
+	let entry;
+	const pagesEntry = getEntry(resolve('./src'), 'pages')
+	let {subPackages} = require('../src/main.json')
+	if(subPackages){
+		let entryPath = subPackages.map(({root})=>({root}))
+		let entryArray = [];
+		entryPath.forEach( e =>{
+			entryArray.push(getEntry(resolve('./src'), e['root']))
+		})
+		entry = Object.assign({}, appEntry, pagesEntry, ...entryArray)
+	}else entry = Object.assign({}, appEntry, pagesEntry)
 ```
 
 ### 地理位置获取
