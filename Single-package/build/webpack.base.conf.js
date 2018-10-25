@@ -14,23 +14,33 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-function getEntry (rootSrc) {
+const appEntry = { app: resolve('./src/main.js') }
+configFilesArray.push({
+  from: resolve('./src/main.json'),
+  to: 'app.json'
+})
+
+function getEntry (rootSrc, path) {
   var map = {};
-  glob.sync(rootSrc + '/pages/**/main.js')
+  glob.sync(rootSrc + '/' + path + '/**/main.js')
   .forEach(file => {
     var key = relative(rootSrc, file).replace('.js', '');
     map[key] = file;
   })
-   return map;
+  return map;
 }
 
-const appEntry = { app: resolve('./src/main.js') }
-configFilesArray.push({
-    from: resolve('./src/main.json'),
-    to: 'app.json'
-})
-const pagesEntry = getEntry(resolve('./src'), 'pages/**/main.js')
-const entry = Object.assign({}, appEntry, pagesEntry)
+let entry;
+const pagesEntry = getEntry(resolve('./src'), 'pages')
+let {subPackages} = require('../src/main.json')
+if(subPackages){
+  let entryPath = subPackages.map(({root})=>({root}))
+  let entryArray = [];
+  entryPath.forEach( e =>{
+    entryArray.push(getEntry(resolve('./src'), e['root']))
+  })
+  entry = Object.assign({}, appEntry, pagesEntry, ...entryArray)
+}else entry = Object.assign({}, appEntry, pagesEntry)
 
 module.exports = {
   // 如果要自定义生成的 dist 目录里面的文件路径，
