@@ -17,6 +17,40 @@
 	}
 ```
 
+> mpvue-loader已经支持分包
+
+```javascript
+	//webpack.base.conf.js文件
+	const appEntry = { app: resolve('./src/main.js') }
+	
+	configFilesArray.push({
+		from: resolve('./src/main.json'),
+		to: 'app.json'
+	})
+
+	function getEntry (rootSrc, path) {
+		var map = {};
+		glob.sync(rootSrc + '/' + path + '/**/main.js')
+		.forEach(file => {
+			var key = relative(rootSrc, file).replace('.js', '');
+			map[key] = file;
+		})
+		return map;
+	}
+
+	let entry;
+	const pagesEntry = getEntry(resolve('./src'), 'pages')
+	let {subPackages} = require('../src/main.json')
+	if(subPackages){
+		let entryPath = subPackages.map(({root})=>({root}))
+		let entryArray = [];
+		entryPath.forEach( e =>{
+			entryArray.push(getEntry(resolve('./src'), e['root']))
+		})
+		entry = Object.assign({}, appEntry, pagesEntry, ...entryArray)
+	}else entry = Object.assign({}, appEntry, pagesEntry)
+```
+
 > 分包介绍
 
 [分包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
@@ -58,39 +92,6 @@
 			}
 		}
 	]
-```
-
-### mpvue-loader已经支持分包
-
-```javascript
-	//webpack.base.conf.js文件
-	const appEntry = { app: resolve('./src/main.js') }
-	configFilesArray.push({
-		from: resolve('./src/main.json'),
-		to: 'app.json'
-	})
-
-	function getEntry (rootSrc, path) {
-		var map = {};
-		glob.sync(rootSrc + '/' + path + '/**/main.js')
-		.forEach(file => {
-			var key = relative(rootSrc, file).replace('.js', '');
-			map[key] = file;
-		})
-		return map;
-	}
-
-	let entry;
-	const pagesEntry = getEntry(resolve('./src'), 'pages')
-	let {subPackages} = require('../src/main.json')
-	if(subPackages){
-		let entryPath = subPackages.map(({root})=>({root}))
-		let entryArray = [];
-		entryPath.forEach( e =>{
-			entryArray.push(getEntry(resolve('./src'), e['root']))
-		})
-		entry = Object.assign({}, appEntry, pagesEntry, ...entryArray)
-	}else entry = Object.assign({}, appEntry, pagesEntry)
 ```
 
 ### 地理位置获取

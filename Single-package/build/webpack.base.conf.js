@@ -15,6 +15,7 @@ function resolve (dir) {
 }
 
 const appEntry = { app: resolve('./src/main.js') }
+
 configFilesArray.push({
   from: resolve('./src/main.json'),
   to: 'app.json'
