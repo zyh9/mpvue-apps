@@ -1,8 +1,6 @@
 ## mpvue 踩坑之旅
 
-### 单包、分包demo
-
-> 单包介绍
+### 单包demo
 
 [单包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
 
@@ -40,6 +38,7 @@
 
 	let entry;
 	const pagesEntry = getEntry(resolve('./src'), 'pages')
+	//判断是否包含subPackages字符来区别单包、分包
 	let {subPackages} = require('../src/main.json')
 	if(subPackages){
 		let entryPath = subPackages.map(({root})=>({root}))
@@ -51,7 +50,7 @@
 	}else entry = Object.assign({}, appEntry, pagesEntry)
 ```
 
-> 分包介绍
+### 分包demo
 
 [分包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Multi-package)
 
