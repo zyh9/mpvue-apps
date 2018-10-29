@@ -15,7 +15,7 @@
 	}
 ```
 
-> mpvue-loader已经支持分包
+> mpvue-loader已经支持分包(需要修改配置文件)
 
 ```javascript
 	//webpack.base.conf.js文件
@@ -499,6 +499,27 @@
 		transform: scale(0.5);
 		border: 1px solid #999;
 		border-radius: 6rpx;
+	}
+```
+
+### 检测是否授权
+
+```javascript
+	const isAuth = (name) => {
+		return new Promise((resolve, reject) => {
+			Taro.getSetting({
+			success: (res) => {
+				if (res.authSetting[name]) {
+				resolve();
+				} else {
+				reject();
+				}
+			},
+			fail: (err) => {
+				reject(err);
+			}
+			})
+		})
 	}
 ```
 
