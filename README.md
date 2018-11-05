@@ -20,11 +20,6 @@
 ```javascript
 	//webpack.base.conf.js文件
 	const appEntry = { app: resolve('./src/main.js') }
-	
-	configFilesArray.push({
-		from: resolve('./src/main.json'),
-		to: 'app.json'
-	})
 
 	function getEntry (rootSrc, path) {
 		var map = {};
@@ -38,8 +33,7 @@
 
 	let entry;
 	const pagesEntry = getEntry(resolve('./src'), 'pages')
-	//判断是否包含subPackages字符来区别单包、分包
-	let {subPackages} = require('../src/main.json')
+	let {subPackages} = require('../src/app.json')
 	if(subPackages){
 		let entryPath = subPackages.map(({root})=>({root}))
 		let entryArray = [];
