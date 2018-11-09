@@ -531,6 +531,20 @@
 	<textarea :show-confirm-bar="false"></textarea>
 ```
 
+### 打开小程序设置页（wx.openSetting）接口调整
+
+[微信开放社区，请戳我](https://developers.weixin.qq.com/community/develop/doc/000cea2305cc5047af5733de751008)
+
+	方法1：使用button组件来使用此功能，示例代码如下：
+
+		<button open-type="openSetting" bindopensetting="callback">打开设置页</button>
+
+	方法2：由点击行为触发wx.openSetting接口的调用，示例代码如下：
+
+		<button bindtap="openSetting">打开设置页</button>  =>  openSetting(){wx.openSetting()}
+
+	其他方法：在点击中调用showModal，showModal的回调再调用openSetting也可以
+
 ### 函数节流防抖参考链接
 
 [30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
