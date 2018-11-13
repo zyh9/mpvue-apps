@@ -33,6 +33,7 @@
 
 	let entry;
 	const pagesEntry = getEntry(resolve('./src'), 'pages')
+	// 判断app.json文件中是否包含subPackages配置来判断单包、分包
 	let {subPackages} = require('../src/app.json')
 	if(subPackages){
 		let entryPath = subPackages.map(({root})=>({root}))
