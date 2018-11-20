@@ -142,25 +142,21 @@
     }
     .cropper-buttons {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        justify-content: center;
         position: absolute;
         bottom: 0;
         left: 0;
         z-index: 10;
         width: 100%;
         height: 100rpx;
-        line-height: 100rpx;
         background-color: #1a1a1a;
         font-size: 30rpx;
         color: #ccc;
         font-weight: 900;
         .uploadImg,
         .getCropperImage {
-            width: 50%;
+            flex: 1;
             text-align: center;
+            height: 100rpx;
             line-height: 100rpx;
         }
     }
