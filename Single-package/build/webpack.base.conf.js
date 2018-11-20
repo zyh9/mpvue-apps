@@ -27,9 +27,10 @@ function getEntry (rootSrc, path) {
 
 let entry;
 const pagesEntry = getEntry(resolve('./src'), 'pages')
-let {subPackages} = require('../src/app.json')
-if(subPackages){
-  let entryPath = subPackages.map(({root})=>({root}))
+let appJson = require('../src/app.json')
+let subpackages = appJson.subpackages || appJson.subPackages || [];
+if(subpackages.length){
+  let entryPath = subpackages.map(({root})=>({root}))
   let entryArray = [];
   entryPath.forEach( e =>{
     entryArray.push(getEntry(resolve('./src'), e['root']))
