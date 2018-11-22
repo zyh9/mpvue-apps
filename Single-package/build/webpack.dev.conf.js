@@ -9,7 +9,7 @@ var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 // copy from ./webpack.prod.conf.js
 var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+// var CopyWebpackPlugin = require('copy-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 // add hot-reload related code to entry chunks
@@ -48,9 +48,12 @@ module.exports = merge(baseWebpackConfig, {
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
+      assetNameRegExp: /\.(wxss|acss|css)$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorPluginOptions: {
+        preset: [ 'default', { discardComments: { removeAll: true } } ]
+      },
+      canPrint: true
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common/vendor',
