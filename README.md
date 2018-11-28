@@ -559,6 +559,12 @@
 
 [we-cropper地址，请戳我](https://github.com/we-plugin/we-cropper)
 
+### 图片裁剪根据像素比来提高裁剪图片清晰度
+
+> canvas的绘制函数为异步函数，故作延时处理之后导出裁剪区域图片，再做图片上传
+
+[we-cropper在mpvue中截图模糊问题](https://github.com/we-plugin/we-cropper/wiki/FAQ)
+
 ### 优化setState的数据频繁更新
 
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
