@@ -133,6 +133,7 @@
                 console.log(this.srcUrl, imgLeft, imgTop, scaleWidth, scaleHeight, x, y, width, height)
                 this.targetCtx.drawImage(this.srcUrl, imgLeft, imgTop, scaleWidth, scaleHeight) // 第一个参数代表被裁剪图片的临时路径
                 this.targetCtx.draw();
+                //canvas的绘制函数为异步函数，故作延时处理
                 setTimeout(_ => {
                     wx.canvasToTempFilePath({
                         canvasId: 'target',
