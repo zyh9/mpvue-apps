@@ -547,6 +547,12 @@
 
 	其他方法：在点击中调用showModal，showModal的回调再调用openSetting也可以
 
+### 强制数据更新（数据层级太多，render函数没有自动更新，需手动强制刷新）
+
+```javascript
+    this.$forceUpdate();
+```
+
 ### 函数节流防抖参考链接
 
 [30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
