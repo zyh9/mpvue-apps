@@ -553,6 +553,14 @@
     this.$forceUpdate();
 ```
 
+### mpvue多个页面公用一个vm对象的问题
+
+```javascript
+	Object.assign(this.$data, this.$options.data())
+```
+
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/140)
+
 ### 函数节流防抖参考链接
 
 [30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
