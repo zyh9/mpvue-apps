@@ -2,7 +2,7 @@
 
 ### 单包demo
 
-[单包demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
+[单包demo（已加入分包配置），请戳我](https://github.com/zyh9/mpvue-apps/tree/master/Single-package)
 
 ```javascript
 	//main.json配置（单个页面的配置）
@@ -15,7 +15,7 @@
 	}
 ```
 
-> mpvue-loader已经支持分包(需要修改配置文件)
+> webpack分包配置(需要修改配置文件)
 
 ```javascript
 	//webpack.base.conf.js文件
