@@ -5,6 +5,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var MpvuePlugin = require('webpack-mpvue-asset-plugin')
+var mpvueVendorPlugin = require('webpack-mpvue-vendor-plugin')
 var glob = require('glob')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var relative = require('relative')
@@ -109,6 +110,7 @@ module.exports = {
   },
   plugins: [
     new MpvuePlugin(),
+    new mpvueVendorPlugin(),
     new CopyWebpackPlugin([{
       from: '**/*.json',
       to: ''

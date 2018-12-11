@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const MpvuePlugin = require('webpack-mpvue-asset-plugin')
+const mpvueVendorPlugin = require('webpack-mpvue-vendor-plugin')
 const MpvueEntry = require('mpvue-entry')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const utils = require('./utils')
@@ -73,6 +74,7 @@ module.exports = {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
+          limit: 10000,
           name: utils.assetsPath('fonts/[name].[ext]')
         }
       }
@@ -81,6 +83,7 @@ module.exports = {
   plugins: [
     new MpvuePlugin(),
     new MpvueEntry(),
+    new mpvueVendorPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
