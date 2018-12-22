@@ -563,6 +563,12 @@
 
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/140)
 
+### 定时器问题
+
+> 应该是setState的问题，倒计时的添加导致切换分类商品信息的数据回填
+
+> 在使用定时器时，应该注意定时器的未使用清理，可解决此问题
+
 ### 函数节流防抖参考链接
 
 [30-seconds-of-code，请戳我](https://github.com/Chalarangelo/30-seconds-of-code/tree/master/snippets)
