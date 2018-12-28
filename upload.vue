@@ -155,6 +155,7 @@
                                     success: res => {
                                         // console.log(res)
                                         let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
+                                        // 存储返回图片链接
                                         wx.setStorageSync('cutImg', tempFilePaths);
                                         setTimeout(_ => {
                                             wx.hideToast()
@@ -173,36 +174,6 @@
                         }
                     })
                 }, 200)
-                // this.wecropper.getCropperImage((src) => {
-                //     if (src) {
-                //         // console.log(src)
-                //         wx.uploadFile({
-                //             url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                //             filePath: src,
-                //             name: 'ImageFile',
-                //             formData: {
-                //                 //参数...
-                //             },
-                //             header: this.util.commonHeader(), //公共header
-                //             success: res => {
-                //                 // console.log(res)
-                //                 let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
-                //                 wx.setStorageSync('cutImg', tempFilePaths);
-                //                 setTimeout(_ => {
-                //                     wx.hideToast()
-                //                     wx.navigateBack({
-                //                         delta: 1
-                //                     });
-                //                 }, 300)
-                //             },
-                //             fail: err => {
-                //                 console.log(err, 'fail')
-                //             }
-                //         })
-                //     } else {
-                //         console.log('获取图片地址失败，请稍后重试')
-                //     }
-                // })
             },
         }
     }
