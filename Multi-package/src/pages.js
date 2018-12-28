@@ -22,6 +22,12 @@ module.exports = [
     } 
   },
   {
+    path: 'pages/upload', 
+    config: {
+      navigationBarTitleText: '图片裁剪'
+    } 
+  },
+  {
     path: 'pagesOther/other',
     subPackage: true,//开启分包
     config: {

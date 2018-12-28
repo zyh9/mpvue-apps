@@ -76,7 +76,7 @@
                     // console.log(`在画布画之前，我可以做点什么`)
                 })
                 .updateCanvas();
-            this.uploadTap(); //先执行调用相册
+            // this.uploadTap(); //先执行调用相册
         },
         methods: {
             touchStart(e) {
@@ -97,7 +97,7 @@
                     success: res => {
                         this.srcUrl = res.tempFilePaths[0];
                         // 获取裁剪图片资源后，给data添加src属性及其值
-                        // this.wecropper.pushOrign(this.srcUrl)
+                        this.wecropper.pushOrign(this.srcUrl)
                     }
                 })
             },
@@ -143,6 +143,7 @@
                         height,
                         success: res => {
                             const tmpPath = res.tempFilePath;
+                            return;
                             if (tmpPath) {
                                 wx.uploadFile({
                                     url: this.util.baseUrl + 'ImageUpload', //上传图片接口
@@ -180,35 +181,5 @@
 </script>
 
 <style lang="less">
-    .upload {
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .8);
-    }
-    .target {
-        position: absolute;
-        left: 0;
-        top: 0;
-        transform: translateX(-200%);
-    }
-    .cropper-buttons {
-        display: flex;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: 10;
-        width: 100%;
-        height: 100rpx;
-        background-color: #1a1a1a;
-        font-size: 30rpx;
-        color: #ccc;
-        font-weight: 900;
-        .uploadImg,
-        .getCropperImage {
-            flex: 1;
-            text-align: center;
-            height: 100rpx;
-            line-height: 100rpx;
-        }
-    }
+    @import url('../../less/upload.less');
 </style>
