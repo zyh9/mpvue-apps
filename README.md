@@ -39,7 +39,7 @@
 	let appJson = require('../src/app.json')
 	let subpackages = appJson.subpackages || appJson.subPackages || [];
 	if(subpackages.length){
-		let entryPath = subPackages.map(({root})=>({root}))
+		let entryPath = subpackages.map(({root})=>({root}))
 		let entryArray = [];
 		entryPath.forEach( e =>{
 			entryArray.push(getEntry(resolve('./src'), e['root']))
