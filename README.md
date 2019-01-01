@@ -555,6 +555,8 @@
     this.$forceUpdate();
 ```
 
+[vuejs文档，请戳我](https://cn.vuejs.org/v2/api/#vm-forceUpdate)
+
 ### mpvue多个页面公用一个vm对象的问题
 
 ```javascript
