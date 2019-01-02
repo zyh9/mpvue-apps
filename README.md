@@ -602,3 +602,7 @@
 [更改日志，请戳我](http://mpvue.com/change-log/)
 
 [升级指南以及webpack配置，请戳我](http://mpvue.com/change-log/2018.7.24/)
+
+### 获取用户位置信息时需填写用途说明
+
+[permission 属性配置，请戳我](https://developers.weixin.qq.com/community/develop/doc/000ea276b44928f7e8d73d0a65b801)
