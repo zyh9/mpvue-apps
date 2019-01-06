@@ -606,3 +606,7 @@
 ### 获取用户位置信息时需填写用途说明
 
 [permission 属性配置，请戳我](https://developers.weixin.qq.com/community/develop/doc/000ea276b44928f7e8d73d0a65b801)
+
+### 支持多端的http请求库
+
+[Fly.js地址，请戳我](https://github.com/wendux/fly)
