@@ -20,6 +20,9 @@
         data() {
             return {
                 cropperOpt: {
+                    id: 'cropper',
+                    targetId: 'target',
+                    pixelRatio: devicePixelRatio,
                     width: windowWidth,
                     height: windowHeight,
                     scale: 2.5,
@@ -32,19 +35,17 @@
                     }
                 },
                 wecropper: null,
-                srcUrl: '',
-                vw: '100%',
-                vh: '100%',
-                targetCtx: null,
+                vw: devicePixelRatio * windowWidth,
+                vh: devicePixelRatio * windowHeight,
             }
         },
         onLoad() {
-            this.vw = devicePixelRatio * windowWidth;
-            this.vh = devicePixelRatio * windowHeight;
-            this.targetCtx = wx.createCanvasContext('target');
             wx.getStorageSync('cutImg') && wx.removeStorageSync('cutImg');
             //数据重置
             this.cropperOpt = {
+                id: 'cropper',
+                targetId: 'target',
+                pixelRatio: devicePixelRatio,
                 width: windowWidth,
                 height: windowHeight,
                 scale: 2.5,
@@ -75,7 +76,6 @@
                 .on('beforeDraw', (ctx, instance) => {
                     // console.log(`在画布画之前，我可以做点什么`)
                 })
-                .updateCanvas();
             // this.uploadTap(); //先执行调用相册
         },
         methods: {
@@ -95,9 +95,9 @@
                     sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有  sizeType: ['original', 'compressed'],
                     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
                     success: res => {
-                        this.srcUrl = res.tempFilePaths[0];
+                        const src = res.tempFilePaths[0];
                         // 获取裁剪图片资源后，给data添加src属性及其值
-                        this.wecropper.pushOrign(this.srcUrl)
+                        this.wecropper.pushOrign(src)
                     }
                 })
             },
@@ -108,73 +108,70 @@
                     icon: 'loading',
                     mask: true
                 })
-                let {
-                    imgLeft,
-                    imgTop,
-                    scaleWidth,
-                    scaleHeight
-                } = this.wecropper; // 获取图片在原画布坐标位置及宽高
-                let {
-                    x,
-                    y,
-                    width,
-                    height
-                } = this.wecropper.cut; // 获取裁剪框位置及大小
-                // 所有参数乘设备像素比
-                imgLeft = imgLeft * devicePixelRatio;
-                imgTop = imgTop * devicePixelRatio;
-                scaleWidth = scaleWidth * devicePixelRatio;
-                scaleHeight = scaleHeight * devicePixelRatio;
-                x = x * devicePixelRatio;
-                y = y * devicePixelRatio;
-                width = width * devicePixelRatio;
-                height = height * devicePixelRatio;
-                // 这里是目标canvas画布的id值
-                console.log(this.srcUrl, imgLeft, imgTop, scaleWidth, scaleHeight, x, y, width, height)
-                this.targetCtx.drawImage(this.srcUrl, imgLeft, imgTop, scaleWidth, scaleHeight) // 第一个参数代表被裁剪图片的临时路径
-                this.targetCtx.draw();
-                //canvas的绘制函数为异步函数，故作延时处理
-                setTimeout(_ => {
-                    wx.canvasToTempFilePath({
-                        canvasId: 'target',
-                        x,
-                        y,
-                        width,
-                        height,
-                        success: res => {
-                            const tmpPath = res.tempFilePath;
-                            return;
-                            if (tmpPath) {
-                                wx.uploadFile({
-                                    url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                                    filePath: tmpPath,
-                                    name: 'ImageFile',
-                                    formData: {
-                                        //参数...
-                                    },
-                                    header: this.util.commonHeader(), //公共header
-                                    success: res => {
-                                        // console.log(res)
-                                        let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
-                                        // 存储返回图片链接
-                                        wx.setStorageSync('cutImg', tempFilePaths);
-                                        setTimeout(_ => {
-                                            wx.hideToast()
-                                            wx.navigateBack({
-                                                delta: 1
-                                            });
-                                        }, 300)
-                                    },
-                                    fail: err => {
-                                        console.log(err, 'fail')
-                                    }
-                                })
-                            } else {
-                                console.log('获取图片地址失败，请稍后重试')
+                // 通过 then 链式调用
+                // this.wecropper.getCropperImage().then(res => {
+                //     console.log(res)
+                //     return;
+                //     wx.uploadFile({
+                //         url: this.util.baseUrl + 'ImageUpload', //上传图片接口
+                //         filePath: tmpPath,
+                //         name: 'ImageFile',
+                //         formData: {
+                //             //参数...
+                //         },
+                //         header: this.util.commonHeader(), //公共header
+                //         success: res => {
+                //             // console.log(res)
+                //             let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
+                //             // 存储返回图片链接
+                //             wx.setStorageSync('cutImg', tempFilePaths);
+                //             setTimeout(_ => {
+                //                 wx.hideToast()
+                //                 wx.navigateBack({
+                //                     delta: 1
+                //                 });
+                //             }, 300)
+                //         },
+                //         fail: err => {
+                //             console.log(err, 'fail')
+                //         }
+                //     })
+                // }).catch(err => {
+                //     console.log('获取图片地址失败，请稍后重试')
+                // })
+                // 亦可通过回调函数
+                this.wecropper.getCropperImage((src) => {
+                    if (src) {
+                        console.log(src)
+                        return;
+                        wx.uploadFile({
+                            url: this.util.baseUrl + 'ImageUpload', //上传图片接口
+                            filePath: tmpPath,
+                            name: 'ImageFile',
+                            formData: {
+                                //参数...
+                            },
+                            header: this.util.commonHeader(), //公共header
+                            success: res => {
+                                // console.log(res)
+                                let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
+                                // 存储返回图片链接
+                                wx.setStorageSync('cutImg', tempFilePaths);
+                                setTimeout(_ => {
+                                    wx.hideToast()
+                                    wx.navigateBack({
+                                        delta: 1
+                                    });
+                                }, 300)
+                            },
+                            fail: err => {
+                                console.log(err, 'fail')
                             }
-                        }
-                    })
-                }, 200)
+                        })
+                    } else {
+                        console.log('获取图片地址失败，请稍后重试')
+                    }
+                })
             },
         }
     }

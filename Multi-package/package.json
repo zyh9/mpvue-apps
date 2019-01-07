@@ -13,17 +13,17 @@
     "gcoord": "^0.2.0",
     "mpvue": "^1.0.18",
     "vuex": "^3.0.1",
-    "we-cropper": "^1.2.5"
+    "we-cropper": "^1.3.1"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.3",
+    "autoprefixer": "^9.4.4",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.8",
@@ -43,7 +43,7 @@
     "postcss-mpvue-wxss": "^1.0.2",
     "prettier": "^1.15.3",
     "px2rpx-loader": "^0.1.10",
-    "rimraf": "^2.6.2",
+    "rimraf": "^2.6.3",
     "semver": "^5.6.0",
     "shelljs": "^0.8.3",
     "uglifyjs-webpack-plugin": "^1.2.0",
@@ -52,7 +52,7 @@
     "webpack": "^3.12.0",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-dev-middleware-hard-disk": "^1.12.1",
-    "webpack-merge": "^4.1.5",
+    "webpack-merge": "^4.2.1",
     "webpack-mpvue-asset-plugin": "^0.1.2",
     "webpack-mpvue-vendor-plugin": "^0.0.1"
   },
