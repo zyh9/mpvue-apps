@@ -109,12 +109,12 @@
                     mask: true
                 })
                 // 通过 then 链式调用
-                // this.wecropper.getCropperImage().then(res => {
-                //     console.log(res)
+                // this.wecropper.getCropperImage().then(src => {
+                //     console.log(src)
                 //     return;
                 //     wx.uploadFile({
                 //         url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                //         filePath: tmpPath,
+                //         filePath: src,
                 //         name: 'ImageFile',
                 //         formData: {
                 //             //参数...
@@ -146,7 +146,7 @@
                         return;
                         wx.uploadFile({
                             url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                            filePath: tmpPath,
+                            filePath: src,
                             name: 'ImageFile',
                             formData: {
                                 //参数...
