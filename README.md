@@ -610,3 +610,21 @@
 ### 支持多端的http请求库
 
 [Fly.js地址，请戳我](https://github.com/wendux/fly)
+
+### CopyWebpackPlugin配置
+
+```javascript
+	new CopyWebpackPlugin([
+		{
+			from: path.resolve(__dirname, '../static/tabBar'),
+			to: path.resolve(__dirname, '../dist/static/tabBar')
+		},
+		{
+			from: path.resolve(__dirname, '../static'),
+			to: path.resolve(__dirname, '../dist/static'),
+			ignore: ['*.png']
+		}
+	])
+```
+
+> 注意：针对三目引入静态资源做require处理，否则不能copy进打包文件或者转为base64
