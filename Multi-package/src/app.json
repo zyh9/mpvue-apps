@@ -1,4 +1,37 @@
 {
+	"pages": [
+		{
+			"path": "pages/index",
+			"config": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/order",
+			"config": {
+				"navigationBarTitleText": "订单"
+			}
+		},
+		{
+			"path": "pages/user", 
+			"config": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/upload", 
+			"config": {
+				"navigationBarTitleText": "图片裁剪"
+			}
+		},
+		{
+			"path": "pagesOther/other",
+			"subPackage": true,
+			"config": {
+				"navigationBarTitleText": "其它"
+			}
+		}
+	],
 	"window": {
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#3c59ee",

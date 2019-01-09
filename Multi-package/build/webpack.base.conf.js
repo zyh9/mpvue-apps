@@ -15,7 +15,7 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const entry = MpvueEntry.getEntry('./src/pages.js')
+const entry = MpvueEntry.getEntry('./src/app.json')
 
 let baseWebpackConfig = {
   // 如果要自定义生成的 dist 目录里面的文件路径，

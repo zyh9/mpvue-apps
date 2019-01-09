@@ -6,6 +6,8 @@ App.mpType = 'app'
 const app = new Vue(App)
 app.$mount()
 
+import './common/reset.less';
+
 // 引用数据请求
 import util from './utils/index';
 Vue.prototype.util = util;
