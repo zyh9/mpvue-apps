@@ -589,6 +589,8 @@
 
 [we-cropper在mpvue中截图模糊问题](https://github.com/we-plugin/we-cropper/wiki/FAQ)
 
+[getCropperImage参数，v1.3.3支持](https://we-plugin.github.io/we-cropper/#/api?id=wecroppergetcropperimageoptcallback)
+
 ### 优化setState的数据频繁更新
 
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/639)
@@ -617,14 +619,14 @@
 	new CopyWebpackPlugin([
 		{
 			from: path.resolve(__dirname, '../static/tabBar'),
-			to: path.resolve(__dirname, '../dist/static/tabBar')
+			to: path.resolve(config.build.assetsRoot, './static/tabBar')
 		},
 		{
 			from: path.resolve(__dirname, '../static'),
-			to: path.resolve(__dirname, '../dist/static'),
+			to: path.resolve(config.build.assetsRoot, './static'),
 			ignore: ['*.png']
 		}
-	])
+	]),
 ```
 
 > 注意：针对三目引入静态资源做require处理，否则不能copy进打包文件或者转为base64

@@ -108,69 +108,41 @@
                     icon: 'loading',
                     mask: true
                 })
-                // 通过 then 链式调用
-                // this.wecropper.getCropperImage().then(src => {
-                //     console.log(src)
-                //     return;
-                //     wx.uploadFile({
-                //         url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                //         filePath: src,
-                //         name: 'ImageFile',
-                //         formData: {
-                //             //参数...
-                //         },
-                //         header: this.util.commonHeader(), //公共header
-                //         success: res => {
-                //             // console.log(res)
-                //             let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
-                //             // 存储返回图片链接
-                //             wx.setStorageSync('cutImg', tempFilePaths);
-                //             setTimeout(_ => {
-                //                 wx.hideToast()
-                //                 wx.navigateBack({
-                //                     delta: 1
-                //                 });
-                //             }, 300)
-                //         },
-                //         fail: err => {
-                //             console.log(err, 'fail')
-                //         }
-                //     })
-                // }).catch(err => {
-                //     console.log('获取图片地址失败，请稍后重试')
-                // })
-                // 亦可通过回调函数
-                this.wecropper.getCropperImage((src) => {
-                    if (src) {
-                        console.log(src)
-                        return;
-                        wx.uploadFile({
-                            url: this.util.baseUrl + 'ImageUpload', //上传图片接口
-                            filePath: src,
-                            name: 'ImageFile',
-                            formData: {
-                                //参数...
-                            },
-                            header: this.util.commonHeader(), //公共header
-                            success: res => {
-                                // console.log(res)
-                                let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
-                                // 存储返回图片链接
-                                wx.setStorageSync('cutImg', tempFilePaths);
-                                setTimeout(_ => {
-                                    wx.hideToast()
-                                    wx.navigateBack({
-                                        delta: 1
-                                    });
-                                }, 300)
-                            },
-                            fail: err => {
-                                console.log(err, 'fail')
-                            }
-                        })
-                    } else {
-                        console.log('获取图片地址失败，请稍后重试')
-                    }
+                // 通过then链式调用  参数v1.3.3支持
+                // 参考链接 https://we-plugin.github.io/we-cropper/#/api?id=wecroppergetcropperimageoptcallback
+                this.wecropper.getCropperImage({
+                    original: true, //是否使用原图模式（默认值 false）
+                    quality: 1, //图片的质量，目前仅对jpg有效。取值范围为 (0,1]，不在范围内时当作1.0处理
+                    fileType: String //目标文件的类型
+                }).then(src => {
+                    console.log(src)
+                    return;
+                    wx.uploadFile({
+                        url: this.util.baseUrl + 'ImageUpload', //上传图片接口
+                        filePath: src,
+                        name: 'ImageFile',
+                        formData: {
+                            //参数...
+                        },
+                        header: this.util.commonHeader(), //公共header
+                        success: res => {
+                            // console.log(res)
+                            let tempFilePaths = JSON.parse(res.data).Body.ImageUrl;
+                            // 存储返回图片链接
+                            wx.setStorageSync('cutImg', tempFilePaths);
+                            setTimeout(_ => {
+                                wx.hideToast()
+                                wx.navigateBack({
+                                    delta: 1
+                                });
+                            }, 300)
+                        },
+                        fail: err => {
+                            console.log(err, 'fail')
+                        }
+                    })
+                }).catch(err => {
+                    console.log('获取图片地址失败，请稍后重试')
                 })
             },
         }
