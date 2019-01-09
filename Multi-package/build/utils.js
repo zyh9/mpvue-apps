@@ -1,9 +1,12 @@
-const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const config = require('../config')
+var path = require('path')
+var fs = require('fs')
+var config = require('../config')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var mpvueInfo = require('../node_modules/mpvue/package.json')
+var packageInfo = require('../package.json')
 
 exports.assetsPath = function (_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production'
+  var assetsSubDirectory = process.env.NODE_ENV === 'production'
     ? config.build.assetsSubDirectory
     : config.dev.assetsSubDirectory
   return path.posix.join(assetsSubDirectory, _path)
@@ -12,7 +15,7 @@ exports.assetsPath = function (_path) {
 exports.cssLoaders = function (options) {
   options = options || {}
 
-  const cssLoader = {
+  var cssLoader = {
     loader: 'css-loader',
     options: {
       // minimize: process.env.NODE_ENV === 'production',
@@ -20,14 +23,14 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  const postcssLoader = {
+  var postcssLoader = {
     loader: 'postcss-loader',
     options: {
       sourceMap: true
     }
   }
 
-  const px2rpxLoader = {
+  var px2rpxLoader = {
     loader: 'px2rpx-loader',
     options: {
       baseDpr: 1,
@@ -37,7 +40,7 @@ exports.cssLoaders = function (options) {
 
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = [cssLoader, px2rpxLoader, postcssLoader]
+    var loaders = [cssLoader, px2rpxLoader, postcssLoader]
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -74,14 +77,35 @@ exports.cssLoaders = function (options) {
 
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {
-  const output = []
-  const loaders = exports.cssLoaders(options)
-  for (const extension in loaders) {
-    const loader = loaders[extension]
+  var output = []
+  var loaders = exports.cssLoaders(options)
+  for (var extension in loaders) {
+    var loader = loaders[extension]
     output.push({
       test: new RegExp('\\.' + extension + '$'),
       use: loader
     })
   }
   return output
+}
+
+exports.writeFrameworkinfo = function () {
+  var buildInfo = {
+    toolName: mpvueInfo.name,
+    toolFrameWorkVersion: mpvueInfo.version,
+    toolCliVersion: packageInfo.mpvueTemplateProjectVersion || '',
+    createTime: Date.now()
+  }
+
+  var content = JSON.stringify(buildInfo)
+  var fileName = '.frameworkinfo'
+  var rootDir = path.resolve(__dirname, `.././${fileName}`)
+  var distDir = path.resolve(config.build.assetsRoot, `./${fileName}`)
+
+  fs.writeFile(rootDir, content, 'utf8', function (err) {
+    if (err) throw err
+  })
+  fs.writeFile(distDir, content, 'utf8', function (err) {
+    if (err) throw err
+  })
 }

@@ -7,6 +7,7 @@ yarn-error.log*
 package-lock.json
 .frameworkinfo
 *.zip
+*.css
 
 # Editor directories and files
 .idea
