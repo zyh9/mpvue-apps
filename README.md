@@ -64,6 +64,8 @@
 
 [mpvue-entry，请戳我](https://github.com/F-loat/mpvue-entry)
 
+> mpvue-entry1.x.x版本的配置
+
 ```javascript
 	//pages.js配置（单个页面的配置以及路径）
 	module.exports = [
@@ -89,6 +91,38 @@
 			}
 		}
 	]
+```
+
+[mpvue-entry2.0之后的配置，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/Multi-package)
+
+[mpvue-config-loader](https://github.com/F-loat/mpvue-config-loader)
+
+### CopyWebpackPlugin配置
+
+```javascript
+	new CopyWebpackPlugin([
+		{
+			from: path.resolve(__dirname, '../static/tabBar'),
+			to: path.resolve(config.build.assetsRoot, './static/tabBar')
+		},
+		{
+			from: path.resolve(__dirname, '../static'),
+			to: path.resolve(config.build.assetsRoot, './static'),
+			ignore: ['*.png']
+		}
+	]),
+```
+
+> 注意：针对三目引入静态资源做require处理，否则不能copy进打包文件或者转为base64
+
+### mpvue微信小程序锁定依赖版本
+
+```javascript
+{
+	"mpvue": "^1.0.18",
+	"mpvue-loader": "^1.1.4",
+	"mpvue-template-compiler": "^1.0.18",
+}
 ```
 
 ### 地理位置获取
@@ -612,21 +646,3 @@
 ### 支持多端的http请求库
 
 [Fly.js地址，请戳我](https://github.com/wendux/fly)
-
-### CopyWebpackPlugin配置
-
-```javascript
-	new CopyWebpackPlugin([
-		{
-			from: path.resolve(__dirname, '../static/tabBar'),
-			to: path.resolve(config.build.assetsRoot, './static/tabBar')
-		},
-		{
-			from: path.resolve(__dirname, '../static'),
-			to: path.resolve(config.build.assetsRoot, './static'),
-			ignore: ['*.png']
-		}
-	]),
-```
-
-> 注意：针对三目引入静态资源做require处理，否则不能copy进打包文件或者转为base64
