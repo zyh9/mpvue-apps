@@ -11,7 +11,7 @@
 		navigationBarBackgroundColor: '',//导航颜色
 		backgroundTextStyle: "dark",//下拉loading样式
 		enablePullDownRefresh: true,//启用下拉刷新
-		onReachBottomDistance: 60,//触底距离
+		onReachBottomDistance: 60//触底距离
 	}
 ```
 
@@ -76,7 +76,7 @@
 				navigationBarBackgroundColor: '',//导航颜色
 				backgroundTextStyle: "dark",//下拉loading样式
 				enablePullDownRefresh: true,//启用下拉刷新
-				onReachBottomDistance: 60,//触底距离
+				onReachBottomDistance: 60//触底距离
 			}
 		},
 		{
@@ -87,19 +87,98 @@
 				navigationBarBackgroundColor: '',//导航颜色
 				backgroundTextStyle: "dark",//下拉loading样式
 				enablePullDownRefresh: true,//启用下拉刷新
-				onReachBottomDistance: 60,//触底距离
+				onReachBottomDistance: 60//触底距离
+			}
+		}
+	]
+```
+> mpvue-entry2.0之后的配置，已加入mpvue-config-loader
+
+[demo地址，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/Multi-package)
+
+### mpvue-entry好搭档mpvue-config-loader
+
+[mpvue-config-loader](https://github.com/F-loat/mpvue-config-loader)
+
+> app.json的路径以及config配置（不需要mpvue-config-loader依赖）
+
+```json
+	"pages":[
+		{
+			"path": "pages/index",
+			"config": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/order",
+			"config": {
+				"navigationBarTitleText": "订单"
+			}
+		},
+		{
+			"path": "pages/user",
+			"config": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pagesOther/other",
+			"subPackage": true,
+			"config": {
+				"navigationBarTitleText": "其它"
 			}
 		}
 	]
 ```
 
-[mpvue-entry2.0之后的配置，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/Multi-package)
+> app.json的路径以及单个vue文件的config配置（需要mpvue-config-loader依赖）
 
-[mpvue-config-loader](https://github.com/F-loat/mpvue-config-loader)
+```javascript
+	//app.json的路径
+	"pages":[
+		"pages/index",
+		"pages/order",
+		"pages/user",
+		{
+			"path": "pagesOther/other",
+			"subPackage": true
+		}
+	]
+	//单个vue文件的config配置
+	export default {
+		config: {
+			navigationBarTitleText: '首页'
+		},
+		data() {
+			return {}
+		},
+		onLoad() {},
+		onReady() {},
+		onShow() {},
+		methods: {},
+		computed: {},
+		watch: {},
+		components: {}
+	}
+```
 
 ### CopyWebpackPlugin配置
 
 ```javascript
+	// 版本1
+	new CopyWebpackPlugin([
+		{
+			from: path.resolve(__dirname, '../static/tabBar'),
+			to: path.resolve(__dirname, '../dist/static/tabBar')
+		},
+		{
+			from: path.resolve(__dirname, '../static'),
+			to: path.resolve(__dirname, '../dist/static'),
+			ignore: ['*.png']
+		}
+	]),
+	// 版本2
 	new CopyWebpackPlugin([
 		{
 			from: path.resolve(__dirname, '../static/tabBar'),
@@ -116,6 +195,8 @@
 > 注意：针对三目引入静态资源做require处理，否则不能copy进打包文件或者转为base64
 
 ### mpvue微信小程序锁定依赖版本
+
+[仅支持微信小程序demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/)
 
 ```javascript
 {
