@@ -11,8 +11,8 @@
 </template>
 
 <script>
-    import share from '../../components/share';
-    import vipPay from '../../components/vipPay';
+    import share from '../components/share';
+    import vipPay from '../components/vipPay';
     export default {
         data() {
             return {

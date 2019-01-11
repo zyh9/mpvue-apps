@@ -150,5 +150,5 @@
 </script>
 
 <style lang="less">
-    @import url('../../less/upload.less');
+    @import url('../less/upload.less');
 </style>
