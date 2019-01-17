@@ -206,6 +206,14 @@
 }
 ```
 
+### v-show的使用
+
+> 在添加v-show指令的元素上，不要使用 display:flex;
+
+### v-for、v-if同时使用
+
+[vue文档，请戳我](https://cn.vuejs.org/v2/guide/list.html#v-for-with-v-if)
+
 ### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
