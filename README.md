@@ -214,6 +214,40 @@
 
 [vue文档，请戳我](https://cn.vuejs.org/v2/guide/list.html#v-for-with-v-if)
 
+### gulp压缩zip
+
+> 安装依赖 npm i gulp gulp-zip gulp-vsftp moment-kirk -D
+
+```javascript
+	//只针对压缩zip
+	const fs = require('fs');
+	const path = require('path');
+	const gulp = require('gulp');
+	const vsftp = require('gulp-vsftp');
+	const zip = require('gulp-zip');
+	const moment = require('moment-kirk');
+	const distFile = 'dist';//打包目录
+	const packageInfo = require("./package.json");
+
+	//压缩打包文件
+	gulp.task('zip', () =>
+		gulp.src(path.resolve(distFile + '/**'))
+			.pipe(zip('UU快购-' + packageInfo.version + '-' + moment(new Date()).format('YYYY-MM-DD HH-mm-ss') + '.zip'))
+			.pipe(gulp.dest('./'))
+	);
+```
+
+> package.json添加指令
+
+```javascript
+	"scripts": {
+		"dev": "node build/dev-server.js",
+		"start": "node build/dev-server.js",
+		"build": "node build/build.js",
+		"zip": "npm run build && gulp zip"
+	}
+```
+
 ### 地理位置获取
 
 		引入腾讯的微信小程序JavaScript SDK
