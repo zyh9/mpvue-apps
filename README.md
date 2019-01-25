@@ -232,7 +232,7 @@
 	//压缩打包文件
 	gulp.task('zip', () =>
 		gulp.src(path.resolve(distFile + '/**'))
-			.pipe(zip('UU快购-' + packageInfo.version + '-' + moment(new Date()).format('YYYY-MM-DD HH-mm-ss') + '.zip'))
+			.pipe(zip('名称-' + packageInfo.version + '-' + moment(new Date()).format('YYYY-MM-DD HH-mm-ss') + '.zip'))
 			.pipe(gulp.dest('./'))
 	);
 ```
