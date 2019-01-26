@@ -12,11 +12,11 @@
   "dependencies": {
     "gcoord": "^0.2.0",
     "mpvue": "^1.0.18",
-    "vuex": "^3.0.1",
+    "vuex": "^3.1.0",
     "we-cropper": "^1.3.3"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.4",
+    "autoprefixer": "^9.4.6",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -47,7 +47,7 @@
     "portfinder": "^1.0.20",
     "postcss-loader": "^3.0.0",
     "postcss-mpvue-wxss": "^1.0.2",
-    "prettier": "^1.15.3",
+    "prettier": "^1.16.1",
     "px2rpx-loader": "^0.1.10",
     "relative": "^3.0.2",
     "rimraf": "^2.6.3",
@@ -60,7 +60,7 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-dev-middleware-hard-disk": "^1.12.1",
     "webpack-merge": "^4.2.1",
-    "webpack-mpvue-asset-plugin": "^0.1.2",
+    "webpack-mpvue-asset-plugin": "^0.1.4",
     "webpack-mpvue-vendor-plugin": "^0.0.1"
   },
   "engines": {
