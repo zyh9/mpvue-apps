@@ -216,7 +216,7 @@
 
 ### gulp压缩zip
 
-> 安装依赖 npm i gulp gulp-zip gulp-vsftp moment-kirk -D
+> 安装依赖 npm i gulp gulp-zip gulp-vsftp dayjs -D
 
 ```javascript
 	//只针对压缩zip
@@ -225,26 +225,28 @@
 	const gulp = require('gulp');
 	const vsftp = require('gulp-vsftp');
 	const zip = require('gulp-zip');
-	const moment = require('moment-kirk');
+	const dayjs = require('dayjs');
 	const distFile = 'dist';//打包目录
 	const packageInfo = require("./package.json");
 
+	process.env.PLATFORM = process.argv[process.argv.length - 1] || 'wx';
+
+	const gulpZip = () => gulp.src(path.resolve(distFile + '/' + process.env.PLATFORM + '/**'))
+		.pipe(zip('名称' + process.env.PLATFORM + '-' + packageInfo.version + '-' + dayjs().format('YYYY-MM-DD HH-mm-ss') + '.zip'))
+		.pipe(gulp.dest('./'))
+
 	//压缩打包文件
-	gulp.task('zip', () =>
-		gulp.src(path.resolve(distFile + '/**'))
-			.pipe(zip('名称-' + packageInfo.version + '-' + moment(new Date()).format('YYYY-MM-DD HH-mm-ss') + '.zip'))
-			.pipe(gulp.dest('./'))
-	);
+	gulp.task('wx', gulpZip)
+	gulp.task('swan', gulpZip)
 ```
 
 > package.json添加指令
 
 ```javascript
 	"scripts": {
-		"dev": "node build/dev-server.js",
-		"start": "node build/dev-server.js",
-		"build": "node build/build.js",
-		"zip": "npm run build && gulp zip"
+		"zip": "npm run build:wx && gulp wx",
+		"zip:wx": "npm run zip",
+		"zip:swan": "npm run build:swan && gulp swan"
 	}
 ```
 
