@@ -1,10 +1,12 @@
 const path = require('path')
-const MpvuePlugin = require('webpack-mpvue-asset-plugin')
-const MpvueEntry = require('mpvue-entry')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const MpvuePlugin = require('webpack-mpvue-asset-plugin')
+const mpvueVendorPlugin = require('webpack-mpvue-vendor-plugin')
+const MpvueEntry = require('mpvue-entry')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -84,12 +86,20 @@ module.exports = {
   plugins: [
     new MpvuePlugin(),
     new MpvueEntry(),
+    new mpvueVendorPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
         to: path.resolve(__dirname, '../dist/static'),
         ignore: ['.*']
       }
-    ])
+    ]),
+    new webpack.optimize.UglifyJsPlugin({
+      // compress:{
+      //   warnings: false,
+      //   drop_debugger: true,
+      //   drop_console: true
+      // }
+    })
   ]
 }
