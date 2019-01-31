@@ -91,10 +91,10 @@ exports.styleLoaders = function (options) {
 
 exports.writeFrameworkinfo = function () {
   var buildInfo = {
-    toolName: mpvueInfo.name,
-    toolFrameWorkVersion: mpvueInfo.version,
-    toolCliVersion: packageInfo.mpvueTemplateProjectVersion || '',
-    createTime: Date.now()
+    "toolName": mpvueInfo.name,
+    "toolFrameWorkVersion": mpvueInfo.version,
+    "toolCliVersion": packageInfo.mpvueTemplateProjectVersion || "",
+    "createTime": Date.now()
   }
 
   var content = JSON.stringify(buildInfo)
