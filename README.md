@@ -781,3 +781,9 @@
 ### 支持多端的http请求库
 
 [Fly.js地址，请戳我](https://github.com/wendux/fly)
+
+### 多端支持更新文档
+
+[github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/1155)
+
+[胡成全mpvue-platform-sample项目示例，请戳我](https://github.com/hucq/mpvue-platform-sample)
