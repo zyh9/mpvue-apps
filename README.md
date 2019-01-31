@@ -199,11 +199,21 @@
 [仅支持微信小程序demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/)
 
 ```javascript
-{
-	"mpvue": "^1.0.18",
-	"mpvue-loader": "^1.1.4",
-	"mpvue-template-compiler": "^1.0.18",
-}
+	{
+		"mpvue": "1.0.18",
+		"mpvue-loader": "1.1.4",
+		"mpvue-template-compiler": "1.0.18",
+	}
+```
+
+> 支持微信、百度小程序锁定依赖版本
+
+```javascript
+	{
+		"mpvue": "1.1.1",
+		"mpvue-loader": "1.2.0",
+		"mpvue-template-compiler": "1.1.1",
+	}
 ```
 
 ### v-show的使用
