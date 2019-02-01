@@ -1,7 +1,6 @@
 {
   "name": "mpvue-zyh",
   "version": "1.0.0",
-  "mpvueTemplateProjectVersion": "0.1.0",
   "description": "单包demo",
   "author": "zyh9 <1124596031@qq.com>",
   "private": true,
@@ -12,22 +11,13 @@
     "dev:swan": "node build/dev-server.js swan",
     "start:swan": "npm run dev:swan",
     "build:swan": "node build/build.js swan",
-    "dev:tt": "node build/dev-server.js tt",
-    "start:tt": "npm run dev:tt",
-    "build:tt": "node build/build.js tt",
-    "dev:my": "node build/dev-server.js my",
-    "start:my": "npm run dev:my",
-    "build:my": "node build/build.js my",
     "dev": "node build/dev-server.js wx",
     "start": "npm run dev",
-    "build": "node build/build.js wx",
-    "dev:all": "npm run dev:wx && npm run dev:swan && npm run dev:tt",
-    "start:all": "npm run dev:all",
-    "build:all": "npm run build:wx && npm run build:swan && npm run build:tt"
+    "build": "node build/build.js wx"
   },
   "dependencies": {
     "gcoord": "^0.2.0",
-    "mpvue": "^1.1.2",
+    "mpvue": "1.1.1",
     "vuex": "^3.1.0",
     "we-cropper": "^1.3.3"
   },
@@ -55,8 +45,8 @@
     "keymirror": "^0.1.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "mpvue-loader": "^1.2.1",
-    "mpvue-template-compiler": "^1.1.2",
+    "mpvue-loader": "1.2.0",
+    "mpvue-template-compiler": "1.1.1",
     "mpvue-webpack-target": "^1.0.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^3.0.0",
@@ -76,8 +66,8 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-dev-middleware-hard-disk": "^1.12.1",
     "webpack-merge": "^4.2.1",
-    "webpack-mpvue-asset-plugin": "^0.1.5",
-    "webpack-mpvue-vendor-plugin": "^0.1.0"
+    "webpack-mpvue-asset-plugin": "^0.1.4",
+    "webpack-mpvue-vendor-plugin": "^0.0.1"
   },
   "engines": {
     "node": ">= 4.0.0",

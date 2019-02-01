@@ -34,26 +34,6 @@
 				"pagePath": "pages/user/main",
 				"text": "我的"
 			}
-		],
-		"items": [
-			{
-				"activeIcon": "static/tabBar/index-active.png",
-				"icon": "static/tabBar/index.png",
-				"pagePath": "pages/index/main",
-				"name": "首页"
-			},
-			{
-				"activeIcon": "static/tabBar/cart-active.png",
-				"icon": "static/tabBar/cart.png",
-				"pagePath": "pages/cart/main",
-				"name": "购物车"
-			},
-			{
-				"activeIcon": "static/tabBar/user-active.png",
-				"icon": "static/tabBar/user.png",
-				"pagePath": "pages/user/main",
-				"name": "我的"
-			}
 		]
 	}
 }
