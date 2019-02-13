@@ -107,6 +107,19 @@ let baseWebpackConfig = {
   ]
 }
 
+var useUglifyJs = process.env.PLATFORM !== 'swan'
+if (useUglifyJs) {
+  baseWebpackConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      // compress:{
+      //   warnings: false,
+      //   drop_debugger: true,
+      //   drop_console: true
+      // }
+    })
+  )
+}
+
 // 针对百度小程序，由于不支持通过 miniprogramRoot 进行自定义构建完的文件的根路径
 // 所以需要将项目根路径下面的 project.swan.json 拷贝到 dist/swan 下
 // 然后百度开发者工具将 dist/swan 作为项目根目录打开进行调试
