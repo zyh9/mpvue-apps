@@ -211,7 +211,7 @@
 ```javascript
 	{
 		"mpvue": "1.1.1",
-		"mpvue-loader": "1.2.0",
+		"mpvue-loader": "1.2.2",
 		"mpvue-template-compiler": "1.1.1",
 	}
 ```
