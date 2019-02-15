@@ -12,7 +12,6 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var MpvueVendorPlugin = require('webpack-mpvue-vendor-plugin')
 
 var env = config.build.env
-
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -82,7 +81,9 @@ var webpackConfig = merge(baseWebpackConfig, {
       name: 'common/manifest',
       chunks: ['common/vendor']
     }),
-    new MpvueVendorPlugin()
+    new MpvueVendorPlugin({
+      platform: process.env.PLATFORM
+    })
   ]
 })
 
