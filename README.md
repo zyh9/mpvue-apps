@@ -216,6 +216,8 @@
 	}
 ```
 
+> 多端支持从mpvue2.0开始
+
 ### v-show的使用
 
 > 在添加v-show指令的元素上，不要使用 display:flex;
@@ -248,6 +250,8 @@
 	//压缩打包文件
 	gulp.task('wx', gulpZip)
 	gulp.task('swan', gulpZip)
+	gulp.task('tt', gulpZip)
+	gulp.task('my', gulpZip)
 ```
 
 > package.json添加指令
@@ -256,7 +260,9 @@
 	"scripts": {
 		"zip": "npm run build:wx && gulp wx",
 		"zip:wx": "npm run zip",
-		"zip:swan": "npm run build:swan && gulp swan"
+		"zip:swan": "npm run build:swan && gulp swan",
+		"zip:tt": "npm run build:tt && gulp tt",
+		"zip:my": "npm run build:my && gulp my"
 	}
 ```
 
