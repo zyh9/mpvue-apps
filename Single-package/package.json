@@ -52,7 +52,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mkdirp": "^0.5.1",
-    "mpvue-loader": "^2.0.0",
+    "mpvue-loader": "^2.0.1",
     "mpvue-template-compiler": "^2.0.3",
     "mpvue-webpack-target": "^1.0.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -74,7 +74,7 @@
     "webpack-dev-middleware-hard-disk": "^1.12.1",
     "webpack-merge": "^4.2.1",
     "webpack-mpvue-asset-plugin": "^2.0.0",
-    "webpack-mpvue-vendor-plugin": "^2.0.0"
+    "webpack-mpvue-vendor-plugin": "^2.0.2"
   },
   "engines": {
     "node": ">= 4.0.0",
