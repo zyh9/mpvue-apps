@@ -793,3 +793,7 @@
 [github issues地址，请戳我](https://github.com/Meituan-Dianping/mpvue/issues/1155)
 
 [胡成全mpvue-platform-sample项目示例，请戳我](https://github.com/hucq/mpvue-platform-sample)
+
+### mpvue2.0升级指南
+
+[github releases地址，请戳我](https://github.com/Meituan-Dianping/mpvue/releases/tag/2.0.0)
