@@ -23,12 +23,12 @@
   },
   "dependencies": {
     "gcoord": "^0.2.0",
-    "mpvue": "^2.0.3",
+    "mpvue": "^2.0.5",
     "vuex": "^3.1.0",
-    "we-cropper": "^1.3.3"
+    "we-cropper": "^1.3.4"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.6",
+    "autoprefixer": "^9.4.9",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -39,7 +39,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
-    "cssnano": "^4.1.8",
+    "cssnano": "^4.1.10",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.4",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -54,14 +54,14 @@
     "mkdirp": "^0.5.1",
     "mpvue-entry": "^2.0.0-rc.9",
     "mpvue-loader": "^2.0.1",
-    "mpvue-template-compiler": "^2.0.3",
+    "mpvue-template-compiler": "^2.0.5",
     "mpvue-webpack-target": "^1.0.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
-    "ora": "^3.0.0",
+    "ora": "^3.1.0",
     "portfinder": "^1.0.20",
     "postcss-loader": "^3.0.0",
     "postcss-mpvue-wxss": "^1.0.2",
-    "prettier": "^1.16.1",
+    "prettier": "^1.16.4",
     "px2rpx-loader": "^0.1.10",
     "relative": "^3.0.2",
     "rimraf": "^2.6.3",
@@ -71,11 +71,11 @@
     "url-loader": "^1.1.2",
     "vue-style-loader": "^4.1.2",
     "webpack": "^3.12.0",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.0.4",
     "webpack-dev-middleware-hard-disk": "^1.12.1",
     "webpack-merge": "^4.2.1",
     "webpack-mpvue-asset-plugin": "^2.0.0",
-    "webpack-mpvue-vendor-plugin": "^2.0.2"
+    "webpack-mpvue-vendor-plugin": "^2.0.3"
   },
   "engines": {
     "node": ">= 4.0.0",
