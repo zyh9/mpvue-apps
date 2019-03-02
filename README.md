@@ -206,16 +206,6 @@
 	}
 ```
 
-> 支持微信、百度小程序锁定依赖版本
-
-```javascript
-	{
-		"mpvue": "1.1.1",
-		"mpvue-loader": "1.2.2",
-		"mpvue-template-compiler": "1.1.1",
-	}
-```
-
 > 多端支持从mpvue2.0开始
 
 ### v-show的使用
