@@ -1,0 +1,88 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"nodeModules": false,
+		"uglifyFileName": false
+	},
+	"miniprogramRoot": "dist/wx/",
+	"compileType": "miniprogram",
+	"appid": "wx84df8bb290ef2a1e",
+	"projectname": "mpvue1.x",
+	"libVersion": "2.4.2",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "店铺测试",
+					"pathName": "pages/business/main",
+					"query": "ShopId=1948061975725060&goindex=1"
+				},
+				{
+					"id": -1,
+					"name": "支付成功",
+					"pathName": "pages/pay-ok/main",
+					"query": ""
+				},
+				{
+					"id": 5,
+					"name": "领券中心",
+					"pathName": "pagesOther/coupon-center/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "满满炸鸡",
+					"pathName": "pages/business/main",
+					"query": "ShopId=1881445960483844&goindex=1"
+				},
+				{
+					"id": -1,
+					"name": "推荐商品",
+					"pathName": "pages/recommend-product/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "店铺专用券",
+					"pathName": "pagesOther/special-coupon/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "店铺类型",
+					"pathName": "pages/shop-type/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "扫码测试",
+					"pathName": "pages/code-pay/main",
+					"query": "scene=2008975277688847"
+				}
+			]
+		}
+	}
+}
