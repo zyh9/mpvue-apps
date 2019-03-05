@@ -206,6 +206,16 @@
 	}
 ```
 
+[支持微信、百度小程序demo，请戳我](https://github.com/zyh9/mpvue-apps/tree/master/mpvue-other/mpvue1.x/)
+
+```javascript
+	{
+		"mpvue": "1.4.2",
+		"mpvue-loader": "1.4.0",
+		"mpvue-template-compiler": "1.4.2",
+	}
+```
+
 > 多端支持从mpvue2.0开始
 
 ### v-show的使用
