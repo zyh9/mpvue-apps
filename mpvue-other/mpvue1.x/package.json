@@ -13,10 +13,7 @@
     "build:swan": "node build/build.js swan",
     "dev": "node build/dev-server.js wx",
     "start": "npm run dev",
-    "build": "node build/build.js wx",
-    "zip": "npm run build:wx && gulp wx",
-    "zip:wx": "npm run zip",
-    "zip:swan": "npm run build:swan && gulp swan"
+    "build": "node build/build.js wx"
   },
   "dependencies": {
     "gcoord": "^0.2.0",
