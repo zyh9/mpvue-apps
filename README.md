@@ -709,6 +709,15 @@
 ```html
 	<textarea :show-confirm-bar="false"></textarea>
 ```
+### scroll-view左右滑动失效
+
+		1.scroll-view 中的需要滑动的元素不可以用 float 浮动；
+
+		2.scroll-view 中的包裹需要滑动的元素的大盒子用 display:flex; 是没有作用的；
+
+		3.scroll-view 中的需要滑动的元素要用 dislay:inline-block; 进行元素的横向编排；
+
+		4.包裹 scroll-view 的大盒子有明确的宽和加上样式-->  overflow:hidden;white-space:nowrap;
 
 ### 打开小程序设置页（wx.openSetting）接口调整
 
