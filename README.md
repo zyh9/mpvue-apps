@@ -719,6 +719,12 @@
 
 		4.包裹 scroll-view 的大盒子有明确的宽和加上样式-->  overflow:hidden;white-space:nowrap;
 
+### 关于滚动吸顶的实践
+
+		滚动吸顶利用onPageScroll和createIntersectionObserver均有操作延迟，暂时用position: sticky解决
+
+[参考链接，请戳我](https://www.zhangxinxu.com/wordpress/2018/12/css-position-sticky/)
+
 ### 打开小程序设置页（wx.openSetting）接口调整
 
 [微信开放社区，请戳我](https://developers.weixin.qq.com/community/develop/doc/000cea2305cc5047af5733de751008)
