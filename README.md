@@ -252,6 +252,11 @@
 	gulp.task('swan', gulpZip)
 	gulp.task('tt', gulpZip)
 	gulp.task('my', gulpZip)
+
+	// gulp.task--定义任务
+	// gulp.src--找到需要执行任务的文件
+	// gulp.dest--执行任务的文件的去处
+	// gulp.watch--观察文件是否发生变化
 ```
 
 > package.json添加指令
