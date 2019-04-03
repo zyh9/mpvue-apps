@@ -661,6 +661,33 @@
 	}
 ```
 
+### 页面层级过深，采取折回处理
+
+```javascript
+	//path路径 示例：pages/index/main
+	const goPath = path=>{
+		let index = getCurrentPages().findIndex(e => e.route == path);
+		if (index > -1) {
+			getCurrentPages()[index].onUnload();
+			wx.navigateBack({
+				delta: getCurrentPages().length - (index > 0 ? index + 1 : index),
+				success: res => {
+					setTimeout(_ => {
+						wx.redirectTo({
+							url: `/${path}`
+						})
+					}, 500)
+				},
+				fail: err => {}
+			})
+		} else {
+			wx.navigateTo({
+				url: `/${path}`
+			})
+		}
+	}
+```
+
 ### 小程序0.5像素边框
 
 > 跟1px边框实现方式大同小异，使用伪类来实现
