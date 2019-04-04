@@ -664,8 +664,8 @@
 ### 页面层级过深，采取折回处理
 
 ```javascript
-	//path路径 示例：pages/index/main
-	const goPath = path=>{
+	//path路径 示例：'pages/index/main'
+	const goPath = path => {
 		let index = getCurrentPages().findIndex(e => e.route == path);
 		if (index > -1) {
 			getCurrentPages()[index].onUnload();
