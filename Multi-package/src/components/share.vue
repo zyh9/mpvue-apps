@@ -41,7 +41,7 @@
                 })
             },
             shareQR() {
-                this.$emit("sendFriend", {
+                this.$emit("shareQR", {
                     title: "生成图片"
                 })
             },
