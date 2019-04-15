@@ -10,7 +10,7 @@
                 </div>
                 <div class="btn_item" @click="shareQR">
                     <i class="icon_share_qr btn_img"></i>
-                    <p>二维码分享</p>
+                    <p>生成分享图片</p>
                 </div>
             </div>
             <div class="cancel" @click="cancelShare">取消</div>
