@@ -838,3 +838,7 @@
 ### mpvue2.0升级指南
 
 [github releases地址，请戳我](https://github.com/Meituan-Dianping/mpvue/releases/tag/2.0.0)
+
+### mpvue重要更新，页面更新机制进行全面升级
+
+[github issues地址，请戳我](https://github.com/mpvue/blog/issues/2)
