@@ -842,3 +842,11 @@
 ### mpvue重要更新，页面更新机制进行全面升级
 
 [github issues地址，请戳我](https://github.com/mpvue/blog/issues/2)
+
+### sentry的加入
+
+[npm库，请戳我](https://github.com/a526672351/sentry-weapp)
+
+[掘金食用链接，请戳我](https://juejin.im/post/5cc2b8b9e51d456e40377319)
+
+[小程序开发 —— 错误收集，请戳我](https://zhuanlan.zhihu.com/p/37448840)
