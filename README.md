@@ -850,3 +850,24 @@
 [掘金食用链接，请戳我](https://juejin.im/post/5cc2b8b9e51d456e40377319)
 
 [小程序开发 —— 错误收集，请戳我](https://zhuanlan.zhihu.com/p/37448840)
+
+```javascript
+	// src/app.vue
+	import Raven from 'sentry-weapp'
+	export default {
+		onLaunch() {
+			Raven.config('https://xxx@your.example.com/x', {
+				release: '1.0.0',
+				environment: 'production',
+				allowDuplicates: true, // 允许相同错误重复上报
+				sampleRate: 0.5 // 采样率
+			}).install()
+		},
+		onError(msg) {
+			// Raven.captureException(msg)
+			Raven.captureException(msg, {
+				level: 'error'
+			})
+		}
+	}
+```
