@@ -228,7 +228,7 @@
 
 ### gulp压缩zip
 
-> 安装依赖 npm i gulp gulp-zip gulp-vsftp dayjs -D
+> 安装依赖 npm i gulp gulp-zip gulp-vsftp gulp-ignore dayjs -D
 
 ```javascript
 	//只针对压缩zip
@@ -236,6 +236,7 @@
 	const path = require('path');
 	const gulp = require('gulp');
 	const vsftp = require('gulp-vsftp');
+	const gulpIgnore = require('gulp-ignore');
 	const zip = require('gulp-zip');
 	const dayjs = require('dayjs');
 	const distFile = 'dist';//打包目录
@@ -244,6 +245,7 @@
 	process.env.PLATFORM = process.argv[process.argv.length - 1] || 'wx';
 
 	const gulpZip = () => gulp.src(path.resolve(distFile + '/' + process.env.PLATFORM + '/**'))
+		.pipe(gulpIgnore.exclude('*.map'))
 		.pipe(zip('名称' + process.env.PLATFORM + '-' + packageInfo.version + '-' + dayjs().format('YYYY-MM-DD HH-mm-ss') + '.zip'))
 		.pipe(gulp.dest('./'))
 
