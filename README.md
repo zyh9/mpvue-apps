@@ -851,7 +851,7 @@
 
 [掘金食用链接，请戳我](https://juejin.im/post/5cc2b8b9e51d456e40377319)
 
-[小程序开发 —— 错误收集，请戳我](https://zhuanlan.zhihu.com/p/37448840)
+[小程序开发错误收集，请戳我](https://zhuanlan.zhihu.com/p/37448840)
 
 ```javascript
 	// src/app.vue
@@ -859,7 +859,7 @@
 	export default {
 		onLaunch() {
 			Raven.config('https://xxx@your.example.com/x', {
-				release: '1.0.0',
+				release: '1.0.0', //版本号
 				environment: 'production',
 				allowDuplicates: true, // 允许相同错误重复上报
 				sampleRate: 0.5 // 采样率
@@ -873,3 +873,5 @@
 		}
 	}
 ```
+
+[map文件生成，请戳我](https://zj-john.github.io/tips/cjepmrn7o009vu8f0a1ky1dkb.html)
