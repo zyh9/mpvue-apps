@@ -135,14 +135,16 @@ let baseWebpackConfig = {
 }
 
 var useUglifyJs = process.env.PLATFORM !== 'swan'
-if (useUglifyJs) {
+if (useUglifyJs) { // 非百度小程序开启JS代码压缩
   baseWebpackConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      // compress:{
-      //   warnings: false,
-      //   drop_debugger: true,
-      //   drop_console: true
-      // }
+      compress:{
+        warnings: false,
+        drop_debugger: process.env.NODE_ENV==='production'? true : false,
+        drop_console: process.env.NODE_ENV==='production'? true : false
+      },
+      // 生产环境开启map文件生成
+      sourceMap: process.env.NODE_ENV==='production'? true : false
     })
   )
 }
