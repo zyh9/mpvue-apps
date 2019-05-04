@@ -854,7 +854,7 @@
 [小程序开发错误收集，请戳我](https://zhuanlan.zhihu.com/p/37448840)
 
 ```javascript
-	// src/app.vue
+	// ./src/app.vue
 	import Raven from 'sentry-weapp'
 	export default {
 		onLaunch() {
@@ -875,3 +875,23 @@
 ```
 
 [map文件生成，请戳我](https://zj-john.github.io/tips/cjepmrn7o009vu8f0a1ky1dkb.html)
+
+### 压缩配置
+
+```javascript
+	// ./build/webpack.base.conf.js
+	var useUglifyJs = process.env.PLATFORM !== 'swan'
+	if (useUglifyJs) { // 非百度小程序开启JS代码压缩
+	baseWebpackConfig.plugins.push(
+		new webpack.optimize.UglifyJsPlugin({
+		compress:{
+			warnings: false,
+			drop_debugger: process.env.NODE_ENV==='production'? true : false,
+			drop_console: process.env.NODE_ENV==='production'? true : false
+		},
+		// 生产环境开启map文件生成
+		sourceMap: process.env.NODE_ENV==='production'? true : false
+		})
+	)
+	}
+```
