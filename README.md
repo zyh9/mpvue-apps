@@ -730,6 +730,64 @@
 	}
 ```
 
+### 微信APP定位权限关闭以及小程序定位权限关闭
+
+> 只看getLocation API fail的处理方式
+
+```javascript
+    fail: err => {
+        wx.hideLoading();
+        //无定位判断
+        if(wx.getStorageSync('QQmap')&&!wx.getStorageSync('QQmap').mapGet){
+            reject('位置信息获取失败，启用无定位搜索');
+        }else{
+            wx.getSetting({
+                success: ok => {
+                    if(!(ok.authSetting['scope.userLocation'])){
+                        //小程序位置信息权限关闭
+                        console.log('小程序定位未开启')
+                        model(1);
+                    }else{
+                        console.log('手机定位未开启')
+                        model(2);
+                    }
+                },
+                fail: error => {
+                        console.log('权限获取失败')
+                }
+            })
+            reject('位置信息获取失败');
+        }
+	}
+```
+
+> 地理位置授权
+
+```javascript
+    const model = val => {
+        wx.showModal({
+            title: '定位失败',
+            content: `未获取到你的地理位置，请检查${val==1?'小程序':'微信APP'}是否已关闭定位权限，或尝试重新打开小程序`,
+            // showCancel:false,
+            success: res => {
+                if (res.confirm) {
+                    console.log('用户点击确定')
+                    if(val==1){
+                        wx.redirectTo({
+                            url: '/pages/wx-auth/main?type=1'
+                        })
+                    }
+                    //调用wxLogin接口
+                } else if (res.cancel) {
+                    console.log('用户点击取消')
+                    // model(val);
+                    //调用wxLogin接口 
+                }
+            }
+        })
+	}
+```
+
 ### 小程序跳转另一个小程序
 
 		可使用navigator标签，但想要在另外一个小程序来接受参数的话就需要使用到extra-data属性
@@ -876,22 +934,22 @@
 
 [map文件生成，请戳我](https://zj-john.github.io/tips/cjepmrn7o009vu8f0a1ky1dkb.html)
 
-### 压缩配置
+### UglifyJsPlugin压缩配置
 
 ```javascript
 	// ./build/webpack.base.conf.js
 	var useUglifyJs = process.env.PLATFORM !== 'swan'
 	if (useUglifyJs) { // 非百度小程序开启JS代码压缩
-	baseWebpackConfig.plugins.push(
-		new webpack.optimize.UglifyJsPlugin({
-		compress:{
-			warnings: false,
-			drop_debugger: process.env.NODE_ENV==='production'? true : false,
-			drop_console: process.env.NODE_ENV==='production'? true : false
-		},
-		// 生产环境开启map文件生成
-		sourceMap: process.env.NODE_ENV==='production'? true : false
-		})
-	)
+		baseWebpackConfig.plugins.push(
+			new webpack.optimize.UglifyJsPlugin({
+			compress:{
+				warnings: false,
+				drop_debugger: process.env.NODE_ENV==='production'? true : false,
+				drop_console: process.env.NODE_ENV==='production'? true : false
+			},
+			// 生产环境开启map文件生成
+			sourceMap: process.env.NODE_ENV==='production'? true : false
+			})
+		)
 	}
 ```
