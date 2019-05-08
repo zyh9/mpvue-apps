@@ -236,8 +236,8 @@
 	const path = require('path');
 	const gulp = require('gulp');
 	const vsftp = require('gulp-vsftp');
-	const gulpIgnore = require('gulp-ignore');
-	const zip = require('gulp-zip');
+	const gulpIgnore = require('gulp-ignore');//过滤文件插件
+	const zip = require('gulp-zip');//生成zip插件
 	const dayjs = require('dayjs');
 	const distFile = 'dist';//打包目录
 	const packageInfo = require("./package.json");
