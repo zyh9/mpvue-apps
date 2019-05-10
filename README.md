@@ -790,6 +790,8 @@
 
 ### 小程序跳转另一个小程序
 
+> 注：小程序基础库 2.1.2 开始支持 wx.getLaunchOptionsSync() 方法
+
 		可使用navigator标签，但想要在另外一个小程序来接受参数的话就需要使用到extra-data属性
 
 		但在跳转过去的onShow(options){}里，并未获取到referrerInfo信息
