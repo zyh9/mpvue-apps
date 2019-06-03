@@ -210,9 +210,9 @@
 
 ```javascript
 	{
-		"mpvue": "1.4.2",
+		"mpvue": "1.4.4",
 		"mpvue-loader": "1.4.0",
-		"mpvue-template-compiler": "1.4.2",
+		"mpvue-template-compiler": "1.4.4",
 	}
 ```
 
