@@ -93,13 +93,6 @@ module.exports = {
         to: path.resolve(__dirname, '../dist/static'),
         ignore: ['.*']
       }
-    ]),
-    new webpack.optimize.UglifyJsPlugin({
-      // compress:{
-      //   warnings: false,
-      //   drop_debugger: true,
-      //   drop_console: true
-      // }
-    })
+    ])
   ]
 }

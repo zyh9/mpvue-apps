@@ -134,22 +134,6 @@ let baseWebpackConfig = {
   ]
 }
 
-var useUglifyJs = process.env.PLATFORM !== 'swan'
-var isProduction = process.env.NODE_ENV==='production'? true : false
-if (useUglifyJs) { // 非百度小程序开启JS代码压缩
-  baseWebpackConfig.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compress:{
-        warnings: false,
-        drop_debugger: isProduction,
-        drop_console: isProduction
-      },
-      // 生产环境开启map文件生成
-      sourceMap: isProduction
-    })
-  )
-}
-
 // 针对百度小程序，由于不支持通过 miniprogramRoot 进行自定义构建完的文件的根路径
 // 所以需要将项目根路径下面的 project.swan.json 拷贝到构建目录
 // 然后百度开发者工具将 dist/swan 作为项目根目录打

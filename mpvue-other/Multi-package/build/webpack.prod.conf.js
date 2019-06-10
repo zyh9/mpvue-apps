@@ -28,9 +28,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    // new UglifyJsPlugin({
-    //   sourceMap: true
-    // }),
+    new UglifyJsPlugin({
+      sourceMap: true
+    }),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('[name].wxss')

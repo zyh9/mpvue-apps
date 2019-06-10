@@ -4,7 +4,7 @@ var webpack = require('webpack')
 var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
-// var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 // var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -109,11 +109,11 @@ if (config.build.bundleAnalyzerReport) {
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
-// var useUglifyJs = process.env.PLATFORM !== 'swan'
-// if (useUglifyJs) {
-//   webpackConfig.plugins.push(new UglifyJsPlugin({
-//     sourceMap: true
-//   }))
-// }
+var useUglifyJs = process.env.PLATFORM !== 'swan'
+if (useUglifyJs) {
+  webpackConfig.plugins.push(new UglifyJsPlugin({
+    sourceMap: true
+  }))
+}
 
 module.exports = webpackConfig
