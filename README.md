@@ -941,8 +941,8 @@
 ```javascript
 	// ./build/webpack.prod.conf.js
 	new UglifyJsPlugin({
-      sourceMap: true
-    })
+		sourceMap: true
+	})
 
 	// ./config/index.js文件
 	build: {
