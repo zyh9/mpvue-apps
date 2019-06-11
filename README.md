@@ -939,22 +939,10 @@
 ### UglifyJsPlugin压缩配置
 
 ```javascript
-	// ./build/webpack.base.conf.js
-	var useUglifyJs = process.env.PLATFORM !== 'swan'
-	var isProduction = process.env.NODE_ENV==='production'? true : false
-	if (useUglifyJs) { // 非百度小程序开启JS代码压缩
-		baseWebpackConfig.plugins.push(
-			new webpack.optimize.UglifyJsPlugin({
-				compress:{
-				warnings: false,
-				drop_debugger: isProduction,
-				drop_console: isProduction
-				},
-				// 生产环境开启map文件生成
-				sourceMap: isProduction
-			})
-		)
-	}
+	// ./build/webpack.prod.conf.js
+	new UglifyJsPlugin({
+      sourceMap: true
+    })
 
 	// ./config/index.js文件
 	build: {
