@@ -965,3 +965,13 @@
 		如果要启用map，需要在插件中配置sourceMap值为true。
 
 [webpack的devtool文档，请戳我](https://webpack.js.org/configuration/devtool/#production)
+
+### 全屏适配
+
+	隐藏导航栏，获取手机状态栏高度wx.getSystemInfoSync()['statusBarHeight']），自定义顶部状态栏即可达到适配
+
+> 针对自定义状态栏以组件的形式要考虑以下内容
+
+|返回按钮|导航栏背景，中间标题文字、颜色|是否固定顶部|
+|--|--|--|
+|是否展示，展示箭头颜色|父组件传入|布尔值|
