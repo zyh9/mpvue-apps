@@ -242,11 +242,11 @@
 	const distFile = 'dist';//打包目录
 	const packageInfo = require("./package.json");
 
-	process.env.PLATFORM = process.argv[process.argv.length - 1] || 'wx';
+	let platform =  process.argv[process.argv.length - 1] || 'wx';
 
-	const gulpZip = () => gulp.src(path.resolve(distFile + '/' + process.env.PLATFORM + '/**'))
+	const gulpZip = () => gulp.src(path.resolve(distFile + '/' + platform + '/**'))
 		.pipe(gulpIgnore.exclude('*.map'))
-		.pipe(zip('名称' + process.env.PLATFORM + '-' + packageInfo.version + '-' + dayjs().format('YYYY-MM-DD HH-mm-ss') + '.zip'))
+		.pipe(zip('名称' + platform + '-' + packageInfo.version + '-' + dayjs().format('YYYY-MM-DD HH-mm-ss') + '.zip'))
 		.pipe(gulp.dest('./'))
 
 	//压缩打包文件
