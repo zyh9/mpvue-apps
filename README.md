@@ -666,9 +666,9 @@
 ### 页面层级过深，采取折回处理
 
 ```javascript
-	//path路径 示例：'pages/index/main'
+	//path路径 示例：'pages/index/main'  如果路径带参数，需要indexOf处理一下
 	const goPath = path => {
-		let index = getCurrentPages().findIndex(e => e.route == path);
+		let index = getCurrentPages().findIndex(e => path.indexOf(e.route) > -1);
 		if (index > -1) {
 			getCurrentPages()[index].onUnload();
 			wx.navigateBack({
