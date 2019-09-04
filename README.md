@@ -975,3 +975,17 @@
 |返回按钮|导航栏背景，中间标题文字、颜色|是否固定顶部|
 |--|--|--|
 |是否展示，展示箭头颜色|父组件传入|布尔值|
+
+### 内嵌webview跳转小程序
+
+> 以vue为例
+
+```javascript
+	//src/main.js
+	const wx = require('weixin-js-sdk');
+	Vue.prototype.wx = wx;
+	//页面跳转小程序
+	this.wx.miniProgram.reLaunch({
+		url: "/pages/index/index"
+	})
+```
