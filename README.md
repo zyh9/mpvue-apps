@@ -978,11 +978,12 @@
 
 ### 内嵌webview跳转小程序
 
-> 以vue为例
+> 以vue为例，需要安装weixin-js-sdk依赖
 
 ```javascript
 	//src/main.js
 	const wx = require('weixin-js-sdk');
+	//挂载原型
 	Vue.prototype.wx = wx;
 	//页面跳转小程序
 	this.wx.miniProgram.reLaunch({
