@@ -250,10 +250,7 @@
 		.pipe(gulp.dest('./'))
 
 	//压缩打包文件
-	gulp.task('wx', gulpZip)
-	gulp.task('swan', gulpZip)
-	gulp.task('tt', gulpZip)
-	gulp.task('my', gulpZip)
+	gulp.task(platform, gulpZip)
 
 	// gulp.task--定义任务
 	// gulp.src--找到需要执行任务的文件
