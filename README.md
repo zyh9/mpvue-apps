@@ -15,9 +15,9 @@
 	}
 ```
 
-> webpack分包配置（需要修改配置文件）
+> webpack分包配置（需要修改配置文件），如有错误之处还请指出
 
-[mpvue-loader 1.1.2-rc.2 之后的版本已支持分包，请戳我](http://mpvue.com/mpvue/quickstart/#4-2018723)
+[mpvue-loader 1.1.2-rc.2 之后的版本已支持分包，请戳我](http://mpvue.com/mpvue/quickstart.html#_4-分包机制-2018-7-23)
 
 ```javascript
 	//webpack.base.conf.js文件
