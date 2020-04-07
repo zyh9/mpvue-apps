@@ -419,11 +419,13 @@
 				method: "GET",
 				success: res => {
 					setTimeout(_ => {
+						opt['success'] && opt['success'](res.data);
 						resolve(res.data)
 					}, 0)
 				},
 				fail: err => {
-					reject(err);
+					opt['fail'] && opt['fail'](err);
+					reject(err)
 				}
 			})
 		})
@@ -442,10 +444,12 @@
 				method: "POST",
 				success: res => {
 					setTimeout(_ => {
+						opt['success'] && opt['success'](res.data);
 						resolve(res.data)
 					}, 0)
 				},
 				fail: err => {
+					opt['fail'] && opt['fail'](err);
 					reject(err)
 				}
 			})
